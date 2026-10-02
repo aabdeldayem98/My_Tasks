@@ -195,7 +195,9 @@ header.top h1{font-size:18px;margin:0}
 .drag-over{outline:2px dashed var(--primary);outline-offset:2px}
 
 /* Board (Kanban) */
-.board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:start}
+.board{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(250px,1fr);gap:12px;align-items:start;overflow-x:auto;padding-bottom:6px}
+.board-opts{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;font-size:13px}
+.col-h .cdot{width:10px;height:10px;border-radius:3px;background:var(--c);flex:none}
 .col{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:10px;min-height:300px}
 .col-h{display:flex;align-items:center;gap:8px;margin-bottom:8px}
 .col-h h3{margin:0;font-size:15px;flex:1}
@@ -298,6 +300,32 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
 .gcal{font-size:12px;margin-top:6px;display:inline-flex;gap:5px;align-items:center}
 .temp-pw{font-size:22px;font-weight:800;letter-spacing:2px;text-align:center;padding:12px;border:1px dashed var(--border);border-radius:10px;margin:10px 0;user-select:all;font-variant-numeric:tabular-nums}
 
+/* Projects */
+.proj-top{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.proj-top h2{margin:0;font-size:20px}
+.proj{display:flex;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--border);border-left:5px solid var(--c);border-radius:12px;padding:14px 16px;margin-bottom:10px;cursor:pointer;box-shadow:var(--shadow);transition:transform .1s}
+.proj:hover{transform:translateY(-1px)}
+.proj h3{margin:0;font-size:16px;word-break:break-word}
+.proj .desc{color:var(--muted);font-size:13px;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.proj .pmeta{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.proj .pside{width:170px;flex:none}
+.proj .pside .prog{margin-top:0}
+.pchip{font-size:11px;padding:1px 8px;border-radius:6px;border:1px solid var(--border);color:var(--muted);font-weight:600;display:inline-flex;align-items:center;gap:5px}
+.pchip i{width:8px;height:8px;border-radius:2px;background:var(--c)}
+.proj-head{background:var(--surface);border:1px solid var(--border);border-top:5px solid var(--c);border-radius:14px;padding:16px 18px;margin-bottom:12px}
+.proj-head h2{margin:0;font-size:22px;word-break:break-word}
+.proj-head .desc{color:var(--muted);margin:6px 0 0;white-space:pre-wrap;line-height:1.5}
+.gantt-wrap{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:12px;overflow-x:auto}
+.gantt{display:block}
+.gantt text{font-family:inherit;font-size:12px;fill:var(--text)}
+.gantt .ax{fill:var(--muted);font-size:11px}
+.gantt .gl{stroke:var(--grid);stroke-width:1}
+.gantt .today{stroke:var(--danger);stroke-width:1.5}
+.gantt .hit{fill:transparent}
+.gantt .hit:hover{fill:color-mix(in srgb,var(--text) 5%,transparent)}
+.arch-row{display:flex;gap:10px;align-items:center;padding:8px 2px;border-top:1px solid var(--border);font-size:13px}
+@media (max-width:760px){ .proj{flex-wrap:wrap} .proj .pside{width:100%} }
+
 /* Toast / busy */
 #toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:50;display:flex;flex-direction:column;gap:6px;align-items:center}
 .toast{background:#111827;color:#fff;padding:9px 16px;border-radius:10px;font-size:13px;box-shadow:0 4px 14px rgba(0,0,0,.2);display:flex;align-items:center;gap:12px}
@@ -312,7 +340,7 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
   .matrix{grid-template-columns:1fr}
   .matrix-wrap{grid-template-columns:1fr}
   .axis-top,.axis-side{display:none}
-  .board{grid-template-columns:1fr}
+  .board{grid-auto-flow:row;grid-auto-columns:auto;grid-template-columns:1fr}
   .panels{grid-template-columns:1fr}
   .grid2{grid-template-columns:1fr}
   .day{min-height:64px;padding:2px 3px}
@@ -435,6 +463,7 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
       <button class="tab" data-view="matrix">Focus Hub</button>
       <button class="tab" data-view="board">Board</button>
       <button class="tab" data-view="calendar">Calendar</button>
+      <button class="tab" data-view="projects">Projects</button>
       <button class="tab" data-view="insights">Insights</button>
     </div>
 
@@ -503,6 +532,13 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
     </div>
 
     <div class="sec grid2">
+      <div><label class="sec-h"><span>Project</span></label>
+        <select id="m-project"></select></div>
+      <div><label class="sec-h"><span>Start date <span class="opt">(for the Gantt chart)</span></span></label>
+        <div style="display:flex;gap:6px"><input type="date" id="m-start"><button class="btn sm" id="m-start-clear" type="button">Clear</button></div></div>
+    </div>
+
+    <div class="sec grid2">
       <div><label class="sec-h"><span>Reminder <span class="opt">(email)</span></span></label>
         <div style="display:flex;gap:6px"><input type="datetime-local" id="m-rem"><button class="btn sm" id="m-rem-clear" type="button">Clear</button></div>
         <div class="hint hidden" id="m-rem-hint">Link an email in Manage account to receive reminders.</div>
@@ -547,6 +583,19 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
       <button class="btn" id="m-cancel" type="button">Discard</button>
       <button class="btn primary" id="m-save" type="button">Save</button>
     </div>
+  </div>
+</div>
+
+<!-- ================= Project modal ================= -->
+<div class="overlay hidden" id="proj-modal">
+  <div class="modal" style="max-width:460px">
+    <div class="m-headrow"><h2 id="pm-head">New project</h2><button type="button" class="x" id="pm-close" style="font-size:24px">×</button></div>
+    <div class="field"><label>Project name<span class="req">*</span></label><input id="pm-name" dir="auto" maxlength="60" placeholder="e.g. Website relaunch"></div>
+    <div class="field"><label>Color</label>
+      <div style="display:flex;gap:8px;align-items:center"><input type="color" id="pm-color" style="width:46px;height:36px;padding:2px;flex:none"><span class="muted" style="font-size:12px">Used on the project card and its Gantt chart</span></div></div>
+    <div class="field"><label>Description <span class="opt">(optional)</span></label><textarea id="pm-desc" dir="auto" maxlength="1000" placeholder="What is this project about?"></textarea></div>
+    <div class="m-foot"><button class="btn danger hidden" type="button" id="pm-del">Delete project</button><span class="grow"></span>
+      <button class="btn" type="button" id="pm-cancel">Cancel</button><button class="btn primary" type="button" id="pm-save">Save</button></div>
   </div>
 </div>
 
@@ -637,10 +686,10 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbyhMjxieiwRAePz-42iXr-L
 
 /* ================= Constants ================= */
 const QUADS = {
-  Q1: { name: 'Priority', sub: 'Urgent & important — do it now',      color: 'var(--q1)' },
-  Q2: { name: 'Schedule', sub: 'Important, not urgent — plan it',     color: 'var(--q2)' },
-  Q3: { name: 'Assign',   sub: 'Urgent, not important — delegate it', color: 'var(--q3)' },
-  Q4: { name: 'Remove',   sub: 'Not urgent, not important — drop it', color: 'var(--q4)' }
+  Q1: { name: 'Priority', sub: 'Urgent & important — do it now',      color: 'var(--q1)', hex: '#dc2626' },
+  Q2: { name: 'Schedule', sub: 'Important, not urgent — plan it',     color: 'var(--q2)', hex: '#2563eb' },
+  Q3: { name: 'Assign',   sub: 'Urgent, not important — delegate it', color: 'var(--q3)', hex: '#d97706' },
+  Q4: { name: 'Remove',   sub: 'Not urgent, not important — drop it', color: 'var(--q4)', hex: '#6b7280' }
 };
 const REPEAT_LABEL = { daily: 'Daily', weekly: 'Weekly', monthly: 'Monthly' };
 const PALETTE = ['#8b5cf6','#0ea5e9','#10b981','#f59e0b','#e11d48','#14b8a6','#6366f1','#f97316','#84cc16','#ec4899'];
@@ -660,8 +709,10 @@ const S = {
   f: { q: '', labels: [], quad: '', status: 'open', sort: 'due' },
   cal: null, draft: null, draftInit: '', saving: false, uploads: [], expanded: new Set(),
   authMode: 'login', hasUsers: true, allowSignup: true, maxMb: 10, maxCats: 10, archiveDays: 30, shareUrl: '', appName: 'My Tasks',
-  catDraft: [], remember: false, insPeriod: 'week', admin: null, adm: { q: '', sort: 'createdAt', dir: 1 }, installEvt: null
+  catDraft: [], remember: false, insPeriod: 'week', admin: null, adm: { q: '', sort: 'createdAt', dir: 1 }, installEvt: null,
+  projects: [], projectOpen: null, projMode: 'tasks', boardBy: 'status', dragFrom: '', projCb: null, projEdit: null
 };
+try { S.boardBy = localStorage.getItem('boardBy') || 'status'; } catch (e) {}
 
 /* ================= Utils ================= */
 const $ = (s, r = document) => r.querySelector(s);
@@ -1065,8 +1116,8 @@ async function enterApp() {
   renderGreeting();
   loadQuote();
   try {
-    const [me, tasks, cats] = await withBusy(Promise.all([api('whoAmI', S.token), api('listTasks', S.token), api('getCategories', S.token)]));
-    S.me = me; S.user = me.username; S.tasks = tasks; S.cats = cats;
+    const [me, tasks, cats, projects] = await withBusy(Promise.all([api('whoAmI', S.token), api('listTasks', S.token), api('getCategories', S.token), api('getProjects', S.token)]));
+    S.me = me; S.user = me.username; S.tasks = tasks; S.cats = cats; S.projects = projects;
     S.archived = []; S.archLoaded = false;
     $('#btn-admin').classList.toggle('hidden', !me.isAdmin);
     renderGreeting(); renderAnnouncement(); render();
@@ -1113,11 +1164,11 @@ function render() {
   renderStats();
   renderLabelFilter();
   const v = $('#view');
-  const views = { matrix: renderMatrix, board: renderBoard, calendar: renderCalendar, insights: renderInsights };
+  const views = { matrix: renderMatrix, board: renderBoard, calendar: renderCalendar, projects: renderProjects, insights: renderInsights };
   v.innerHTML = (views[S.view] || renderList)();
-  $('#f-quad').disabled = S.view === 'matrix';
-  $('#f-status').disabled = S.view === 'board';
-  $('#toolbar').classList.toggle('hidden', S.view === 'insights');
+  $('#f-quad').disabled = S.view === 'matrix' || (S.view === 'board' && S.boardBy === 'quad');
+  $('#f-status').disabled = S.view === 'board' && S.boardBy === 'status';
+  $('#toolbar').classList.toggle('hidden', S.view === 'insights' || S.view === 'projects');
 }
 
 function renderStats() {
@@ -1148,6 +1199,8 @@ function taskCard(t, mode) {
   const labels = t.labels.filter(l => cm[l]).map(l => `<span class="tag" style="--c:${esc(cm[l].color)}">${esc(cm[l].name)}</span>`).join('');
   const remind = t.reminderAt && !t.reminderSentAt && !done ? `<span class="muted" title="Email reminder">${BELL} ${fmtWhen(t.reminderAt)}</span>` : '';
   const rep = t.repeat ? `<span class="muted" title="Repeats">${REPEAT} ${REPEAT_LABEL[t.repeat]}</span>` : '';
+  const pj = t.projectId && S.view !== 'projects' ? S.projects.find(x => x.id === t.projectId) : null;
+  const pchip = pj ? `<span class="pchip" style="--c:${esc(pj.color)}"><i></i>${esc(pj.name)}</span>` : '';
   return `<div class="card ${mode} ${done ? 'is-done' : ''}" data-id="${esc(t.id)}" draggable="true" style="--q:${q.color}">
     <div class="row">
       <button class="check ${done ? 'on' : ''}" data-act="toggle" title="${done ? 'Mark incomplete' : 'Mark complete'}">✓</button>
@@ -1155,7 +1208,7 @@ function taskCard(t, mode) {
         <div class="title" dir="auto">${esc(t.title)}</div>
         <div class="meta">
           ${mode === 'list' ? `<span class="qbadge">${q.name}</span>` : ''}
-          ${labels}
+          ${pchip}${labels}
           ${due ? `<span class="due ${due.cls}">${due.text}</span>` : ''}
           ${t.status === 'doing' ? '<span class="muted">In progress</span>' : ''}
           ${rep}${remind}
@@ -1194,16 +1247,44 @@ function renderMatrix() {
   </div>`;
 }
 
+const BOARD_BY = [['status', 'Status'], ['project', 'Project'], ['category', 'Category'], ['quad', 'Focus box'], ['day', 'Day']];
+function boardColumns(list) {
+  const by = S.boardBy, td = today();
+  if (by === 'project') {
+    const known = new Set(S.projects.map(p => p.id));
+    return S.projects.map(p => ({ drop: 'p:' + p.id, name: p.name, color: p.color, items: list.filter(t => t.projectId === p.id) }))
+      .concat([{ drop: 'p:', name: 'No project', items: list.filter(t => !known.has(t.projectId)) }]);
+  }
+  if (by === 'category') {
+    const known = new Set(S.cats.map(c => c.key));
+    return S.cats.map(c => ({ drop: 'c:' + c.key, name: c.name, color: c.color, items: list.filter(t => t.labels.includes(c.key)) }))
+      .concat([{ drop: 'c:', name: 'No category', items: list.filter(t => !t.labels.some(k => known.has(k))) }]);
+  }
+  if (by === 'quad') return Object.keys(QUADS).map(k => ({ drop: 'q:' + k, name: QUADS[k].name, color: QUADS[k].color, items: list.filter(t => t.quadrant === k) }));
+  if (by === 'day') {
+    const cols = [{ drop: '', name: 'Overdue', items: list.filter(t => t.dueDate && t.dueDate < td && t.status !== 'done') }];
+    for (let i = 0; i < 7; i++) {
+      const key = addDays(td, i), d = new Date(key + 'T00:00:00');
+      cols.push({ drop: 'd:' + key, name: i === 0 ? 'Today' : i === 1 ? 'Tomorrow' : WEEKDAYS[d.getDay()] + ' · ' + shortD(d), items: list.filter(t => t.dueDate === key) });
+    }
+    const last = addDays(td, 6);
+    cols.push({ drop: '', name: 'Later', items: list.filter(t => t.dueDate > last) });
+    cols.push({ drop: '', name: 'No date', items: list.filter(t => !t.dueDate) });
+    return cols;
+  }
+  return [['todo', 'To do'], ['doing', 'In progress'], ['done', 'Done']].map(([k, name]) => ({ drop: 's:' + k, name, items: list.filter(t => t.status === k) }));
+}
 function renderBoard() {
-  const list = sortTasks(filtered({ noStatus: true }));
-  const cols = [['todo', 'To do'], ['doing', 'In progress'], ['done', 'Done']];
-  return `<div class="board">${cols.map(([k, name]) => {
-    const items = list.filter(t => t.status === k);
-    return `<section class="col" data-drop="s:${k}">
-      <div class="col-h"><h3>${name}</h3><span class="count">${items.length}</span>${k === 'todo' ? '<button class="btn sm" data-act="new">+</button>' : ''}</div>
-      ${items.map(t => taskCard(t, 'compact')).join('') || '<div class="empty">Drag a task here</div>'}
-    </section>`;
-  }).join('')}</div>`;
+  const list = sortTasks(filtered({ noStatus: S.boardBy === 'status', noQuad: S.boardBy === 'quad' }));
+  const opts = `<div class="board-opts"><span class="muted">Group by</span><div class="seg" id="board-by">${BOARD_BY.map(([k, n]) =>
+    `<button data-by="${k}" class="${S.boardBy === k ? 'on' : ''}">${n}</button>`).join('')}</div>
+    ${S.boardBy === 'project' && !S.projects.length ? '<button class="btn sm" data-pa="new">+ New project</button>' : ''}</div>`;
+  const cols = boardColumns(list).map(c => `<section class="col" ${c.drop ? `data-drop="${esc(c.drop)}"` : ''} ${c.color ? `style="--c:${esc(c.color)}"` : ''}>
+      <div class="col-h">${c.color ? '<span class="cdot"></span>' : ''}<h3 dir="auto">${esc(c.name)}</h3><span class="count">${c.items.length}</span>
+        ${c.drop && c.drop !== 's:doing' && c.drop !== 's:done' ? `<button class="btn sm" data-act="add-col">+</button>` : ''}</div>
+      ${c.items.map(t => taskCard(t, 'compact')).join('') || `<div class="empty">${c.drop ? 'Drag a task here' : 'Nothing here'}</div>`}
+    </section>`).join('');
+  return opts + `<div class="board">${cols}</div>`;
 }
 
 function renderCalendar() {
@@ -1337,6 +1418,7 @@ function renderInsights() {
 /* ================= Toolbar events ================= */
 $('#tabs').addEventListener('click', e => {
   const b = e.target.closest('[data-view]'); if (!b) return;
+  if (b.dataset.view === 'projects') S.projectOpen = null;
   S.view = b.dataset.view;
   $$('.tab').forEach(x => x.classList.toggle('active', x === b));
   render();
@@ -1359,6 +1441,12 @@ const view = $('#view');
 view.addEventListener('click', e => {
   const per = e.target.closest('#ins-period [data-p]');
   if (per) { S.insPeriod = per.dataset.p; return render(); }
+  const by = e.target.closest('#board-by [data-by]');
+  if (by) { S.boardBy = by.dataset.by; ls.set('boardBy', S.boardBy); return render(); }
+  const pa = e.target.closest('[data-pa]');
+  if (pa) return projectAction(pa.dataset.pa, pa.closest('[data-pid]') ? pa.closest('[data-pid]').dataset.pid : S.projectOpen);
+  const pcard = e.target.closest('.proj[data-pid]');
+  if (pcard) { S.projectOpen = pcard.dataset.pid; S.projMode = 'tasks'; window.scrollTo(0, 0); return render(); }
   if (e.target.closest('.subs')) return;                       // checkboxes handled in 'change'
   const act = e.target.closest('[data-act]');
   const card = e.target.closest('[data-id]');
@@ -1368,13 +1456,18 @@ view.addEventListener('click', e => {
     if (a === 'expand') { const id = card.dataset.id; S.expanded.has(id) ? S.expanded.delete(id) : S.expanded.add(id); return render(); }
     if (a === 'new') return openModal(null);
     if (a === 'add-q') return openModal(null, { quadrant: act.dataset.q });
+    if (a === 'add-col') {
+      const [k, v] = (act.closest('[data-drop]').dataset.drop || '').split(':'), pre = {};
+      if (k === 'p') pre.projectId = v; if (k === 'c' && v) pre.labels = [v]; if (k === 'q') pre.quadrant = v; if (k === 'd') pre.dueDate = v;
+      return openModal(null, pre);
+    }
     if (a === 'cal-prev' || a === 'cal-next') {
       const d = new Date(S.cal.y, S.cal.m + (a === 'cal-next' ? 1 : -1), 1);
       S.cal = { y: d.getFullYear(), m: d.getMonth() }; return render();
     }
     if (a === 'cal-today') { S.cal = null; return render(); }
   }
-  if (card) return openModal(card.dataset.id);
+  if (card) return S.tasks.some(x => x.id === card.dataset.id) ? openModal(card.dataset.id) : undefined;
   const day = e.target.closest('.day');
   if (day) openModal(null, { dueDate: day.dataset.date });
 });
@@ -1389,6 +1482,7 @@ view.addEventListener('change', e => {
 /* Drag & drop: Focus Hub boxes, Board columns, calendar days */
 view.addEventListener('dragstart', e => {
   const c = e.target.closest('[data-id]'); if (!c) return;
+  const src = c.closest('[data-drop]'); S.dragFrom = src ? src.dataset.drop : '';
   e.dataTransfer.setData('text/plain', c.dataset.id); e.dataTransfer.effectAllowed = 'move';
 });
 view.addEventListener('dragover', e => {
@@ -1408,8 +1502,16 @@ view.addEventListener('drop', e => {
   const [kind, val] = z.dataset.drop.split(':');
   const before = clone(t);
   if (kind === 'q') { if (t.quadrant === val) return; t.quadrant = val; }
-  if (kind === 'd') { if (!val || t.dueDate === val) return; t.dueDate = val; }
+  if (kind === 'd') { if (!val || t.dueDate === val) return; t.dueDate = val; if (t.startDate && t.startDate > val) t.startDate = val; }
   if (kind === 's') { if (t.status === val) return; t.status = val; }
+  if (kind === 'p') { if ((t.projectId || '') === val) return; t.projectId = val; }
+  if (kind === 'c') {
+    const from = S.dragFrom.indexOf('c:') === 0 ? S.dragFrom.slice(2) : '';
+    if (from === val) return;
+    const L = t.labels.filter(k => k !== from);
+    if (val && !L.includes(val)) L.push(val);
+    t.labels = L;
+  }
   render(); persist(t, before);
 });
 
@@ -1490,7 +1592,10 @@ $('#cats-save').addEventListener('click', async () => {
 /* ================= Task modal ================= */
 function openModal(id, preset) {
   const t = id ? S.tasks.find(x => x.id === id) : null;
-  S.draft = t ? clone(t) : Object.assign({ id: '', title: '', notes: '', labels: [], quadrant: '', dueDate: '', status: 'todo', reminderAt: '', repeat: '', subtasks: [], attachments: [] }, preset || {});
+  S.draft = t ? clone(t) : Object.assign({ id: '', title: '', notes: '', labels: [], quadrant: '', dueDate: '', status: 'todo', reminderAt: '', repeat: '', projectId: '', startDate: '', subtasks: [], attachments: [] }, preset || {});
+  if (S.draft.projectId === undefined) S.draft.projectId = '';
+  if (S.draft.startDate === undefined) S.draft.startDate = '';
+  if (S.draft.projectId && !S.projects.some(p => p.id === S.draft.projectId)) S.draft.projectId = '';
   S.draft.labels = S.draft.labels.filter(k => S.cats.some(c => c.key === k));   // drop deleted categories
   if (S.draft.reminderAt === undefined) S.draft.reminderAt = '';
   if (S.draft.repeat === undefined) S.draft.repeat = '';
@@ -1505,6 +1610,8 @@ function openModal(id, preset) {
   $('#m-status').value = S.draft.status;
   $('#m-rem').value = S.draft.reminderAt ? toLocalInput(S.draft.reminderAt) : '';
   $('#m-repeat').value = S.draft.repeat || '';
+  $('#m-start').value = S.draft.startDate || '';
+  mProj();
   $('#m-sub-new').value = $('#m-link-url').value = $('#m-link-name').value = '';
   $('#m-upl-status').textContent = '';
   const del = $('#m-del'); del.classList.toggle('hidden', !t); del.classList.remove('confirm'); del.textContent = 'Delete';
@@ -1534,6 +1641,8 @@ function validateDraft() {
   chk('#m-eis', !d.quadrant, 'priority box');
   chk('#m-date', !d.dueDate, 'due date');
   chk('#m-status', !d.status, 'status');
+  const badStart = !!(d.startDate && d.dueDate && d.startDate > d.dueDate);
+  $('#m-start').classList.toggle('invalid', badStart);
   return miss;
 }
 function mLabels() {
@@ -1599,6 +1708,20 @@ $('#m-rem').addEventListener('change', e => {
 });
 $('#m-rem-clear').addEventListener('click', () => { S.draft.reminderAt = ''; $('#m-rem').value = ''; mRem(); });
 $('#m-repeat').addEventListener('change', e => { S.draft.repeat = e.target.value; });
+$('#m-start').addEventListener('change', e => { S.draft.startDate = e.target.value; e.target.classList.remove('invalid'); });
+$('#m-start-clear').addEventListener('click', () => { S.draft.startDate = ''; $('#m-start').value = ''; $('#m-start').classList.remove('invalid'); });
+function mProj() {
+  const d = S.draft;
+  $('#m-project').innerHTML = '<option value="">No project</option>' +
+    S.projects.map(p => `<option value="${esc(p.id)}" ${d.projectId === p.id ? 'selected' : ''}>${esc(p.name)}</option>`).join('') +
+    '<option value="__new">+ Add new project…</option>';
+  $('#m-project').value = d.projectId || '';
+}
+$('#m-project').addEventListener('change', e => {
+  if (e.target.value !== '__new') { S.draft.projectId = e.target.value; return; }
+  e.target.value = S.draft.projectId || '';
+  openProjModal(null, p => { if (S.draft) { S.draft.projectId = p.id; mProj(); } });
+});
 
 /* Subtasks */
 function addSubs(refocus = true) {
@@ -1674,6 +1797,7 @@ async function saveModal() {
   const d = S.draft; d.title = $('#m-title').value.trim();
   const miss = validateDraft();
   if (miss.length) { toast('Please fill in: ' + miss.join(', '), 'err'); return; }
+  if (d.startDate && d.dueDate && d.startDate > d.dueDate) { toast('The start date can’t be after the due date', 'err'); return; }
   d.subtasks = d.subtasks.filter(s => s.title.trim());
   S.saving = true;
   try {
@@ -1698,6 +1822,7 @@ document.addEventListener('keydown', e => {
   if (e.key !== 'Escape' && !(e.key === 'Enter' && (e.ctrlKey || e.metaKey))) return;
   const open = id => !$(id).classList.contains('hidden');
   if (open('#dlg')) { if (e.key === 'Escape') $('#dlg-cancel').click(); return; }
+  if (open('#proj-modal')) { if (e.key === 'Escape') closeProjModal(); return; }
   if (open('#cats-modal')) { if (e.key === 'Escape') closeCats(); return; }
   if (open('#share-modal')) { if (e.key === 'Escape') closeShare(); return; }
   if (open('#acct-modal')) { if (e.key === 'Escape') closeAcct(); return; }
@@ -1706,6 +1831,242 @@ document.addEventListener('keydown', e => {
   if (!open('#task-modal')) return;
   if (e.key === 'Escape') attemptClose(); else saveModal();
 });
+
+/* ================= Projects ================= */
+const parseD = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+/* Gantt start: the task's start date, otherwise the day it was created (never after the due date) */
+function tStart(t) {
+  let s = t.startDate || (t.createdAt ? ymd(new Date(t.createdAt)) : t.dueDate || '');
+  if (t.dueDate && s > t.dueDate) s = t.dueDate;
+  return s;
+}
+function projTasks(id) { return S.tasks.concat(S.archived).filter(t => t.projectId === id); }
+function projStats(id) {
+  const ts = projTasks(id), td = today();
+  const done = ts.filter(t => t.status === 'done').length;
+  const pct = ts.length ? Math.round(ts.reduce((a, t) => a + progress(t), 0) / ts.length) : 0;
+  const starts = ts.map(tStart).filter(Boolean).sort(), dues = ts.map(t => t.dueDate).filter(Boolean).sort();
+  return { ts, total: ts.length, done, doing: ts.filter(t => t.status === 'doing').length, open: ts.length - done,
+    overdue: ts.filter(t => t.status !== 'done' && t.dueDate && t.dueDate < td).length, pct,
+    from: starts[0] || '', to: dues[dues.length - 1] || '' };
+}
+function renderProjects() {
+  if (!S.archLoaded) {
+    loadArchived().then(() => { if (S.view === 'projects') render(); }).catch(e => toast(e.message, 'err'));
+    return '<div class="empty big">Loading projects…</div>';
+  }
+  if (S.projectOpen && S.projects.some(p => p.id === S.projectOpen)) return renderProjectDetail(S.projectOpen);
+  S.projectOpen = null;
+  const head = `<div class="proj-top"><h2>Projects</h2><span class="count">${S.projects.length}</span><span class="grow"></span>
+    <button class="btn primary sm" data-pa="new">+ New project</button></div>`;
+  if (!S.projects.length) return head + `<div class="empty big">No projects yet.<br><br><button class="btn primary" data-pa="new">+ New project</button></div>`;
+  return head + S.projects.map(p => {
+    const st = projStats(p.id);
+    return `<div class="proj" data-pid="${esc(p.id)}" style="--c:${esc(p.color)}">
+      <div class="grow"><h3 dir="auto">${esc(p.name)}</h3>${p.description ? `<div class="desc" dir="auto">${esc(p.description)}</div>` : ''}
+        <div class="pmeta"><span>${st.total} task${st.total === 1 ? '' : 's'}</span><span>${st.open} open</span><span>${st.done} done</span>
+          ${st.overdue ? `<span style="color:var(--danger);font-weight:700">${st.overdue} overdue</span>` : ''}
+          ${st.from && st.to ? `<span>${fmtDate(st.from)} → ${fmtDate(st.to)}</span>` : ''}</div></div>
+      <div class="pside"><div class="prog"><div class="bar"><i style="width:${st.pct}%"></i></div><b style="font-size:12px">${st.pct}%</b></div>
+        <div style="display:flex;gap:6px;margin-top:8px;justify-content:flex-end"><button class="btn xs" data-pa="gantt">Gantt chart</button><button class="btn xs" data-pa="pdf">PDF</button></div></div>
+    </div>`;
+  }).join('');
+}
+function renderProjectDetail(id) {
+  const p = S.projects.find(x => x.id === id), st = projStats(id), gantt = S.projMode === 'gantt';
+  const active = sortTasks(st.ts.filter(t => !isArchived(t)));
+  const archived = st.ts.filter(isArchived);
+  const top = `<div class="proj-top"><button class="btn sm" data-pa="back">← All projects</button><span class="grow"></span>
+    <div class="seg"><button data-pa="mode-tasks" class="${gantt ? '' : 'on'}">Tasks</button><button data-pa="mode-gantt" class="${gantt ? 'on' : ''}">Gantt chart</button></div>
+    <button class="btn sm" data-pa="pdf">Download PDF</button><button class="btn sm" data-pa="edit">Edit</button><button class="btn primary sm" data-pa="add">+ Add task</button></div>`;
+  const head = `<div class="proj-head" style="--c:${esc(p.color)}"><h2 dir="auto">${esc(p.name)}</h2>
+    ${p.description ? `<p class="desc" dir="auto">${esc(p.description)}</p>` : ''}
+    <div class="pmeta muted" style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;margin:10px 0 8px">
+      <span><b style="color:var(--text)">${st.total}</b> tasks</span><span><b style="color:var(--text)">${st.done}</b> done</span>
+      <span><b style="color:var(--text)">${st.doing}</b> in progress</span>${st.overdue ? `<span style="color:var(--danger)"><b>${st.overdue}</b> overdue</span>` : ''}
+      ${st.from && st.to ? `<span>${fmtDate(st.from)} → ${fmtDate(st.to)}</span>` : ''}</div>
+    <div class="prog" style="margin:0"><div class="bar"><i style="width:${st.pct}%"></i></div><b style="font-size:12px">${st.pct}% complete</b></div></div>`;
+  if (gantt) {
+    const g = ganttSVG(st.ts, p.color, {});
+    const undated = st.ts.filter(t => !t.dueDate).length;
+    return top + head + (g ? `<div class="gantt-wrap">${g}</div>
+      <p class="hint">Each bar runs from the task’s start date (or the day it was created) to its due date. The solid part shows progress. The red line is today.${undated ? ' ' + undated + ' task(s) without a due date are not shown.' : ''}</p>`
+      : `<div class="empty big">Add due dates to this project’s tasks to see the Gantt chart.</div>`);
+  }
+  return top + head + (active.length ? active.map(t => taskCard(t, 'list')).join('') : `<div class="empty big">No tasks in this project yet.<br><br><button class="btn primary" data-pa="add">+ Add task</button></div>`) +
+    (archived.length ? `<div class="panel" style="margin-top:12px"><h3>Archived (${archived.length})</h3><div class="sub">Completed more than ${S.archiveDays} days ago</div>
+      ${archived.map(t => `<div class="arch-row"><span style="color:var(--ok)">✓</span><span class="grow" dir="auto">${esc(t.title)}</span><span class="muted">${t.completedAt ? fmtDate(ymd(new Date(t.completedAt))) : ''}</span></div>`).join('')}</div>` : '');
+}
+/* Gantt chart as inline SVG. opts.width → fixed width (used for the PDF); otherwise the day width adapts */
+function ganttSVG(tasks, color, opts) {
+  const rows = tasks.filter(t => t.dueDate).map(t => ({ t, s: tStart(t), e: t.dueDate }))
+    .sort((a, b) => a.s.localeCompare(b.s) || a.e.localeCompare(b.e));
+  if (!rows.length) return '';
+  let min = parseD(rows.reduce((a, r) => r.s < a ? r.s : a, rows[0].s)), max = parseD(rows.reduce((a, r) => r.e > a ? r.e : a, rows[0].e));
+  min = plusDays(min, -1); max = plusDays(max, 1);
+  const days = Math.round((max - min) / DAY_MS) + 1;
+  const LW = opts.labelW || 230, rowH = 30, top = 40;
+  const dayW = opts.width ? Math.max(1.5, (opts.width - LW - 12) / days) : Math.max(14, Math.min(40, 900 / days));
+  const W = Math.round(LW + days * dayW + 12), H = top + rows.length * rowH + 8;
+  const idx = s => Math.round((parseD(s) - min) / DAY_MS), xOf = i => LW + i * dayW;
+  const maxChars = Math.floor((LW - 30) / 7);
+  let g = '';
+  // time axis: days when there is room, otherwise weeks (Saturdays) or months
+  for (let i = 0; i < days; i++) {
+    const d = plusDays(min, i), x = xOf(i);
+    const first = d.getDate() === 1 || i === 0;
+    if (first) g += `<text class="ax" x="${x + 2}" y="13" style="font-weight:700">${MONTHS[d.getMonth()].slice(0, 3)} ${d.getFullYear()}</text>`;
+    const tick = dayW >= 16 ? true : dayW >= 5 ? d.getDay() === 6 : d.getDate() === 1;
+    if (tick) {
+      g += `<line class="gl" x1="${x}" x2="${x}" y1="${top - 8}" y2="${H}"/>`;
+      if (dayW >= 16 || dayW >= 5) g += `<text class="ax" x="${x + (dayW >= 16 ? dayW / 2 : 2)}" y="30" ${dayW >= 16 ? 'text-anchor="middle"' : ''}>${d.getDate()}</text>`;
+    }
+  }
+  const td = today();
+  if (td >= ymd(min) && td <= ymd(max)) { const x = xOf(idx(td)) + dayW / 2; g += `<line class="today" x1="${x}" x2="${x}" y1="${top - 8}" y2="${H}"/>`; }
+  rows.forEach((r, i) => {
+    const y = top + i * rowH, t = r.t, p = progress(t), done = t.status === 'done';
+    const x = xOf(idx(r.s)), w = Math.max(dayW, (idx(r.e) - idx(r.s) + 1) * dayW), by = y + 8, bh = 14;
+    let title = t.title.length > maxChars ? t.title.slice(0, maxChars - 1) + '…' : t.title;
+    g += `<line class="gl" x1="0" x2="${W}" y1="${y + rowH}" y2="${y + rowH}"/>`;
+    g += `<text x="6" y="${y + 19}" ${done ? 'style="fill:var(--muted)"' : ''}>${done ? '✓ ' : ''}${esc(title)}</text>`;
+    g += `<rect x="${x}" y="${by}" width="${w}" height="${bh}" rx="4" fill="${esc(color)}" opacity="0.28"/>`;
+    if (p > 0) g += `<rect x="${x}" y="${by}" width="${Math.max(4, w * p / 100)}" height="${bh}" rx="4" fill="${esc(color)}" ${done ? 'opacity="0.55"' : ''}/>`;
+    const tip = t.title + ' · ' + fmtDate(r.s) + ' → ' + fmtDate(r.e) + ' · ' + p + '% · ' + (done ? 'Done' : t.status === 'doing' ? 'In progress' : 'To do');
+    g += `<rect class="hit" x="0" y="${y}" width="${W}" height="${rowH}" data-tip="${esc(tip)}" ${opts.width || isArchived(t) ? '' : `data-id="${esc(t.id)}" style="cursor:pointer"`}/>`;
+  });
+  return `<svg class="gantt" width="${opts.width ? '100%' : W}" ${opts.width ? '' : `height="${H}"`} viewBox="0 0 ${W} ${H}" role="img" aria-label="Gantt chart">${g}</svg>`;
+}
+async function projectAction(act, id) {
+  if (act === 'new') return openProjModal(null);
+  if (act === 'back') { S.projectOpen = null; return render(); }
+  if (act === 'mode-tasks' || act === 'mode-gantt') { S.projMode = act === 'mode-gantt' ? 'gantt' : 'tasks'; return render(); }
+  if (act === 'gantt') { S.projectOpen = id; S.projMode = 'gantt'; window.scrollTo(0, 0); return render(); }
+  if (act === 'edit') return openProjModal(id);
+  if (act === 'add') return openModal(null, { projectId: id });
+  if (act === 'pdf') return exportProjectPDF(id);
+}
+function openProjModal(id, cb) {
+  const p = id ? S.projects.find(x => x.id === id) : null;
+  S.projEdit = id || null; S.projCb = cb || null;
+  $('#pm-head').textContent = p ? 'Edit project' : 'New project';
+  $('#pm-name').value = p ? p.name : '';
+  $('#pm-desc').value = p ? p.description || '' : '';
+  $('#pm-color').value = p ? p.color : (PALETTE.find(c => !S.projects.some(x => x.color === c)) || PALETTE[S.projects.length % PALETTE.length]);
+  $('#pm-del').classList.toggle('hidden', !p);
+  $('#proj-modal').classList.remove('hidden');
+  setTimeout(() => $('#pm-name').focus(), 30);
+}
+const closeProjModal = () => { $('#proj-modal').classList.add('hidden'); S.projCb = null; };
+$('#pm-close').addEventListener('click', closeProjModal);
+$('#pm-cancel').addEventListener('click', closeProjModal);
+$('#proj-modal').addEventListener('mousedown', e => { if (e.target.id === 'proj-modal') closeProjModal(); });
+$('#pm-name').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); $('#pm-save').click(); } });
+$('#pm-save').addEventListener('click', async () => {
+  const name = $('#pm-name').value.trim();
+  if (!name) { $('#pm-name').classList.add('invalid'); return toast('Give the project a name', 'err'); }
+  $('#pm-name').classList.remove('invalid');
+  try {
+    const r = await withBusy(api('saveProject', S.token, { id: S.projEdit, name, color: $('#pm-color').value, description: $('#pm-desc').value }));
+    S.projects = r.projects;
+    const cb = S.projCb; closeProjModal();
+    if (cb) cb(r.project);
+    if (S.draft) mProj();
+    render(); toast(S.projEdit ? 'Project updated' : 'Project created');
+  } catch (err) { toast(err.message, 'err'); }
+});
+$('#pm-del').addEventListener('click', async () => {
+  const p = S.projects.find(x => x.id === S.projEdit); if (!p) return;
+  if (!await dialog('Delete project', `<p>Delete <b>${esc(p.name)}</b>? Its tasks are kept — they just won’t belong to a project anymore.</p>`, 'Delete')) return;
+  try {
+    S.projects = await withBusy(api('deleteProject', S.token, p.id));
+    S.tasks.concat(S.archived).forEach(t => { if (t.projectId === p.id) t.projectId = ''; });
+    if (S.projectOpen === p.id) S.projectOpen = null;
+    closeProjModal(); render(); toast('Project deleted');
+  } catch (err) { toast(err.message, 'err'); }
+});
+
+/* Project → PDF: opens a print-ready report; choose "Save as PDF" in the print window */
+function exportProjectPDF(id) {
+  const p = S.projects.find(x => x.id === id); if (!p) return;
+  const st = projStats(id), cm = catMap(), now = new Date();
+  const tasks = st.ts.slice().sort((a, b) => (tStart(a) || '9999').localeCompare(tStart(b) || '9999') || (a.dueDate || '9999').localeCompare(b.dueDate || '9999'));
+  const gantt = ganttSVG(st.ts, p.color, { width: 1000, labelW: 250 });
+  const statusTxt = t => t.status === 'done' ? 'Done' : t.status === 'doing' ? 'In progress' : 'To do';
+  const logo = (document.querySelector('.logo') || {}).src || '';
+  const taskHtml = tasks.map((t, i) => {
+    const pr = progress(t), q = QUADS[t.quadrant] || QUADS.Q2;
+    const labs = t.labels.filter(k => cm[k]).map(k => `<span class="tag" style="--c:${esc(cm[k].color)}">${esc(cm[k].name)}</span>`).join('');
+    const dates = (t.startDate || t.dueDate) ? `${t.startDate ? fmtDate(t.startDate) + ' → ' : ''}${t.dueDate ? fmtDate(t.dueDate) : ''}` : 'No date';
+    return `<div class="task">
+      <div class="th"><span class="num">${i + 1}</span><div class="grow"><div class="tt" dir="auto">${esc(t.title)}</div>
+        <div class="tm"><span class="st ${t.status}">${statusTxt(t)}</span><span class="q" style="--q:${q.hex}">${q.name}</span>${labs}<span>${dates}</span>
+        ${t.repeat ? `<span>Repeats ${REPEAT_LABEL[t.repeat].toLowerCase()}</span>` : ''}</div></div><b class="pct">${pr}%</b></div>
+      <div class="pbar"><i style="width:${pr}%;background:${esc(p.color)}"></i></div>
+      ${t.subtasks.length ? `<div class="lbl">Steps (${t.subtasks.filter(s => s.done).length}/${t.subtasks.length})</div><ul class="subs">${t.subtasks.map(s => `<li class="${s.done ? 'd' : ''}"><span class="box">${s.done ? '✓' : ''}</span><span dir="auto">${esc(s.title)}</span></li>`).join('')}</ul>` : ''}
+      ${t.notes ? `<div class="lbl">Notes &amp; comments</div><div class="notes" dir="auto">${esc(t.notes)}</div>` : ''}
+      ${t.attachments.length ? `<div class="lbl">Attachments</div><ul class="atts">${t.attachments.map(a => `<li><a href="${esc(a.url)}">${esc(a.name)}</a></li>`).join('')}</ul>` : ''}
+    </div>`;
+  }).join('') || '<p class="muted">No tasks in this project yet.</p>';
+  const html = `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${esc(p.name)} — ${esc(S.appName)}</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--text:#111827;--muted:#6b7280;--border:#e5e7eb;--grid:#eceef1;--danger:#dc2626;--surface:#fff}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;color:var(--text);font-size:12.5px;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.page{max-width:1000px;margin:0 auto;padding:24px}
+.toolbar{position:sticky;top:0;background:#111827;color:#fff;padding:10px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;font-size:13px}
+.toolbar button{background:#fff;color:#111;border:0;border-radius:8px;padding:7px 14px;font-weight:700;cursor:pointer}
+.hdr{display:flex;gap:14px;align-items:center;border-bottom:3px solid ${esc(p.color)};padding-bottom:14px}
+.hdr img{width:46px;height:46px;border-radius:12px}.hdr .app{color:var(--muted);font-size:12px;font-weight:600}
+h1{margin:2px 0 0;font-size:26px;letter-spacing:-.3px}
+.desc{margin:12px 0 0;color:#374151;white-space:pre-wrap;line-height:1.55}
+.meta{color:var(--muted);font-size:11.5px;margin-top:8px}
+.tiles{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:16px 0}
+.tile{border:1px solid var(--border);border-radius:10px;padding:8px 10px}.tile b{display:block;font-size:20px}.tile span{color:var(--muted);font-size:11px}
+.overall{display:flex;gap:10px;align-items:center;margin-bottom:6px}.overall .pbar{flex:1}
+h2{font-size:16px;margin:22px 0 10px}
+.gantt-box{border:1px solid var(--border);border-radius:10px;padding:10px;break-inside:avoid}
+.gantt text{font-size:12px;fill:var(--text);font-family:inherit}.gantt .ax{fill:var(--muted);font-size:11px}.gantt .gl{stroke:var(--grid);stroke-width:1}.gantt .today{stroke:var(--danger);stroke-width:1.5}.gantt .hit{fill:transparent}
+.task{border:1px solid var(--border);border-left:4px solid ${esc(p.color)};border-radius:10px;padding:10px 12px;margin-bottom:10px;break-inside:avoid}
+.th{display:flex;gap:10px;align-items:flex-start}.grow{flex:1;min-width:0}
+.num{width:24px;height:24px;border-radius:50%;background:#f3f4f6;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;flex:none}
+.tt{font-weight:700;font-size:14px}.tm{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:4px;color:var(--muted);font-size:11px}
+.st{font-weight:700;padding:1px 7px;border-radius:99px;border:1px solid var(--border);color:#374151}.st.done{color:#16a34a}.st.doing{color:#d97706}
+.q{font-weight:700;color:var(--q)}.tag{font-weight:700;color:var(--c)}
+.pct{font-size:13px}
+.pbar{height:6px;background:#eef0f3;border-radius:99px;overflow:hidden;margin-top:8px}.pbar i{display:block;height:100%;border-radius:99px}
+.lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;margin:10px 0 4px}
+.subs{list-style:none;margin:0;padding:0}.subs li{display:flex;gap:8px;align-items:center;padding:2px 0}
+.box{width:14px;height:14px;border:1.5px solid #9ca3af;border-radius:3px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;color:#16a34a;flex:none}
+.subs li.d span:last-child{color:var(--muted);text-decoration:line-through}
+.notes{white-space:pre-wrap;line-height:1.5;background:#f9fafb;border-radius:8px;padding:8px 10px}
+.atts{margin:0;padding-left:18px}.atts a{color:#0a66c2}
+.foot{margin-top:24px;padding-top:10px;border-top:1px solid var(--border);color:var(--muted);font-size:11px;text-align:center}
+@page{size:A4;margin:12mm}
+@media print{.toolbar{display:none}.page{padding:0;max-width:none}}
+</style></head><body>
+<div class="toolbar"><button onclick="window.print()">Save as PDF</button><span>In the print window, choose <b>Save as PDF</b> as the destination.</span></div>
+<div class="page">
+  <div class="hdr">${logo ? `<img src="${logo}" alt="">` : ''}<div><div class="app">${esc(S.appName)} · Project report</div><h1 dir="auto">${esc(p.name)}</h1></div></div>
+  ${p.description ? `<div class="desc" dir="auto">${esc(p.description)}</div>` : ''}
+  <div class="meta">Generated ${WEEKDAYS[now.getDay()]}, ${MONTHS[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()} · ${esc(S.user)}${st.from && st.to ? ' · Timeline ' + fmtDate(st.from) + ' → ' + fmtDate(st.to) : ''}</div>
+  <div class="tiles">
+    <div class="tile"><b>${st.total}</b><span>Tasks</span></div><div class="tile"><b>${st.done}</b><span>Completed</span></div>
+    <div class="tile"><b>${st.doing}</b><span>In progress</span></div><div class="tile"><b>${st.open - st.doing}</b><span>To do</span></div>
+    <div class="tile"><b style="color:${st.overdue ? '#dc2626' : 'inherit'}">${st.overdue}</b><span>Overdue</span></div></div>
+  <div class="overall"><b>Overall progress</b><div class="pbar" style="margin:0"><i style="width:${st.pct}%;background:${esc(p.color)}"></i></div><b>${st.pct}%</b></div>
+  ${gantt ? `<h2>Timeline (Gantt chart)</h2><div class="gantt-box">${gantt}</div>` : ''}
+  <h2>Tasks &amp; steps</h2>
+  ${taskHtml}
+  <div class="foot">${esc(S.appName)} · Developed by Ahmed Abdel-Dayem · linkedin.com/in/aabdel-dayem</div>
+</div>
+<script>window.addEventListener('load',function(){setTimeout(function(){window.print()},500)});<\/script>
+</body></html>`;
+  const w = window.open('', '_blank');
+  if (!w) return toast('Please allow pop-ups for this site to download the PDF', 'err');
+  w.document.open(); w.document.write(html); w.document.close();
+}
 
 /* ================= Admin page ================= */
 function showMain() { $('#admin-view').classList.add('hidden'); $('#main-view').classList.remove('hidden'); }
