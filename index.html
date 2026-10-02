@@ -323,6 +323,9 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
 .gantt .today{stroke:var(--danger);stroke-width:1.5}
 .gantt .hit{fill:transparent}
 .gantt .hit:hover{fill:color-mix(in srgb,var(--text) 5%,transparent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin:0 0 10px}
+.legend span{display:inline-flex;gap:6px;align-items:center}
+.legend i{width:10px;height:10px;border-radius:3px;background:var(--c)}
 .arch-row{display:flex;gap:10px;align-items:center;padding:8px 2px;border-top:1px solid var(--border);font-size:13px}
 @media (max-width:760px){ .proj{flex-wrap:wrap} .proj .pside{width:100%} }
 
@@ -370,10 +373,14 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
 
     <h2 class="inside-h">What’s inside?</h2>
     <div class="features">
-      <div class="feat"><div class="fi"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div><h3>Eisenhower Matrix</h3>
+      <div class="feat"><div class="fi"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div><h3>Focus Hub</h3>
         <p>Turn a long to-do list into clear actions — Priority, Schedule, Assign, or Remove.</p></div>
       <div class="feat"><div class="fi"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div><h3>Calendar</h3>
         <p>Keep deadlines, schedules, and upcoming tasks visible so nothing important slips through.</p></div>
+      <div class="feat"><div class="fi"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4v16h18"/><path d="M7 8h7M10 12h8M8 16h6"/></svg></div><h3>Gantt Chart</h3>
+        <p>Plan projects visually, track timelines, understand dependencies, and see what’s coming next.</p></div>
+      <div class="feat"><div class="fi"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div><h3>Project Data</h3>
+        <p>Keep your project information, progress, tasks, timelines, and key details organized in one place.</p></div>
       <div class="feat"><div class="fi"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4l-7.2 7.2a2 2 0 01-2.8 0L2 12V2h10l8.6 8.6a2 2 0 010 2.8z"/><circle cx="7" cy="7" r="1.5"/></svg></div><h3>Smart Categories</h3>
         <p>Organize your life into Growth, Finance, and Personal — because not every task belongs in the same bucket.</p></div>
       <div class="feat"><div class="fi"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div><h3>Task Management</h3>
@@ -463,6 +470,7 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
       <button class="tab" data-view="matrix">Focus Hub</button>
       <button class="tab" data-view="board">Board</button>
       <button class="tab" data-view="calendar">Calendar</button>
+      <button class="tab" data-view="gantt">Gantt</button>
       <button class="tab" data-view="projects">Projects</button>
       <button class="tab" data-view="insights">Insights</button>
     </div>
@@ -1121,6 +1129,7 @@ async function enterApp() {
     S.archived = []; S.archLoaded = false;
     $('#btn-admin').classList.toggle('hidden', !me.isAdmin);
     renderGreeting(); renderAnnouncement(); render();
+    loadArchived().then(renderStats).catch(() => {});
   } catch (e) { toast(e.message, 'err'); }
 }
 async function loadTasks() {
@@ -1145,7 +1154,7 @@ function firstName() {
 }
 function renderGreeting() {
   const d = new Date(), h = d.getHours();
-  const part = h >= 5 && h < 12 ? 'Good Morning' : h >= 12 && h < 17 ? 'Good Afternoon' : 'Good Evening';
+  const part = h < 12 ? 'Good Morning' : h < 17 ? 'Good Afternoon' : 'Good Evening';   // 12 AM–11:59 AM · 12 PM–4:59 PM · 5 PM–11:59 PM
   $('#greet').textContent = part + ', ' + firstName();
   $('#today-date').textContent = WEEKDAYS[d.getDay()] + ', ' + MONTHS[d.getMonth()] + ' ' + d.getDate();
   $('#menu-name').textContent = S.user;
@@ -1164,7 +1173,7 @@ function render() {
   renderStats();
   renderLabelFilter();
   const v = $('#view');
-  const views = { matrix: renderMatrix, board: renderBoard, calendar: renderCalendar, projects: renderProjects, insights: renderInsights };
+  const views = { matrix: renderMatrix, board: renderBoard, calendar: renderCalendar, gantt: renderGanttView, projects: renderProjects, insights: renderInsights };
   v.innerHTML = (views[S.view] || renderList)();
   $('#f-quad').disabled = S.view === 'matrix' || (S.view === 'board' && S.boardBy === 'quad');
   $('#f-status').disabled = S.view === 'board' && S.boardBy === 'status';
@@ -1178,8 +1187,9 @@ function renderStats() {
   const dueToday = open.filter(t => t.dueDate === td).length;
   const q1 = open.filter(t => t.quadrant === 'Q1').length;
   const rate = all.length ? Math.round(done / all.length * 100) : 0;
+  const completed = done + (S.archLoaded ? S.archived.length : 0);   // includes archived (finished long ago)
   $('#stats').innerHTML = [
-    ['Open tasks', open.length, ''], ['Due today', dueToday, ''], ['Overdue', overdue, overdue ? 'bad' : ''],
+    ['Open tasks', open.length, ''], ['Completed', completed, 'good'], ['Due today', dueToday, ''], ['Overdue', overdue, overdue ? 'bad' : ''],
     ['Priority', q1, q1 ? 'bad' : ''], ['Completion rate', rate + '%', 'good']
   ].map(([l, v, c]) => `<div class="stat ${c}"><b>${v}</b><span>${l}</span></div>`).join('');
 }
@@ -1247,7 +1257,7 @@ function renderMatrix() {
   </div>`;
 }
 
-const BOARD_BY = [['status', 'Status'], ['project', 'Project'], ['category', 'Category'], ['quad', 'Focus box'], ['day', 'Day']];
+const BOARD_BY = [['status', 'Status'], ['project', 'Project'], ['category', 'Category'], ['quad', 'Focus Hub'], ['day', 'Day']];
 function boardColumns(list) {
   const by = S.boardBy, td = today();
   if (by === 'project') {
@@ -1638,7 +1648,7 @@ function validateDraft() {
   const chk = (sel, bad, name) => { $(sel).classList.toggle('invalid', bad); if (bad) miss.push(name); };
   chk('#m-title', !d.title.trim(), 'title');
   chk('#m-labels', !d.labels.length, 'category');
-  chk('#m-eis', !d.quadrant, 'priority box');
+  chk('#m-eis', !d.quadrant, 'Focus Hub box');
   chk('#m-date', !d.dueDate, 'due date');
   chk('#m-status', !d.status, 'status');
   const badStart = !!(d.startDate && d.dueDate && d.startDate > d.dueDate);
@@ -1899,6 +1909,7 @@ function renderProjectDetail(id) {
 }
 /* Gantt chart as inline SVG. opts.width → fixed width (used for the PDF); otherwise the day width adapts */
 function ganttSVG(tasks, color, opts) {
+  const colorOf = typeof color === 'function' ? color : () => color;
   const rows = tasks.filter(t => t.dueDate).map(t => ({ t, s: tStart(t), e: t.dueDate }))
     .sort((a, b) => a.s.localeCompare(b.s) || a.e.localeCompare(b.e));
   if (!rows.length) return '';
@@ -1914,7 +1925,8 @@ function ganttSVG(tasks, color, opts) {
   // time axis: days when there is room, otherwise weeks (Saturdays) or months
   for (let i = 0; i < days; i++) {
     const d = plusDays(min, i), x = xOf(i);
-    const first = d.getDate() === 1 || i === 0;
+    const daysLeft = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate() - d.getDate() + 1;
+    const first = d.getDate() === 1 || (i === 0 && daysLeft * dayW >= 72);   // skip the first label if it would overlap the next month
     if (first) g += `<text class="ax" x="${x + 2}" y="13" style="font-weight:700">${MONTHS[d.getMonth()].slice(0, 3)} ${d.getFullYear()}</text>`;
     const tick = dayW >= 16 ? true : dayW >= 5 ? d.getDay() === 6 : d.getDate() === 1;
     if (tick) {
@@ -1930,12 +1942,23 @@ function ganttSVG(tasks, color, opts) {
     let title = t.title.length > maxChars ? t.title.slice(0, maxChars - 1) + '…' : t.title;
     g += `<line class="gl" x1="0" x2="${W}" y1="${y + rowH}" y2="${y + rowH}"/>`;
     g += `<text x="6" y="${y + 19}" ${done ? 'style="fill:var(--muted)"' : ''}>${done ? '✓ ' : ''}${esc(title)}</text>`;
-    g += `<rect x="${x}" y="${by}" width="${w}" height="${bh}" rx="4" fill="${esc(color)}" opacity="0.28"/>`;
-    if (p > 0) g += `<rect x="${x}" y="${by}" width="${Math.max(4, w * p / 100)}" height="${bh}" rx="4" fill="${esc(color)}" ${done ? 'opacity="0.55"' : ''}/>`;
+    const col = esc(colorOf(t));
+    g += `<rect x="${x}" y="${by}" width="${w}" height="${bh}" rx="4" fill="${col}" opacity="0.28"/>`;
+    if (p > 0) g += `<rect x="${x}" y="${by}" width="${Math.max(4, w * p / 100)}" height="${bh}" rx="4" fill="${col}" ${done ? 'opacity="0.55"' : ''}/>`;
     const tip = t.title + ' · ' + fmtDate(r.s) + ' → ' + fmtDate(r.e) + ' · ' + p + '% · ' + (done ? 'Done' : t.status === 'doing' ? 'In progress' : 'To do');
     g += `<rect class="hit" x="0" y="${y}" width="${W}" height="${rowH}" data-tip="${esc(tip)}" ${opts.width || isArchived(t) ? '' : `data-id="${esc(t.id)}" style="cursor:pointer"`}/>`;
   });
   return `<svg class="gantt" width="${opts.width ? '100%' : W}" ${opts.width ? '' : `height="${H}"`} viewBox="0 0 ${W} ${H}" role="img" aria-label="Gantt chart">${g}</svg>`;
+}
+/* Gantt screen for all tasks (uses the filters above; bar color = Focus Hub box) */
+function renderGanttView() {
+  const list = filtered();
+  const g = ganttSVG(list, t => (QUADS[t.quadrant] || QUADS.Q2).hex, {});
+  const undated = list.filter(t => !t.dueDate).length;
+  if (!g) return `<div class="empty big">No tasks with a due date to show.<br><br><button class="btn primary" data-act="new">+ New task</button></div>`;
+  const legend = `<div class="legend">${Object.keys(QUADS).map(k => `<span style="--c:${QUADS[k].hex}"><i></i>${QUADS[k].name}</span>`).join('')}</div>`;
+  return legend + `<div class="gantt-wrap">${g}</div>
+    <p class="hint">Each bar runs from the task’s start date (or the day it was created) to its due date. The solid part shows progress. The red line is today. Click a bar to open the task.${undated ? ' ' + undated + ' task(s) without a due date are not shown.' : ''}</p>`;
 }
 async function projectAction(act, id) {
   if (act === 'new') return openProjModal(null);
