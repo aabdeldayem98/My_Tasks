@@ -326,6 +326,9 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
 .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin:0 0 10px}
 .legend span{display:inline-flex;gap:6px;align-items:center}
 .legend i{width:10px;height:10px;border-radius:3px;background:var(--c)}
+.sync{font-size:12px;font-weight:600;color:var(--muted);display:inline-flex;align-items:center;gap:6px}
+.sync::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--q3);animation:pulse 1s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.3}}
 .arch-row{display:flex;gap:10px;align-items:center;padding:8px 2px;border-top:1px solid var(--border);font-size:13px}
 @media (max-width:760px){ .proj{flex-wrap:wrap} .proj .pside{width:100%} }
 
@@ -437,6 +440,7 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
     <div class="brand"><img class="logo" src="data:image/jpeg;base64,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" alt="logo"><h1 class="app-name">My Tasks</h1></div>
     <span class="grow"></span>
     <button class="btn primary" data-act="new">+ New task</button>
+    <span class="sync hidden" id="sync">Syncing…</span>
     <button class="btn ghost" id="btn-refresh" title="Refresh">Refresh</button>
     <button class="btn ghost icon-btn theme-btn" title="Light / Dark"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg></button>
     <div class="menu">
@@ -718,7 +722,8 @@ const S = {
   cal: null, draft: null, draftInit: '', saving: false, uploads: [], expanded: new Set(),
   authMode: 'login', hasUsers: true, allowSignup: true, maxMb: 10, maxCats: 10, archiveDays: 30, shareUrl: '', appName: 'My Tasks',
   catDraft: [], remember: false, insPeriod: 'week', admin: null, adm: { q: '', sort: 'createdAt', dir: 1 }, installEvt: null,
-  projects: [], projectOpen: null, projMode: 'tasks', boardBy: 'status', dragFrom: '', projCb: null, projEdit: null
+  projects: [], projectOpen: null, projMode: 'tasks', boardBy: 'status', dragFrom: '', projCb: null, projEdit: null,
+  info: null, archivedCount: 0, pending: 0, syncing: false, reloadAfterSave: false
 };
 try { S.boardBy = localStorage.getItem('boardBy') || 'status'; } catch (e) {}
 
@@ -951,6 +956,7 @@ $('#auth-form').addEventListener('submit', async e => {
   } catch (err) { toast(err.message, 'err'); }
 });
 function logoutLocal() {
+  clearCache(); S.pending = 0; S.syncing = false; updateSync();
   S.token = null; S.tasks = []; S.archived = []; S.archLoaded = false; S.draft = null; S.admin = null; store.set(null);
   $$('.overlay').forEach(o => o.classList.add('hidden'));
   $('#menu-list').classList.add('hidden');
@@ -1117,21 +1123,61 @@ $('#btn-install').addEventListener('click', async () => {
 });
 
 /* ================= App ================= */
-async function enterApp() {
+/* ---------- Fast start: show the last copy saved on this device, then refresh it in the background ---------- */
+const CACHE_KEY = 'mt_cache';
+function readCache(token) {
+  try {
+    const c = JSON.parse(localStorage.getItem(CACHE_KEY) || sessionStorage.getItem(CACHE_KEY) || 'null');
+    return c && token && c.tag === token.slice(-16) ? c : null;
+  } catch (e) { return null; }
+}
+let cacheTimer = null;
+function saveCache() {
+  clearTimeout(cacheTimer);
+  cacheTimer = setTimeout(() => {
+    if (!S.token || !S.me || !S.me.username) return;
+    try {
+      const c = { tag: S.token.slice(-16), info: S.info, me: S.me, tasks: S.tasks, categories: S.cats, projects: S.projects, archivedCount: S.archivedCount, at: Date.now() };
+      localStorage.removeItem(CACHE_KEY); sessionStorage.removeItem(CACHE_KEY);
+      (store.remembered() ? localStorage : sessionStorage).setItem(CACHE_KEY, JSON.stringify(c));
+    } catch (e) { /* storage full or blocked — fine, the app just starts the normal way */ }
+  }, 400);
+}
+function clearCache() { try { localStorage.removeItem(CACHE_KEY); sessionStorage.removeItem(CACHE_KEY); } catch (e) {} }
+function updateSync() {
+  const el = $('#sync');
+  el.textContent = S.pending ? 'Saving…' : 'Syncing…';
+  el.classList.toggle('hidden', !S.pending && !S.syncing);
+}
+function applyBoot(b) {
+  S.me = b.me; S.user = b.me.username; S.cats = b.categories; S.projects = b.projects;
+  if (S.pending) S.reloadAfterSave = true;          // a save is still on its way — refresh tasks right after it
+  else S.tasks = b.tasks;
+  S.archivedCount = b.archivedCount || 0;
+  S.archived = []; S.archLoaded = false;
+  $('#btn-admin').classList.toggle('hidden', !b.me.isAdmin);
+  renderGreeting(); renderAnnouncement(); render();
+  if (b.archivedCount === null) loadArchived().then(renderStats).catch(() => {});   // older backend without "bootstrap"
+}
+async function enterApp(cached) {
   $('#landing').classList.add('hidden');
   $('#app').classList.remove('hidden');
   showMain();
   renderGreeting();
   loadQuote();
+  if (cached) applyBoot(cached);
+  const fresh = api('bootstrap', S.token).catch(async e => {
+    if (!/Unknown action/.test(e.message)) throw e;  // Code.gs not updated yet → old way
+    const [me, tasks, categories, projects] = await Promise.all([api('whoAmI', S.token), api('listTasks', S.token), api('getCategories', S.token), api('getProjects', S.token)]);
+    return { me, tasks, categories, projects, archivedCount: null };
+  });
   try {
-    const [me, tasks, cats, projects] = await withBusy(Promise.all([api('whoAmI', S.token), api('listTasks', S.token), api('getCategories', S.token), api('getProjects', S.token)]));
-    S.me = me; S.user = me.username; S.tasks = tasks; S.cats = cats; S.projects = projects;
-    S.archived = []; S.archLoaded = false;
-    $('#btn-admin').classList.toggle('hidden', !me.isAdmin);
-    renderGreeting(); renderAnnouncement(); render();
-    loadArchived().then(renderStats).catch(() => {});
-  } catch (e) { toast(e.message, 'err'); }
+    if (cached) { S.syncing = true; updateSync(); }
+    applyBoot(await (cached ? fresh : withBusy(fresh)));
+  } catch (e) { if (S.token) toast(e.message, 'err'); }
+  finally { S.syncing = false; updateSync(); }
 }
+window.addEventListener('beforeunload', e => { if (S.pending) { e.preventDefault(); e.returnValue = ''; } });
 async function loadTasks() {
   try {
     S.tasks = await withBusy(api('listTasks', S.token));
@@ -1178,6 +1224,7 @@ function render() {
   $('#f-quad').disabled = S.view === 'matrix' || (S.view === 'board' && S.boardBy === 'quad');
   $('#f-status').disabled = S.view === 'board' && S.boardBy === 'status';
   $('#toolbar').classList.toggle('hidden', S.view === 'insights' || S.view === 'projects');
+  saveCache();
 }
 
 function renderStats() {
@@ -1187,7 +1234,7 @@ function renderStats() {
   const dueToday = open.filter(t => t.dueDate === td).length;
   const q1 = open.filter(t => t.quadrant === 'Q1').length;
   const rate = all.length ? Math.round(done / all.length * 100) : 0;
-  const completed = done + (S.archLoaded ? S.archived.length : 0);   // includes archived (finished long ago)
+  const completed = done + (S.archLoaded ? S.archived.length : S.archivedCount || 0);   // includes archived (finished long ago)
   $('#stats').innerHTML = [
     ['Open tasks', open.length, ''], ['Completed', completed, 'good'], ['Due today', dueToday, ''], ['Overdue', overdue, overdue ? 'bad' : ''],
     ['Priority', q1, q1 ? 'bad' : ''], ['Completion rate', rate + '%', 'good']
@@ -1532,13 +1579,18 @@ async function toggleDone(id) {
   render(); persist(t, before);
 }
 async function persist(t, before) {
+  S.pending++; updateSync();
   try {
     const saved = await api('saveTask', S.token, t);
     const hadNext = takeNext(saved);
     Object.assign(t, saved);
-    hadNext ? render() : renderStats();
+    hadNext ? render() : (renderStats(), saveCache());
   }
   catch (e) { Object.assign(t, before); render(); toast('Could not save: ' + e.message, 'err'); }
+  finally {
+    S.pending--; updateSync();
+    if (!S.pending && S.reloadAfterSave) { S.reloadAfterSave = false; api('listTasks', S.token).then(ts => { S.tasks = ts; render(); }).catch(() => {}); }
+  }
 }
 /* Delete with Undo (the server keeps deleted tasks for 24 hours) */
 async function deleteWithUndo(id) {
@@ -2218,22 +2270,26 @@ adminView.addEventListener('click', async e => {
 });
 
 /* ================= Init ================= */
+function applyInfo(info) {
+  S.info = info;
+  S.hasUsers = info.hasUsers; S.allowSignup = info.allowSignup; S.maxMb = info.maxFileMb || 10;
+  S.maxCats = info.maxCategories || 10; S.appName = info.appName; S.archiveDays = info.archiveDays || 30;
+  S.shareUrl = info.shareUrl || (IN_GAS ? info.scriptUrl : location.origin + location.pathname);
+  $$('.app-name').forEach(el => el.textContent = info.appName); document.title = info.appName;
+}
 (async function init() {
   if ('serviceWorker' in navigator && !IN_GAS && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
-  try {
-    const info = await withBusy(api('getAppInfo'));
-    S.hasUsers = info.hasUsers; S.allowSignup = info.allowSignup; S.maxMb = info.maxFileMb || 10;
-    S.maxCats = info.maxCategories || 10; S.appName = info.appName; S.archiveDays = info.archiveDays || 30;
-    S.shareUrl = info.shareUrl || (IN_GAS ? info.scriptUrl : location.origin + location.pathname);
-    $$('.app-name').forEach(el => el.textContent = info.appName); document.title = info.appName;
-    const t = store.get();
-    if (t) {
-      S.token = t; S.remember = store.remembered();
-      try { const me = await withBusy(api('whoAmI', t)); S.user = me.username; return enterApp(); }
-      catch (e) { S.token = null; store.set(null); }
-    }
-    showLanding();
-  } catch (e) { toast(e.message, 'err'); showLanding(); }
+  const t = store.get();
+  const cached = readCache(t);
+  if (cached && cached.info) applyInfo(cached.info);
+  if (t) {                                   // logged in → open the app now (from the device copy if there is one)
+    S.token = t; S.remember = store.remembered();
+    api('getAppInfo').then(info => { applyInfo(info); saveCache(); }).catch(() => {});
+    return enterApp(cached);
+  }
+  try { applyInfo(await withBusy(api('getAppInfo'))); }
+  catch (e) { toast(e.message, 'err'); }
+  showLanding();
 })();
 </script>
 </body>
