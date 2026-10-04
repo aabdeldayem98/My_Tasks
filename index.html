@@ -703,6 +703,7 @@ const QUADS = {
   Q3: { name: 'Assign',   sub: 'Urgent, not important — delegate it', color: 'var(--q3)', hex: '#d97706' },
   Q4: { name: 'Remove',   sub: 'Not urgent, not important — drop it', color: 'var(--q4)', hex: '#6b7280' }
 };
+const STATUS = { todo: 'To do', doing: 'In progress', done: 'Done' };
 const REPEAT_LABEL = { daily: 'Daily', weekly: 'Weekly', monthly: 'Monthly' };
 const PALETTE = ['#8b5cf6','#0ea5e9','#10b981','#f59e0b','#e11d48','#14b8a6','#6366f1','#f97316','#84cc16','#ec4899'];
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -768,10 +769,7 @@ const store = {
 const catMap = () => Object.fromEntries(S.cats.map(c => [c.key, c]));
 const isArchived = t => t.status === 'done' && t.completedAt && Date.now() - Date.parse(t.completedAt) > S.archiveDays * DAY_MS;
 
-/* ================= Talking to the backend =================
-   Inside Google Apps Script → google.script.run
-   On GitHub Pages (or any website) → fetch() to the Apps Script /exec URL */
-const IN_GAS = !!(window.google && google.script && google.script.run);
+/* ================= Talking to the backend (fetch() to the Apps Script /exec URL) ================= */
 function api(fn, ...args) {
   return new Promise((resolve, reject) => {
     const fail = err => {
@@ -779,14 +777,29 @@ function api(fn, ...args) {
       if (msg.includes('AUTH_REQUIRED') && S.token) { logoutLocal(); toast('Session expired, please log in again', 'err'); }
       reject(new Error(msg));
     };
-    if (IN_GAS) { google.script.run.withSuccessHandler(resolve).withFailureHandler(fail)[fn](...args); return; }
     if (!/^https:\/\//.test(API_URL)) return fail(new Error('The app is not connected yet — paste your Apps Script URL into API_URL in index.html'));
-    fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ fn, args }) })
-      .then(r => r.json())
+    // A hiccup on Google's side (busy server, a dropped redirect) is retried quietly.
+    // Calls that create something new are sent once only, so a retry can never make a duplicate.
+    const first = args[1];
+    const creates = NO_RETRY.has(fn) || ((fn === 'saveTask' || fn === 'saveProject') && !(first && first.id));
+    const tries = creates ? 1 : 3;
+    const attempt = n => fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ fn, args }) })
+      .then(r => r.text().then(txt => {
+        try { return JSON.parse(txt); } catch (e) { throw Object.assign(new Error('busy'), { kind: 'busy' }); }
+      }), () => { throw Object.assign(new Error('net'), { kind: navigator.onLine === false ? 'offline' : 'net' }); })
       .then(j => j && j.ok ? resolve(j.data) : fail(new Error((j && j.error) || 'Something went wrong')))
-      .catch(() => fail(new Error('Could not reach the server — check your internet connection')));
+      .catch(e => {
+        if (!e.kind) return fail(e);
+        if (e.kind !== 'offline' && n < tries) return new Promise(r => setTimeout(r, 800 * n)).then(() => attempt(n + 1));
+        fail(new Error(
+          (e.kind === 'offline' ? 'You’re offline — check your internet connection.' :
+           e.kind === 'busy' ? 'The My Tasks server is busy right now.' :
+           'Couldn’t reach the My Tasks server.') + ' Please try again later.'));
+      });
+    attempt(1);
   });
 }
+const NO_RETRY = new Set(['register', 'sendFeedback', 'uploadAttachment', 'requestPasswordReset', 'adminBackupNow']);
 let busyN = 0;
 async function withBusy(p) {
   busyN++; $('#busy').classList.remove('hidden');
@@ -818,6 +831,13 @@ function dialog(title, html, okLabel, cancelLabel) {
     $('#dlg-ok').onclick = () => done(true);
     $('#dlg-cancel').onclick = () => done(false);
   });
+}
+/* Popups: close with their × / Cancel buttons or by clicking outside → returns the close function */
+function closable(id, buttons, onClose) {
+  const close = () => { $('#' + id).classList.add('hidden'); if (onClose) onClose(); };
+  buttons.split(' ').forEach(b => $('#' + b).addEventListener('click', close));
+  $('#' + id).addEventListener('mousedown', e => { if (e.target.id === id) close(); });
+  return close;
 }
 /* Show / hide password buttons */
 document.addEventListener('click', e => {
@@ -1015,10 +1035,7 @@ $('#btn-acct').addEventListener('click', async () => {
     $('#acct-modal').classList.remove('hidden'); $('#ac-user').focus();
   } catch (err) { toast(err.message, 'err'); }
 });
-const closeAcct = () => $('#acct-modal').classList.add('hidden');
-$('#acct-close').addEventListener('click', closeAcct);
-$('#acct-cancel').addEventListener('click', closeAcct);
-$('#acct-modal').addEventListener('mousedown', e => { if (e.target.id === 'acct-modal') closeAcct(); });
+const closeAcct = closable('acct-modal', 'acct-close acct-cancel');
 $('#acct-form').addEventListener('submit', async e => {
   e.preventDefault();
   try {
@@ -1051,9 +1068,7 @@ $('#btn-share').addEventListener('click', () => {
   $('#sh-open').href = url;
   $('#share-modal').classList.remove('hidden');
 });
-const closeShare = () => $('#share-modal').classList.add('hidden');
-$('#share-close').addEventListener('click', closeShare);
-$('#share-modal').addEventListener('mousedown', e => { if (e.target.id === 'share-modal') closeShare(); });
+const closeShare = closable('share-modal', 'share-close');
 $('#share-copy').addEventListener('click', async () => {
   const inp = $('#share-url');
   try { await navigator.clipboard.writeText(inp.value); }
@@ -1093,16 +1108,11 @@ $('#arch-list').addEventListener('click', async e => {
     delete saved._next; placeTask(saved); renderArchive(); render(); toast('Task reopened');
   } catch (err) { toast(err.message, 'err'); }
 });
-const closeArch = () => $('#arch-modal').classList.add('hidden');
-$('#arch-close').addEventListener('click', closeArch);
-$('#arch-modal').addEventListener('mousedown', e => { if (e.target.id === 'arch-modal') closeArch(); });
+const closeArch = closable('arch-modal', 'arch-close');
 
 /* Feedback */
 $('#btn-feedback').addEventListener('click', () => { closeMenu(); $('#fb-text').value = ''; $('#fb-modal').classList.remove('hidden'); $('#fb-text').focus(); });
-const closeFb = () => $('#fb-modal').classList.add('hidden');
-$('#fb-close').addEventListener('click', closeFb);
-$('#fb-cancel').addEventListener('click', closeFb);
-$('#fb-modal').addEventListener('mousedown', e => { if (e.target.id === 'fb-modal') closeFb(); });
+const closeFb = closable('fb-modal', 'fb-close fb-cancel');
 $('#fb-send').addEventListener('click', async () => {
   const text = $('#fb-text').value.trim();
   if (!text) return toast('Write your feedback first', 'err');
@@ -1115,7 +1125,7 @@ window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); S.inst
 window.addEventListener('appinstalled', () => { S.installEvt = null; $('#btn-install').classList.add('hidden'); toast('App installed'); });
 const standalone = () => (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone;
 const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-if (!IN_GAS && isIOS && !standalone()) $('#btn-install').classList.remove('hidden');
+if (isIOS && !standalone()) $('#btn-install').classList.remove('hidden');
 $('#btn-install').addEventListener('click', async () => {
   closeMenu();
   if (S.installEvt) { S.installEvt.prompt(); S.installEvt = null; return; }
@@ -1157,7 +1167,6 @@ function applyBoot(b) {
   S.archived = []; S.archLoaded = false;
   $('#btn-admin').classList.toggle('hidden', !b.me.isAdmin);
   renderGreeting(); renderAnnouncement(); render();
-  if (b.archivedCount === null) loadArchived().then(renderStats).catch(() => {});   // older backend without "bootstrap"
 }
 async function enterApp(cached) {
   $('#landing').classList.add('hidden');
@@ -1166,11 +1175,7 @@ async function enterApp(cached) {
   renderGreeting();
   loadQuote();
   if (cached) applyBoot(cached);
-  const fresh = api('bootstrap', S.token).catch(async e => {
-    if (!/Unknown action/.test(e.message)) throw e;  // Code.gs not updated yet → old way
-    const [me, tasks, categories, projects] = await Promise.all([api('whoAmI', S.token), api('listTasks', S.token), api('getCategories', S.token), api('getProjects', S.token)]);
-    return { me, tasks, categories, projects, archivedCount: null };
-  });
+  const fresh = api('bootstrap', S.token);
   try {
     if (cached) { S.syncing = true; updateSync(); }
     applyBoot(await (cached ? fresh : withBusy(fresh)));
@@ -1329,7 +1334,7 @@ function boardColumns(list) {
     cols.push({ drop: '', name: 'No date', items: list.filter(t => !t.dueDate) });
     return cols;
   }
-  return [['todo', 'To do'], ['doing', 'In progress'], ['done', 'Done']].map(([k, name]) => ({ drop: 's:' + k, name, items: list.filter(t => t.status === k) }));
+  return Object.keys(STATUS).map(k => ({ drop: 's:' + k, name: STATUS[k], items: list.filter(t => t.status === k) }));
 }
 function renderBoard() {
   const list = sortTasks(filtered({ noStatus: S.boardBy === 'status', noQuad: S.boardBy === 'quad' }));
@@ -1379,42 +1384,42 @@ function renderCalendar() {
 
 /* ================= Charts (inline SVG) ================= */
 function niceStep(max) { const raw = Math.max(1, max) / 4; const p = Math.pow(10, Math.floor(Math.log10(raw))); const n = raw / p; return (n <= 1 ? 1 : n <= 2 ? 2 : n <= 5 ? 5 : 10) * p; }
-/* items: [{label, value, tip}] — one series → no legend; value label on the last column only */
-function columnChart(items) {
+/* Shared frame for the two charts: y gridlines, x labels, value on the last point, hover areas.
+   mark(it, i, x, y, base) draws the bar or dot for one item; extra is drawn once (the line) */
+function chart(items, padRight, valGap, mark, extra) {
   const W = 560, H = 180, L = 30, B = 24, Tp = 16, n = items.length;
   const step = Math.max(1, Math.ceil(niceStep(Math.max(...items.map(i => i.value)))));
-  const top = step * 4, pw = W - L - 4, ph = H - B - Tp, band = pw / n, bw = Math.min(24, band * 0.55);
-  const yOf = v => Tp + ph - (v / top) * ph, base = Tp + ph;
-  let g = '';
-  for (let k = 0; k <= 4; k += 2) { const v = step * k, yy = yOf(v); g += `<line class="gl" x1="${L}" x2="${W - 4}" y1="${yy}" y2="${yy}"/><text x="${L - 6}" y="${yy + 4}" text-anchor="end">${v}</text>`; }
-  items.forEach((it, i) => {
-    const cx = L + band * i + band / 2, x = cx - bw / 2, y = yOf(it.value), h = base - y, r = Math.min(4, h);
-    if (h > 0) g += `<path d="M${x},${base} V${y + r} Q${x},${y} ${x + r},${y} H${x + bw - r} Q${x + bw},${y} ${x + bw},${y + r} V${base} Z" fill="var(--chart)"/>`;
-    if (i === n - 1) g += `<text class="val" x="${cx}" y="${y - 6}" text-anchor="middle">${it.value}</text>`;
-    if (n <= 8 || i % 2 === n % 2 || i === n - 1) g += `<text x="${cx}" y="${H - 6}" text-anchor="middle">${esc(it.label)}</text>`;
-    g += `<rect class="hit" x="${L + band * i}" y="${Tp}" width="${band}" height="${ph}" data-tip="${esc(it.tip)}"/>`;
-  });
-  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img">${g}</svg>`;
-}
-/* items: [{label, value, tip}] — 2px line, r=4 markers with a surface ring, end value labelled */
-function lineChart(items) {
-  const W = 560, H = 180, L = 30, B = 24, Tp = 16, n = items.length;
-  const step = Math.max(1, Math.ceil(niceStep(Math.max(...items.map(i => i.value)))));
-  const top = step * 4, pw = W - L - 14, ph = H - B - Tp, band = pw / n;
+  const top = step * 4, ph = H - B - Tp, band = (W - L - padRight) / n, base = Tp + ph;
   const yOf = v => Tp + ph - (v / top) * ph, xOf = i => L + band * i + band / 2;
   let g = '';
   for (let k = 0; k <= 4; k += 2) { const v = step * k, yy = yOf(v); g += `<line class="gl" x1="${L}" x2="${W - 4}" y1="${yy}" y2="${yy}"/><text x="${L - 6}" y="${yy + 4}" text-anchor="end">${v}</text>`; }
-  g += `<polyline fill="none" stroke="var(--chart)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" points="${items.map((it, i) => xOf(i) + ',' + yOf(it.value)).join(' ')}"/>`;
+  if (extra) g += extra(xOf, yOf);
   items.forEach((it, i) => {
-    g += `<circle cx="${xOf(i)}" cy="${yOf(it.value)}" r="4" fill="var(--chart)" stroke="var(--surface)" stroke-width="2"/>`;
-    if (i === n - 1) g += `<text class="val" x="${xOf(i)}" y="${yOf(it.value) - 10}" text-anchor="middle">${it.value}</text>`;
-    if (n <= 8 || i % 2 === n % 2 || i === n - 1) g += `<text x="${xOf(i)}" y="${H - 6}" text-anchor="middle">${esc(it.label)}</text>`;
+    const x = xOf(i), y = yOf(it.value);
+    g += mark(it, i, x, y, base, band);
+    if (i === n - 1) g += `<text class="val" x="${x}" y="${y - valGap}" text-anchor="middle">${it.value}</text>`;
+    if (n <= 8 || i % 2 === n % 2 || i === n - 1) g += `<text x="${x}" y="${H - 6}" text-anchor="middle">${esc(it.label)}</text>`;
     g += `<rect class="hit" x="${L + band * i}" y="${Tp}" width="${band}" height="${ph}" data-tip="${esc(it.tip)}"/>`;
   });
   return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img">${g}</svg>`;
 }
+/* items: [{label, value, tip}] — one series → no legend; value label on the last column only */
+function columnChart(items) {
+  return chart(items, 4, 6, (it, i, cx, y, base, band) => {
+    const bw = Math.min(24, band * 0.55), x = cx - bw / 2, h = base - y, r = Math.min(4, h);
+    return h > 0 ? `<path d="M${x},${base} V${y + r} Q${x},${y} ${x + r},${y} H${x + bw - r} Q${x + bw},${y} ${x + bw},${y + r} V${base} Z" fill="var(--chart)"/>` : '';
+  });
+}
+/* items: [{label, value, tip}] — 2px line, r=4 markers with a surface ring, end value labelled */
+function lineChart(items) {
+  return chart(items, 14, 10,
+    (it, i, x, y) => `<circle cx="${x}" cy="${y}" r="4" fill="var(--chart)" stroke="var(--surface)" stroke-width="2"/>`,
+    (xOf, yOf) => `<polyline fill="none" stroke="var(--chart)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" points="${items.map((it, i) => xOf(i) + ',' + yOf(it.value)).join(' ')}"/>`);
+}
 function weekStart(d) { const x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate() - (x.getDay() + 1) % 7); return x; } // Saturday
 function plusDays(d, n) { const x = new Date(d); x.setDate(x.getDate() + n); return x; }
+/* The last n weeks (oldest first), each {a: Saturday, b: next Saturday} */
+const lastWeeks = n => Array.from({ length: n }, (_, i) => { const a = plusDays(weekStart(new Date()), -7 * (n - 1 - i)); return { a, b: plusDays(a, 7) }; });
 const shortD = d => MONTHS[d.getMonth()].slice(0, 3) + ' ' + d.getDate();
 
 /* ================= Insights (weekly analytics) ================= */
@@ -1424,8 +1429,7 @@ function renderInsights() {
     return '<div class="empty big">Loading insights…</div>';
   }
   const all = S.tasks.concat(S.archived), now = new Date(), ms = s => (s ? Date.parse(s) : NaN);
-  const ws = weekStart(now), weeks = [];
-  for (let i = 7; i >= 0; i--) { const a = plusDays(ws, -7 * i); weeks.push({ a, b: plusDays(a, 7) }); }
+  const ws = weekStart(now), weeks = lastWeeks(8);
   weeks.forEach((w, i) => {
     const current = i === weeks.length - 1, end = current ? now : w.b, key = current ? today() : ymd(w.b);
     w.done = all.filter(t => t.status === 'done' && ms(t.completedAt) >= w.a && ms(t.completedAt) < w.b);
@@ -1638,10 +1642,7 @@ $('#cats-add').addEventListener('click', () => {
   S.catDraft.push({ key: '', name: '', color }); renderCats();
   const inputs = $$('#cats-list input[type=text]'); inputs[inputs.length - 1].focus();
 });
-const closeCats = () => $('#cats-modal').classList.add('hidden');
-$('#cats-close').addEventListener('click', closeCats);
-$('#cats-cancel').addEventListener('click', closeCats);
-$('#cats-modal').addEventListener('mousedown', e => { if (e.target.id === 'cats-modal') closeCats(); });
+const closeCats = closable('cats-modal', 'cats-close cats-cancel');
 $('#cats-save').addEventListener('click', async () => {
   try {
     S.cats = await withBusy(api('saveCategories', S.token, S.catDraft.map(c => Object.assign({}, c, { name: c.name.trim() }))));
@@ -1654,13 +1655,10 @@ $('#cats-save').addEventListener('click', async () => {
 /* ================= Task modal ================= */
 function openModal(id, preset) {
   const t = id ? S.tasks.find(x => x.id === id) : null;
-  S.draft = t ? clone(t) : Object.assign({ id: '', title: '', notes: '', labels: [], quadrant: '', dueDate: '', status: 'todo', reminderAt: '', repeat: '', projectId: '', startDate: '', subtasks: [], attachments: [] }, preset || {});
-  if (S.draft.projectId === undefined) S.draft.projectId = '';
-  if (S.draft.startDate === undefined) S.draft.startDate = '';
+  const blank = { id: '', title: '', notes: '', labels: [], quadrant: '', dueDate: '', status: 'todo', reminderAt: '', repeat: '', projectId: '', startDate: '', subtasks: [], attachments: [] };
+  S.draft = Object.assign(blank, t ? clone(t) : preset);
   if (S.draft.projectId && !S.projects.some(p => p.id === S.draft.projectId)) S.draft.projectId = '';
   S.draft.labels = S.draft.labels.filter(k => S.cats.some(c => c.key === k));   // drop deleted categories
-  if (S.draft.reminderAt === undefined) S.draft.reminderAt = '';
-  if (S.draft.repeat === undefined) S.draft.repeat = '';
   S.draftInit = JSON.stringify(S.draft);
   S.uploads = [];
   $$('#task-modal .invalid').forEach(x => x.classList.remove('invalid'));
@@ -1884,12 +1882,8 @@ document.addEventListener('keydown', e => {
   if (e.key !== 'Escape' && !(e.key === 'Enter' && (e.ctrlKey || e.metaKey))) return;
   const open = id => !$(id).classList.contains('hidden');
   if (open('#dlg')) { if (e.key === 'Escape') $('#dlg-cancel').click(); return; }
-  if (open('#proj-modal')) { if (e.key === 'Escape') closeProjModal(); return; }
-  if (open('#cats-modal')) { if (e.key === 'Escape') closeCats(); return; }
-  if (open('#share-modal')) { if (e.key === 'Escape') closeShare(); return; }
-  if (open('#acct-modal')) { if (e.key === 'Escape') closeAcct(); return; }
-  if (open('#arch-modal')) { if (e.key === 'Escape') closeArch(); return; }
-  if (open('#fb-modal')) { if (e.key === 'Escape') closeFb(); return; }
+  for (const [id, close] of [['#proj-modal', closeProjModal], ['#cats-modal', closeCats], ['#share-modal', closeShare], ['#acct-modal', closeAcct], ['#arch-modal', closeArch], ['#fb-modal', closeFb]])
+    if (open(id)) { if (e.key === 'Escape') close(); return; }
   if (!open('#task-modal')) return;
   if (e.key === 'Escape') attemptClose(); else saveModal();
 });
@@ -1983,7 +1977,7 @@ function ganttSVG(tasks, color, opts) {
     const tick = dayW >= 16 ? true : dayW >= 5 ? d.getDay() === 6 : d.getDate() === 1;
     if (tick) {
       g += `<line class="gl" x1="${x}" x2="${x}" y1="${top - 8}" y2="${H}"/>`;
-      if (dayW >= 16 || dayW >= 5) g += `<text class="ax" x="${x + (dayW >= 16 ? dayW / 2 : 2)}" y="30" ${dayW >= 16 ? 'text-anchor="middle"' : ''}>${d.getDate()}</text>`;
+      if (dayW >= 5) g += `<text class="ax" x="${x + (dayW >= 16 ? dayW / 2 : 2)}" y="30" ${dayW >= 16 ? 'text-anchor="middle"' : ''}>${d.getDate()}</text>`;
     }
   }
   const td = today();
@@ -1991,13 +1985,13 @@ function ganttSVG(tasks, color, opts) {
   rows.forEach((r, i) => {
     const y = top + i * rowH, t = r.t, p = progress(t), done = t.status === 'done';
     const x = xOf(idx(r.s)), w = Math.max(dayW, (idx(r.e) - idx(r.s) + 1) * dayW), by = y + 8, bh = 14;
-    let title = t.title.length > maxChars ? t.title.slice(0, maxChars - 1) + '…' : t.title;
+    const title = t.title.length > maxChars ? t.title.slice(0, maxChars - 1) + '…' : t.title;
     g += `<line class="gl" x1="0" x2="${W}" y1="${y + rowH}" y2="${y + rowH}"/>`;
     g += `<text x="6" y="${y + 19}" ${done ? 'style="fill:var(--muted)"' : ''}>${done ? '✓ ' : ''}${esc(title)}</text>`;
     const col = esc(colorOf(t));
     g += `<rect x="${x}" y="${by}" width="${w}" height="${bh}" rx="4" fill="${col}" opacity="0.28"/>`;
     if (p > 0) g += `<rect x="${x}" y="${by}" width="${Math.max(4, w * p / 100)}" height="${bh}" rx="4" fill="${col}" ${done ? 'opacity="0.55"' : ''}/>`;
-    const tip = t.title + ' · ' + fmtDate(r.s) + ' → ' + fmtDate(r.e) + ' · ' + p + '% · ' + (done ? 'Done' : t.status === 'doing' ? 'In progress' : 'To do');
+    const tip = t.title + ' · ' + fmtDate(r.s) + ' → ' + fmtDate(r.e) + ' · ' + p + '% · ' + STATUS[t.status];
     g += `<rect class="hit" x="0" y="${y}" width="${W}" height="${rowH}" data-tip="${esc(tip)}" ${opts.width || isArchived(t) ? '' : `data-id="${esc(t.id)}" style="cursor:pointer"`}/>`;
   });
   return `<svg class="gantt" width="${opts.width ? '100%' : W}" ${opts.width ? '' : `height="${H}"`} viewBox="0 0 ${W} ${H}" role="img" aria-label="Gantt chart">${g}</svg>`;
@@ -2032,10 +2026,7 @@ function openProjModal(id, cb) {
   $('#proj-modal').classList.remove('hidden');
   setTimeout(() => $('#pm-name').focus(), 30);
 }
-const closeProjModal = () => { $('#proj-modal').classList.add('hidden'); S.projCb = null; };
-$('#pm-close').addEventListener('click', closeProjModal);
-$('#pm-cancel').addEventListener('click', closeProjModal);
-$('#proj-modal').addEventListener('mousedown', e => { if (e.target.id === 'proj-modal') closeProjModal(); });
+const closeProjModal = closable('proj-modal', 'pm-close pm-cancel', () => { S.projCb = null; });
 $('#pm-name').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); $('#pm-save').click(); } });
 $('#pm-save').addEventListener('click', async () => {
   const name = $('#pm-name').value.trim();
@@ -2067,7 +2058,6 @@ function exportProjectPDF(id) {
   const st = projStats(id), cm = catMap(), now = new Date();
   const tasks = st.ts.slice().sort((a, b) => (tStart(a) || '9999').localeCompare(tStart(b) || '9999') || (a.dueDate || '9999').localeCompare(b.dueDate || '9999'));
   const gantt = ganttSVG(st.ts, p.color, { width: 1000, labelW: 250 });
-  const statusTxt = t => t.status === 'done' ? 'Done' : t.status === 'doing' ? 'In progress' : 'To do';
   const logo = (document.querySelector('.logo') || {}).src || '';
   const taskHtml = tasks.map((t, i) => {
     const pr = progress(t), q = QUADS[t.quadrant] || QUADS.Q2;
@@ -2075,7 +2065,7 @@ function exportProjectPDF(id) {
     const dates = (t.startDate || t.dueDate) ? `${t.startDate ? fmtDate(t.startDate) + ' → ' : ''}${t.dueDate ? fmtDate(t.dueDate) : ''}` : 'No date';
     return `<div class="task">
       <div class="th"><span class="num">${i + 1}</span><div class="grow"><div class="tt" dir="auto">${esc(t.title)}</div>
-        <div class="tm"><span class="st ${t.status}">${statusTxt(t)}</span><span class="q" style="--q:${q.hex}">${q.name}</span>${labs}<span>${dates}</span>
+        <div class="tm"><span class="st ${t.status}">${STATUS[t.status]}</span><span class="q" style="--q:${q.hex}">${q.name}</span>${labs}<span>${dates}</span>
         ${t.repeat ? `<span>Repeats ${REPEAT_LABEL[t.repeat].toLowerCase()}</span>` : ''}</div></div><b class="pct">${pr}%</b></div>
       <div class="pbar"><i style="width:${pr}%;background:${esc(p.color)}"></i></div>
       ${t.subtasks.length ? `<div class="lbl">Steps (${t.subtasks.filter(s => s.done).length}/${t.subtasks.length})</div><ul class="subs">${t.subtasks.map(s => `<li class="${s.done ? 'd' : ''}"><span class="box">${s.done ? '✓' : ''}</span><span dir="auto">${esc(s.title)}</span></li>`).join('')}</ul>` : ''}
@@ -2160,8 +2150,7 @@ function renderAdmin() {
     .map(([l, v]) => `<div class="stat"><b>${v}</b><span>${l}</span></div>`).join('');
 
   // sign-ups per week, last 12 weeks
-  const ws = weekStart(new Date()), weeks = [];
-  for (let i = 11; i >= 0; i--) { const a = plusDays(ws, -7 * i); weeks.push({ a, b: plusDays(a, 7) }); }
+  const weeks = lastWeeks(12);
   const signups = columnChart(weeks.map(w => { const n = A.users.filter(u => { const t = Date.parse(u.createdAt); return t >= w.a && t < w.b; }).length;
     return { label: shortD(w.a), value: n, tip: 'Week of ' + shortD(w.a) + ': ' + n + ' new user' + (n === 1 ? '' : 's') }; }));
 
@@ -2233,7 +2222,7 @@ adminView.addEventListener('click', async e => {
     if (e.target.closest('#adm-ann-save') || e.target.closest('#adm-ann-clear')) {
       const text = e.target.closest('#adm-ann-clear') ? '' : $('#adm-ann').value;
       S.admin.settings = await withBusy(api('adminSaveSettings', S.token, { announcement: text }));
-      if (S.admin.settings.announcement) { S.me.announcement = S.admin.settings.announcement; } else S.me.announcement = null;
+      S.me.announcement = S.admin.settings.announcement || null;
       renderAdmin(); renderAnnouncement(); return toast(text.trim() ? 'Announcement published' : 'Announcement removed');
     }
     if (e.target.closest('#adm-reinstall')) { S.admin.automations = await withBusy(api('adminReinstallAutomations', S.token)); renderAdmin(); return toast('Automations reinstalled'); }
@@ -2274,11 +2263,11 @@ function applyInfo(info) {
   S.info = info;
   S.hasUsers = info.hasUsers; S.allowSignup = info.allowSignup; S.maxMb = info.maxFileMb || 10;
   S.maxCats = info.maxCategories || 10; S.appName = info.appName; S.archiveDays = info.archiveDays || 30;
-  S.shareUrl = info.shareUrl || (IN_GAS ? info.scriptUrl : location.origin + location.pathname);
+  S.shareUrl = info.shareUrl || location.origin + location.pathname;
   $$('.app-name').forEach(el => el.textContent = info.appName); document.title = info.appName;
 }
 (async function init() {
-  if ('serviceWorker' in navigator && !IN_GAS && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
+  if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
   const t = store.get();
   const cached = readCache(t);
   if (cached && cached.info) applyInfo(cached.info);
