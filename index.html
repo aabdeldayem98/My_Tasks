@@ -599,6 +599,22 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
   .mtg{flex-wrap:wrap}.mtg .mt-side{flex-direction:row;width:100%;justify-content:space-between;align-items:center}
   .atable .hm{display:none}
 }
+
+/* ---------- Outlook pane: only "new task" ---------- */
+html.ol-mode #main-view > :not(#ol-pane), html.ol-mode .fab, html.ol-mode .credit, html.ol-mode .new-btn, html.ol-mode #btn-from-mail{display:none!important}
+html:not(.ol-mode) #ol-pane{display:none}
+#ol-pane{max-width:560px;margin:0 auto;padding-top:4px}
+.olp{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
+.olp-h{display:flex;align-items:center;gap:8px;margin-bottom:12px}.olp-h h2{margin:0;font-size:18px}
+.olp .seg{display:flex;width:100%;margin-bottom:12px}.olp .seg button{flex:1}
+.olp-mail{display:flex;gap:10px;align-items:flex-start;background:var(--primary-soft);border-radius:12px;padding:10px 12px;margin-bottom:10px;font-size:13px}
+.olp-mail .icon{flex:none;margin-top:2px;color:var(--ink)}.olp-mail b{display:block;color:var(--ink);word-break:break-word}
+.olp .field{margin-bottom:10px}.olp textarea{min-height:80px}
+.olp .eis small{display:none}.olp .eis button{padding:7px 10px}
+.olp-save{width:100%;margin-top:12px;padding:11px;font-size:15px}
+.olp-done{text-align:center;padding:26px 12px}.olp-done .ok{width:54px;height:54px;border-radius:50%;background:color-mix(in srgb,var(--ok) 16%,var(--surface));color:var(--ok);display:inline-flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;margin-bottom:8px}
+.olp-done h3{margin:4px 0}.olp-done .row-b{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.olp-att{font-size:12px;color:var(--muted);margin:-4px 0 10px 26px}
 </style>
 </head>
 <body>
@@ -712,6 +728,31 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
 
   <!-- Main -->
   <div class="wrap" id="main-view">
+    <div id="ol-pane">
+      <div class="olp" id="olp-form">
+        <div class="olp-h"><h2>New task</h2><span class="grow"></span><button type="button" class="link" id="olp-full">Open full app</button></div>
+        <div class="seg" id="olp-src"><button type="button" data-src="mail" class="on">From this email</button><button type="button" data-src="blank">Blank task</button></div>
+        <div class="olp-mail" id="olp-mail"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><div style="min-width:0"><b id="olp-subj"></b><span class="muted" id="olp-from"></span></div></div>
+        <label class="check-row" id="olp-att-row"><input type="checkbox" id="olp-attach" checked> Attach this email to the task</label>
+        <div class="olp-att" id="olp-att-hint">Saved as an Outlook email file (.eml) — opens in Outlook with its attachments.</div>
+        <div class="field"><label>Task<span class="req">*</span></label><input id="olp-title" dir="auto" maxlength="300" placeholder="What needs to be done?"></div>
+        <div class="grid2 keep2">
+          <div class="field"><label>Due date</label><input type="date" id="olp-due"></div>
+          <div class="field"><label>Project</label><select id="olp-proj"></select></div>
+        </div>
+        <div class="field"><label>Focus Hub</label><div class="eis" id="olp-eis"></div></div>
+        <div class="grid2 hidden" id="olp-deleg">
+          <div class="field"><label>Assigned to</label><input id="olp-dto" dir="auto" maxlength="100" placeholder="Who is doing it?"></div>
+          <div class="field"><label>Follow up on</label><input type="date" id="olp-fu"></div>
+        </div>
+        <div class="field"><label>Category</label><div class="chips" id="olp-cats"></div></div>
+        <div class="field"><label>Notes</label><textarea id="olp-notes" dir="auto" maxlength="5000"></textarea></div>
+        <label class="check-row"><input type="checkbox" id="olp-focus"> Show in Today’s focus</label>
+        <button class="btn primary olp-save" type="button" id="olp-save">Save task</button>
+      </div>
+      <div class="olp olp-done hidden" id="olp-done"><div class="ok">✓</div><h3>Task saved</h3><div class="muted" id="olp-done-t" dir="auto"></div>
+        <div class="row-b"><button class="btn primary" type="button" id="olp-again">+ Another task</button><button class="btn" type="button" id="olp-open">Open full app</button></div></div>
+    </div>
     <div class="announce hidden" id="announce"><span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg></span><p id="announce-text"></p><button class="x" id="announce-close" title="Dismiss">×</button></div>
 
     <div class="welcome">
@@ -1126,6 +1167,7 @@ const S = {
 try { S.mtFilter = localStorage.getItem('mtFilter') || 'upcoming'; S.planMode = localStorage.getItem('planMode') || 'matrix'; S.timeMode = localStorage.getItem('timeMode') || 'calendar'; } catch (e) {}
 /* Plan and Timeline tabs hold two or three screens each */
 const MODES = { plan: [['matrix', 'Focus Hub'], ['board', 'Board'], ['list', 'List']], timeline: [['calendar', 'Calendar'], ['gantt', 'Gantt']] };
+const OLP = { src: 'mail', d: null, started: false, busy: false };   // Outlook pane (quick task)
 const curView = () => S.view === 'plan' ? S.planMode : S.view === 'timeline' ? S.timeMode : S.view;
 try { S.boardBy = localStorage.getItem('boardBy') || 'status'; } catch (e) {}
 
@@ -1386,6 +1428,7 @@ $('#auth-form').addEventListener('submit', async e => {
 });
 function logoutLocal() {
   clearCache(); S.pending = 0; S.syncing = false; updateSync();
+  OLP.started = false; document.documentElement.classList.remove('ol-mode');
   S.token = null; S.tasks = []; S.archived = []; S.meetings = []; S.mt = null; S.archLoaded = false; S.draft = null; S.admin = null; store.set(null);
   S.calUrl = null; S.quoteSeen = []; S.quoteTouched = false;
   try { if (window.google && google.accounts) google.accounts.id.disableAutoSelect(); } catch (e) {}
@@ -1661,6 +1704,7 @@ function applyBoot(b) {
   $('#btn-admin').classList.toggle('hidden', !b.me.isAdmin);
   if (b.quote && !S.quoteTouched) { S.dailyQuote = b.quote; S.quote = Object.assign({}, b.quote); renderQuote(); }
   renderGreeting(); renderAnnouncement(); render();
+  if (S.office) olStart();
 }
 /* Opens the app: from the login answer (boot), from the copy saved on this device (cached), or by asking the server */
 async function enterApp(cached, boot) {
@@ -2668,24 +2712,112 @@ $('#ol-reset').addEventListener('click', async () => {
   try { setCalUrl((await withBusy(api('resetCalendarFeed', S.token))).calToken); toast('New link ready'); }
   catch (e) { toast(e.message, 'err'); }
 });
+
+/* ================= Outlook pane: opens straight on "New task" (from the open email or blank) ================= */
+function olItem() { try { const it = S.office && Office.context.mailbox.item; return it && typeof it.subject === 'string' ? it : null; } catch (e) { return null; } }
+function olStart() {
+  if (!S.office || !S.token || OLP.started) return;
+  OLP.started = true;
+  document.documentElement.classList.add('ol-mode');
+  try { Office.context.mailbox.addHandlerAsync(Office.EventType.ItemChanged, () => { if (document.documentElement.classList.contains('ol-mode') && !OLP.busy) olFill(); }); } catch (e) {}
+  olFill();
+}
+async function olFill() {
+  const it = olItem();
+  if (!it) OLP.src = 'blank';
+  $('#olp-src').classList.toggle('hidden', !it);
+  $$('#olp-src [data-src]').forEach(b => b.classList.toggle('on', b.dataset.src === OLP.src));
+  const mail = OLP.src === 'mail' && it;
+  ['#olp-mail', '#olp-att-row', '#olp-att-hint'].forEach(x => $(x).classList.toggle('hidden', !mail));
+  OLP.d = { title: '', notes: '', dueDate: '', projectId: '', quadrant: '', labels: [], delegateTo: '', followUp: '', focus: false };
+  if (mail) {
+    const from = it.from ? (it.from.displayName || '') + (it.from.emailAddress ? ' <' + it.from.emailAddress + '>' : '') : '';
+    $('#olp-subj').textContent = it.subject || '(no subject)'; $('#olp-from').textContent = from;
+    OLP.d.title = (it.subject || '').replace(/^\s*((re|fw|fwd|aw|wg|رد|إعادة توجيه)\s*:\s*)+/i, '').slice(0, 300);
+    const body = await new Promise(res => { try { it.body.getAsync(Office.CoercionType.Text, r => res(r.status === 'succeeded' ? String(r.value || '') : '')); } catch (e) { res(''); } });
+    const when = it.dateTimeCreated ? fmtWhen(new Date(it.dateTimeCreated).toISOString()) : '';
+    OLP.d.notes = ['Email from: ' + from, when ? 'Received: ' + when : '', '', body.replace(/\n{3,}/g, '\n\n').trim().slice(0, 1500)].filter((x, i) => x || i === 2).join('\n');
+    $('#olp-attach').checked = true;
+  }
+  $('#olp-title').value = OLP.d.title; $('#olp-notes').value = OLP.d.notes; $('#olp-due').value = ''; $('#olp-dto').value = ''; $('#olp-fu').value = ''; $('#olp-focus').checked = false;
+  $('#olp-title').classList.remove('invalid');
+  $('#olp-proj').innerHTML = '<option value="">No project</option>' + S.projects.map(p => `<option value="${esc(p.id)}">${esc(p.name)}</option>`).join('');
+  olEis(); olCats();
+  $('#olp-form').classList.remove('hidden'); $('#olp-done').classList.add('hidden');
+}
+function olEis() {
+  $('#olp-eis').innerHTML = Object.keys(QUADS).map(k => `<button type="button" class="${OLP.d.quadrant === k ? 'on' : ''}" data-q="${k}" style="--q:${QUADS[k].color}"><b>${QUADS[k].name}</b><small>${QUADS[k].sub}</small></button>`).join('');
+  $('#olp-deleg').classList.toggle('hidden', OLP.d.quadrant !== 'Q3');
+}
+function olCats() {
+  $('#olp-cats').innerHTML = S.cats.map(c => `<button type="button" class="chip ${OLP.d.labels.includes(c.key) ? 'on' : ''}" data-label="${esc(c.key)}" style="--c:${esc(c.color)}"><span class="dot"></span>${esc(c.name)}</button>`).join('');
+}
+$('#olp-src').addEventListener('click', e => { const b = e.target.closest('[data-src]'); if (b && b.dataset.src !== OLP.src) { OLP.src = b.dataset.src; olFill(); } });
+$('#olp-eis').addEventListener('click', e => { const b = e.target.closest('[data-q]'); if (!b) return; OLP.d.quadrant = OLP.d.quadrant === b.dataset.q ? '' : b.dataset.q; olEis(); });
+$('#olp-cats').addEventListener('click', e => { const b = e.target.closest('[data-label]'); if (!b) return; const L = OLP.d.labels, i = L.indexOf(b.dataset.label); i >= 0 ? L.splice(i, 1) : L.push(b.dataset.label); olCats(); });
+$('#olp-title').addEventListener('input', e => { if (e.target.value.trim()) e.target.classList.remove('invalid'); });
+$('#olp-full').addEventListener('click', () => { document.documentElement.classList.remove('ol-mode'); render(); window.scrollTo(0, 0); });
+$('#olp-open').addEventListener('click', () => { document.documentElement.classList.remove('ol-mode'); goView('today'); });
+$('#olp-again').addEventListener('click', () => { OLP.src = olItem() ? 'mail' : 'blank'; olFill(); });
+$('#btn-from-mail').addEventListener('click', () => { document.documentElement.classList.add('ol-mode'); OLP.src = olItem() ? 'mail' : 'blank'; olFill(); window.scrollTo(0, 0); }, true);
+
+/* The open email as a file (.eml) — Outlook's getAsFileAsync (newer Outlook) */
+function olMailFile(it) {
+  return new Promise(res => {
+    try {
+      if (!it.getAsFileAsync) return res(null);
+      it.getAsFileAsync(r => res(r.status === 'succeeded' && r.value ? String(r.value) : null));
+    } catch (e) { res(null); }
+  });
+}
+/* A link that opens the email in Outlook on the web */
+function olMailLink(it) {
+  try {
+    const mb = Office.context.mailbox;
+    const rest = mb.convertToRestId ? mb.convertToRestId(it.itemId, Office.MailboxEnums.RestVersion.v2_0) : it.itemId;
+    if (!rest) return '';
+    const host = mb.userProfile && mb.userProfile.accountType === 'outlookCom' ? 'https://outlook.live.com' : 'https://outlook.office.com';
+    return host + '/mail/deeplink/read/' + encodeURIComponent(rest);
+  } catch (e) { return ''; }
+}
+$('#olp-save').addEventListener('click', async () => {
+  if (OLP.busy) return;
+  const d = OLP.d, title = $('#olp-title').value.trim();
+  if (!title) { $('#olp-title').classList.add('invalid'); $('#olp-title').focus(); return toast('Please fill in: task', 'err'); }
+  const it = OLP.src === 'mail' ? olItem() : null, btn = $('#olp-save');
+  const t = { id: newId(), isNew: true, createdAt: new Date().toISOString(), title, notes: $('#olp-notes').value, labels: d.labels.slice(), quadrant: d.quadrant,
+    dueDate: $('#olp-due').value, status: 'todo', reminderAt: '', repeat: '', projectId: $('#olp-proj').value, startDate: '', subtasks: [], attachments: [],
+    focusDate: $('#olp-focus').checked ? today() : '', topDate: '', delegateTo: d.quadrant === 'Q3' ? $('#olp-dto').value.trim() : '',
+    followUp: d.quadrant === 'Q3' ? $('#olp-fu').value : '', estimate: 0 };
+  if (it) {
+    const link = olMailLink(it);
+    if ($('#olp-attach').checked) {
+      OLP.busy = true; btn.disabled = true; btn.textContent = 'Attaching the email…';
+      try {
+        const data = await olMailFile(it);
+        if (!data) toast('This Outlook can’t export the email file — a link to the email was added instead', 'err', null, 6000);
+        else if (data.length * 0.75 > S.maxMb * 1024 * 1024) toast('The email is larger than ' + S.maxMb + ' MB — a link to it was added instead', 'err', null, 6000);
+        else {
+          const name = fileSafe(it.subject || 'Email') + '.eml';
+          t.attachments.push(await api('uploadAttachment', S.token, { name, mimeType: 'message/rfc822', data }));
+        }
+      } catch (err) { toast('Couldn’t attach the email: ' + err.message + ' — a link was added instead', 'err', null, 6000); }
+      finally { OLP.busy = false; btn.disabled = false; btn.textContent = 'Save task'; }
+    }
+    if (link) t.attachments.push({ id: uid(), name: 'Open the email in Outlook', url: link, fileId: '', kind: 'link' });
+  }
+  fillDates(t); placeTask(t); sendTask(t, null).catch(() => {});
+  $('#olp-done-t').textContent = t.title + (t.attachments.some(a => a.fileId) ? ' · email attached' : '');
+  $('#olp-form').classList.add('hidden'); $('#olp-done').classList.remove('hidden');
+  saveCache();
+});
 /* Inside Outlook (add-in): "From email" turns the open email into a task */
 if (window.Office && Office.onReady) Office.onReady(info => {
   if (!info || info.host !== Office.HostType.Outlook) return;
   S.office = true; document.documentElement.classList.add('in-outlook');
-  $('#btn-from-mail').classList.remove('hidden');
+  $('#btn-from-mail').classList.remove('hidden'); $('#btn-from-mail').lastChild.textContent = ' Quick task';
+  if (S.token && S.me && S.me.username) olStart();
 });
-$('#btn-from-mail').addEventListener('click', async () => {
-  const item = S.office && Office.context.mailbox.item;
-  if (!item || typeof item.subject !== 'string') return toast('Open an email first', 'err');
-  const from = item.from ? (item.from.displayName || '') + (item.from.emailAddress ? ' <' + item.from.emailAddress + '>' : '') : '';
-  const body = await new Promise(res => {
-    try { item.body.getAsync(Office.CoercionType.Text, r => res(r.status === 'succeeded' ? String(r.value || '') : '')); } catch (e) { res(''); }
-  });
-  const when = item.dateTimeCreated ? fmtWhen(new Date(item.dateTimeCreated).toISOString()) : '';
-  openModal(null, { title: (item.subject || 'Email').slice(0, 300),
-    notes: ['Email from: ' + from, when ? 'Received: ' + when : '', '', body.replace(/\n{3,}/g, '\n\n').trim().slice(0, 1500)].filter((x, i) => x || i === 2).join('\n') });
-});
-
 $('#m-edit-cats').addEventListener('click', openCats);
 $('#m-labels').addEventListener('click', e => {
   const b = e.target.closest('[data-label]'); if (!b) return;
