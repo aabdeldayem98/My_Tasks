@@ -1462,6 +1462,7 @@ $('#btn-archive').addEventListener('click', async () => {
   $('#arch-sub').textContent = 'Completed tasks move here automatically ' + S.archiveDays + ' days after you finish them.';
   $('#arch-list').innerHTML = '<div class="empty">Loading…</div>';
   $('#arch-modal').classList.remove('hidden');
+  if (S.archLoaded) return renderArchive();                    // already came with the app — no extra request
   try { await loadArchived(); renderArchive(); } catch (err) { toast(err.message, 'err'); }
 });
 function renderArchive() {
@@ -1523,7 +1524,7 @@ function saveCache() {
   cacheTimer = setTimeout(() => {
     if (!S.token || !S.me || !S.me.username) return;
     try {
-      const c = { tag: S.token.slice(-16), info: S.info, me: S.me, tasks: S.tasks, categories: S.cats, projects: S.projects, archivedCount: S.archivedCount, quote: S.dailyQuote || null, at: Date.now() };
+      const c = { tag: S.token.slice(-16), info: S.info, me: S.me, tasks: S.tasks, categories: S.cats, projects: S.projects, archivedCount: S.archivedCount, archived: S.archLoaded ? S.archived : null, quote: S.dailyQuote || null, at: Date.now() };
       localStorage.removeItem(CACHE_KEY); sessionStorage.removeItem(CACHE_KEY);
       (store.remembered() ? localStorage : sessionStorage).setItem(CACHE_KEY, JSON.stringify(c));
     } catch (e) { /* storage full or blocked — fine, the app just starts the normal way */ }
@@ -1541,7 +1542,7 @@ function applyBoot(b) {
   if (S.pending) S.reloadAfterSave = true;          // a save is still on its way — refresh tasks right after it
   else { S.tasks = b.tasks; mergeOutbox(); }
   S.archivedCount = b.archivedCount || 0;
-  S.archived = []; S.archLoaded = false;
+  S.archived = Array.isArray(b.archived) ? b.archived : []; S.archLoaded = Array.isArray(b.archived);   // Projects / Insights open without waiting
   $('#btn-admin').classList.toggle('hidden', !b.me.isAdmin);
   if (b.quote && !S.quoteTouched) { S.dailyQuote = b.quote; S.quote = Object.assign({}, b.quote); renderQuote(); }
   renderGreeting(); renderAnnouncement(); render();
@@ -1566,12 +1567,10 @@ async function enterApp(cached, boot) {
   finally { S.syncing = false; updateSync(); }
 }
 window.addEventListener('beforeunload', e => { if (S.pending) { e.preventDefault(); e.returnValue = ''; } });
+/* Refresh = the same single request the app opens with (tasks, archive, projects, categories) */
 async function loadTasks() {
-  try {
-    S.tasks = await withBusy(api('listTasks', S.token));
-    if (S.archLoaded) await loadArchived();
-    render();
-  } catch (e) { toast(e.message, 'err'); }
+  try { applyBoot(await withBusy(api('bootstrap', S.token))); }
+  catch (e) { toast(e.message, 'err'); }
 }
 $('#btn-refresh').addEventListener('click', () => { if (!$('#admin-view').classList.contains('hidden')) return openAdmin(); loadTasks(); });
 
@@ -1686,9 +1685,12 @@ function renderToday() {
   const td = today(), week = addDays(td, 7), all = filtered({ noStatus: true });
   const open = all.filter(t => t.status !== 'done'), used = new Set();
   const pick = list => { const r = list.filter(t => !used.has(t.id)); r.forEach(t => used.add(t.id)); return sortTasks(r); };
+  const yd = addDays(td, -1);
   const top = pick(open.filter(t => t.focusDate === td));
-  const overdue = pick(open.filter(t => t.dueDate && t.dueDate < td));
   const due = pick(open.filter(t => t.dueDate === td));
+  const yest = pick(open.filter(t => t.dueDate === yd));
+  const older = pick(open.filter(t => t.dueDate && t.dueDate < yd));
+  const overdue = yest.concat(older);
   const follow = pick(open.filter(t => t.followUp && t.followUp <= td));
   const doing = pick(open.filter(t => t.status === 'doing'));
   const soon = pick(open.filter(t => t.dueDate > td && t.dueDate <= week));
@@ -1700,14 +1702,17 @@ function renderToday() {
   const right = `${mins ? `<span class="vlabel muted">≈ ${fmtMin(mins)} planned</span>` : ''}
     <button class="btn sm" data-act="plan-day">${STAR} Plan my day</button>
     <button class="btn sm ${late ? 'primary' : ''}" data-act="wrap-up" title="Move what’s left to another day">Wrap up</button>`;
+  const moveAll = from => `<button class="btn xs" data-act="overdue-today" data-from="${from}">Move all to today</button>`;
+  // Order: quick add → Top 3 → due today → due yesterday → … → older overdue at the very bottom
   return vhead('Today', top.length + overdue.length + due.length, right) + quickAddBar() +
     sec('Top 3 today', 'top', top, 'Pick up to 3 tasks that matter most today — <button class="link" data-act="plan-day">Plan my day</button>') +
-    (overdue.length ? sec('Overdue', 'late', overdue, '', '<button class="btn xs" data-act="overdue-today">Move all to today</button>') : '') +
-    sec('Due today', 'now', due, overdue.length || top.length ? 'Nothing else is due today.' : 'Nothing due today — a good moment to plan ahead.') +
+    sec('Due today', 'now', due, top.length ? 'Nothing else is due today.' : 'Nothing due today — a good moment to plan ahead.') +
+    (yest.length ? sec('Due yesterday', 'late', yest, '', moveAll('y')) : '') +
     (follow.length ? sec('Follow up', 'follow', follow, '') : '') +
     (doing.length ? sec('In progress', '', doing, '') : '') +
     sec('Coming up · next 7 days', 'soon', soon, 'Nothing planned for the next 7 days.') +
-    (doneToday.length ? sec('Done today', 'done', doneToday, '') : '');
+    (doneToday.length ? sec('Done today', 'done', doneToday, '') : '') +
+    (older.length ? sec('Overdue · earlier', 'late', older, '', moveAll('o')) : '');
 }
 
 /* Inbox: everything captured but not sorted into a Focus Hub box yet */
@@ -2180,7 +2185,8 @@ view.addEventListener('click', e => {
     if (a === 'qs') { const t = S.tasks.find(x => x.id === card.dataset.id), before = clone(t); t.quadrant = act.dataset.q; render(); persist(t, before);
       toast('Sorted into ' + QUADS[t.quadrant].name); if (t.quadrant === 'Q4') removeHint(t.id); return; }
     if (a === 'overdue-today') {
-      const td = today(), late = filtered({ noStatus: true }).filter(t => t.status !== 'done' && t.dueDate && t.dueDate < td);
+      const td = today(), yd = addDays(td, -1), from = act.dataset.from;
+      const late = filtered({ noStatus: true }).filter(t => t.status !== 'done' && t.dueDate && (from === 'y' ? t.dueDate === yd : from === 'o' ? t.dueDate < yd : t.dueDate < td));
       late.forEach(t => { const before = clone(t); t.dueDate = td; persist(t, before); });
       render(); return toast(late.length + ' task' + (late.length === 1 ? '' : 's') + ' moved to today');
     }
