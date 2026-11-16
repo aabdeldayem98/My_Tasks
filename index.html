@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>North Star</title>
-<meta name="description" content="North Star — the task and project manager for HR experts. Capture everything, focus on what matters today, and deliver every project on time.">
+<title>North Star Momentum</title>
+<meta name="description" content="North Star Momentum — the task and project manager for HR experts. Capture everything, focus on what matters today, and deliver every project on time.">
 <meta name="theme-color" content="#312e81">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
-<meta name="apple-mobile-web-app-title" content="North Star">
+<meta name="apple-mobile-web-app-title" content="North Star Momentum">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
@@ -194,9 +194,16 @@ header.top h1{font-size:18px;margin:0;white-space:nowrap}
 .tsec.late .tsec-h h3{color:var(--danger)}
 .tsec.now .tsec-h h3{color:var(--ink)}
 .tsec.top .tsec-h h3{color:var(--gold-ink)}
-.tsec.top .tsec-h h3::before{content:'★ '}
 .tsec.follow .tsec-h h3{color:var(--q3)}
-.card.focus{background:linear-gradient(90deg,color-mix(in srgb,var(--gold) 9%,var(--surface)),var(--surface) 45%)}
+.card.top{background:linear-gradient(90deg,color-mix(in srgb,var(--gold) 20%,var(--surface)),color-mix(in srgb,var(--gold) 6%,var(--surface)) 65%);border-color:color-mix(in srgb,var(--gold) 60%,var(--border));box-shadow:inset 4px 0 0 var(--gold),var(--shadow)}
+.card .tstar{color:var(--gold);display:inline-flex;vertical-align:-2px;margin-right:5px}
+.card .tstar .icon{width:15px;height:15px;fill:currentColor}
+.ico.pin.on{color:var(--primary)}
+.ico[data-act=top].on .icon{fill:currentColor}
+.prow .pstar{background:none;border:1px solid var(--border);border-radius:8px;width:30px;height:28px;display:inline-flex;align-items:center;justify-content:center;color:var(--muted);flex:none;cursor:pointer}
+.prow .pstar.on{color:var(--gold);border-color:var(--gold);background:color-mix(in srgb,var(--gold) 14%,var(--surface))}
+.prow .pstar.on .icon{fill:currentColor}
+.prow.is-top{background:color-mix(in srgb,var(--gold) 9%,var(--surface))}
 .card.inbox{border-left-style:dashed}
 .c-act{display:flex;gap:2px;justify-content:flex-end}
 .ico{border:0;background:transparent;width:30px;height:30px;border-radius:8px;color:var(--muted);display:inline-flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;padding:0}
@@ -551,6 +558,47 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
   .hbar{grid-template-columns:90px 1fr 30px}
   .chart text{font-size:16px}
 }
+/* ---------- Meetings ---------- */
+.mt-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:-4px 0 14px}
+.mt-tools input{flex:1;min-width:160px;max-width:320px}
+.mtg{display:flex;gap:14px;align-items:flex-start;background:var(--surface);border:1px solid var(--border);border-left:5px solid var(--c,var(--primary));border-radius:12px;padding:12px 14px;margin-bottom:10px;cursor:pointer;box-shadow:var(--shadow)}
+.mtg:hover{border-color:color-mix(in srgb,var(--primary) 40%,var(--border))}
+.mtg .mday{width:54px;flex:none;text-align:center;border-radius:10px;background:var(--primary-soft);color:var(--ink);padding:6px 0;line-height:1.1}
+.mtg .mday b{display:block;font-size:20px}.mtg .mday span{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.mtg.past .mday{background:var(--surface2);color:var(--muted)}
+.mtg .mt-t{font-weight:700;font-size:15px}
+.mtg .meta{display:flex;flex-wrap:wrap;gap:4px 12px;color:var(--muted);font-size:12.5px;margin-top:3px}
+.mtg .mt-side{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex:none}
+.mtg .mt-side .row-b{display:flex;gap:6px}
+.apill{font-size:12px;font-weight:700;border-radius:99px;padding:2px 9px;background:var(--surface2);border:1px solid var(--border);white-space:nowrap}
+.apill.ok{color:var(--ok)}.apill.bad{color:var(--danger);border-color:color-mix(in srgb,var(--danger) 40%,var(--border))}
+.mt-group{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:16px 0 8px}
+.atable{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;font-size:13.5px}
+.atable th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding:8px 10px;background:var(--surface2)}
+.atable td{padding:8px 10px;border-top:1px solid var(--border);vertical-align:top}
+.atable tr.d td{color:var(--muted)}.atable tr.d .at{text-decoration:line-through}
+.atable .late{color:var(--danger);font-weight:700}
+.atable input[type=checkbox]{width:17px;height:17px;accent-color:var(--primary)}
+.atable .mlink{background:none;border:0;padding:0;color:var(--primary);cursor:pointer;font:inherit;text-align:left}
+.pchips{display:flex;flex-wrap:wrap;gap:6px;align-items:center;border:1px solid var(--border);border-radius:10px;padding:6px;background:var(--surface)}
+.pchips input{border:0;flex:1;min-width:140px;padding:4px 6px;background:transparent;outline:none;box-shadow:none}
+.pchip2{display:inline-flex;align-items:center;gap:4px;background:var(--primary-soft);color:var(--ink);border-radius:99px;padding:2px 4px 2px 10px;font-size:13px;font-weight:600}
+.pchip2 button{border:0;background:none;color:inherit;cursor:pointer;font-size:15px;line-height:1;padding:0 4px;opacity:.7}
+.pchip2.owner{background:color-mix(in srgb,var(--gold) 22%,var(--surface));color:var(--gold-ink)}
+.arow{display:grid;grid-template-columns:22px minmax(0,1fr) minmax(0,160px) 150px 30px;gap:6px;align-items:center;margin-bottom:6px}
+.arow input[type=checkbox]{width:18px;height:18px;accent-color:var(--primary)}
+.arow.d .a-text{text-decoration:line-through;color:var(--muted)}
+.arow .a-task{grid-column:2/-1;font-size:11.5px;color:var(--muted);margin:-3px 0 2px}
+.a-head{display:grid;grid-template-columns:22px minmax(0,1fr) minmax(0,160px) 150px 30px;gap:6px;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+#mt-modal textarea{min-height:70px}
+@media (max-width:620px){
+  .arow,.a-head{grid-template-columns:22px minmax(0,1fr) 30px}
+  .a-head span:nth-child(3),.a-head span:nth-child(4){display:none}
+  .arow .a-owner{grid-column:2;grid-row:2}.arow .a-due{grid-column:2;grid-row:3}
+  .arow{border-bottom:1px dashed var(--border);padding-bottom:6px}
+  .mtg{flex-wrap:wrap}.mtg .mt-side{flex-direction:row;width:100%;justify-content:space-between;align-items:center}
+  .atable .hm{display:none}
+}
 </style>
 </head>
 <body>
@@ -561,7 +609,7 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
   <div class="landing">
     <section class="hero">
       <img class="hero-logo" src="icons/icon-192.png" alt="logo">
-      <h1 class="app-name">North Star</h1>
+      <h1 class="app-name">North Star Momentum</h1>
       <div class="by">Developed by <b>Ahmed Abdel-Dayem</b> ·
         <a class="li" href="https://www.linkedin.com/in/aabdel-dayem" target="_blank" rel="noopener"><svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 110-4.13 2.06 2.06 0 010 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg> LinkedIn</a></div>
       <div class="for">For HR experts who run their own projects</div>
@@ -637,7 +685,7 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
 <!-- ================= App ================= -->
 <div id="app" class="hidden">
   <header class="top">
-    <div class="brand"><img class="logo" src="icons/icon-192.png" alt="logo"><h1 class="app-name">North Star</h1></div>
+    <div class="brand"><img class="logo" src="icons/icon-192.png" alt="logo"><h1 class="app-name">North Star Momentum</h1></div>
     <span class="grow"></span>
     <span class="sync hidden" id="sync">Syncing…</span>
     <button class="btn sm hidden" id="btn-from-mail" title="Make a task from the open email"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg> From email</button>
@@ -680,6 +728,7 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
       <button class="tab" data-view="plan">Plan</button>
       <button class="tab" data-view="timeline">Timeline</button>
       <button class="tab" data-view="projects">Projects</button>
+      <button class="tab" data-view="meetings">Meetings</button>
       <button class="tab" data-view="insights">Insights</button>
     </div>
 
@@ -786,7 +835,8 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
         <div><label class="sec-h"><span>Time needed</span></label>
           <select id="m-est"><option value="0">Not set</option><option value="15">15 min</option><option value="30">30 min</option><option value="60">1 hour</option><option value="90">1½ hours</option><option value="120">2 hours</option><option value="240">Half a day</option><option value="480">A full day</option></select></div>
         <div><label class="sec-h"><span>Today</span></label>
-          <label class="check-row" style="margin:8px 0 0"><input type="checkbox" id="m-focus"> In my Top 3 today</label></div>
+          <label class="check-row" style="margin:8px 0 0"><input type="checkbox" id="m-focus"> Show in Today’s focus</label>
+          <label class="check-row" style="margin:6px 0 0"><input type="checkbox" id="m-top"> ★ One of my Top 3</label></div>
       </div>
     </div>
 
@@ -874,7 +924,7 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
 <!-- ================= Share modal ================= -->
 <div class="overlay hidden" id="share-modal">
   <div class="modal" style="max-width:460px">
-    <div class="m-headrow"><h2>Share <span class="app-name">North Star</span></h2><button type="button" class="x" id="share-close" style="font-size:24px">×</button></div>
+    <div class="m-headrow"><h2>Share <span class="app-name">North Star Momentum</span></h2><button type="button" class="x" id="share-close" style="font-size:24px">×</button></div>
     <p class="muted" style="margin:0 0 12px">This link opens the intro page, where people can read about the app and sign up with their own account.</p>
     <div class="share-link"><input id="share-url" readonly><button class="btn primary" type="button" id="share-copy">Copy</button></div>
     <div class="share-btns">
@@ -900,11 +950,11 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
     </div>
     <p class="hint">If a button doesn’t open the right place: in Outlook Calendar choose <b>Add calendar → Subscribe from web</b> and paste the link.<br>
       Keep this link private — anyone who has it can see your task titles. <button type="button" class="link" id="ol-reset">Make a new link</button></p>
-    <h3 class="ol-h">2 · <span class="app-name">North Star</span> inside Outlook</h3>
+    <h3 class="ol-h">2 · <span class="app-name">North Star Momentum</span> inside Outlook</h3>
     <ol class="steps">
       <li><a class="btn sm" href="outlook-addin.xml" download="MyTasks-Outlook-addin.xml">Download the add-in file</a></li>
       <li>Open <a class="li" href="https://aka.ms/olksideload" target="_blank" rel="noopener">aka.ms/olksideload</a> (Outlook on the web) → <b>My add-ins</b> → <b>Add a custom add-in</b> → <b>Add from file</b> → choose the file.</li>
-      <li>Open any email → <b>Apps</b> (or <b>…</b>) → <b><span class="app-name">North Star</span></b>. Use <b>From email</b> to turn the email into a task.</li>
+      <li>Open any email → <b>Apps</b> (or <b>…</b>) → <b><span class="app-name">North Star Momentum</span></b>. Use <b>From email</b> to turn the email into a task.</li>
     </ol>
     <p class="hint">It also appears in the new Outlook for Windows and Outlook for Mac with the same account. Work accounts: if “Add a custom add-in” is missing, your IT admin has turned it off.</p>
   </div>
@@ -941,13 +991,75 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
 <div id="tip" class="hidden"></div>
 <div id="pop" class="pop hidden"></div>
 
+<!-- ================= Meeting (minutes of meeting) ================= -->
+<div class="overlay hidden" id="mt-modal">
+  <div class="modal" role="dialog" aria-modal="true" style="max-width:760px">
+    <div class="m-headrow"><h2 id="mt-head">New meeting</h2><span class="m-created" id="mt-created"></span><button type="button" class="x" id="mt-close" title="Close" style="font-size:24px">×</button></div>
+    <input id="mt-title" dir="auto" class="m-title" placeholder="Meeting title *" maxlength="200">
+
+    <div class="m-group">
+      <div class="m-gl">When &amp; where</div>
+      <div class="grid2">
+        <div><label class="sec-h"><span>Type</span></label>
+          <select id="mt-kind"><option value="meeting">Meeting</option><option value="one-on-one">One-on-one</option><option value="interview">Interview</option><option value="workshop">Workshop / training</option><option value="review">Review</option><option value="other">Other</option></select></div>
+        <div><label class="sec-h"><span>Project</span></label><select id="mt-project"></select></div>
+      </div>
+      <div class="grid2 keep2" style="margin-top:10px">
+        <div><label class="sec-h"><span>Starts<span class="req">*</span></span></label><input type="datetime-local" id="mt-start"></div>
+        <div><label class="sec-h"><span>Ends</span></label><input type="datetime-local" id="mt-end"></div>
+      </div>
+      <div class="sec" style="margin-top:10px"><label class="sec-h"><span>Location / link</span></label><input id="mt-loc" dir="auto" maxlength="300" placeholder="Room, Teams or Zoom link"></div>
+    </div>
+
+    <div class="m-group">
+      <div class="m-gl">People</div>
+      <div class="sec"><label class="sec-h"><span>Owner / chair</span></label><input id="mt-org" dir="auto" maxlength="120" placeholder="Who runs the meeting?"></div>
+      <div class="sec"><label class="sec-h"><span>Attendees</span><span class="muted" style="font-weight:400;font-size:12px">Enter or comma to add</span></label>
+        <div class="pchips" id="mt-att"><input id="mt-att-in" dir="auto" maxlength="120" placeholder="Name or email" list="mt-people"></div></div>
+      <div class="sec"><label class="sec-h"><span>Absent / apologies <span class="opt">(optional)</span></span></label>
+        <div class="pchips" id="mt-abs"><input id="mt-abs-in" dir="auto" maxlength="120" placeholder="Name" list="mt-people"></div></div>
+    </div>
+
+    <div class="m-group">
+      <div class="m-gl">Minutes</div>
+      <div class="sec"><label class="sec-h"><span>Agenda</span><span class="muted" style="font-weight:400;font-size:12px">one item per line</span></label><textarea id="mt-agenda" dir="auto" maxlength="8000" placeholder="1. Hiring plan Q1&#10;2. Onboarding feedback"></textarea></div>
+      <div class="sec"><label class="sec-h"><span>Discussion / notes</span></label><textarea id="mt-notes" dir="auto" maxlength="20000" placeholder="Key points that were discussed"></textarea></div>
+      <div class="sec"><label class="sec-h"><span>Decisions</span><span class="muted" style="font-weight:400;font-size:12px">what was agreed</span></label><textarea id="mt-dec" dir="auto" maxlength="8000" placeholder="One decision per line"></textarea></div>
+    </div>
+
+    <div class="m-group">
+      <div class="m-gl">Action points</div>
+      <div class="a-head"><span></span><span>Action</span><span>Owner</span><span>Deadline</span><span></span></div>
+      <div id="mt-actions"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
+        <button class="btn sm" type="button" id="mt-a-add">+ Add action point</button>
+        <button class="btn sm" type="button" id="mt-a-tasks" title="Each action point becomes a task — yours go to Schedule, others to Assign with a follow-up date">→ Turn into tasks</button>
+      </div>
+      <datalist id="mt-people"></datalist>
+    </div>
+
+    <div class="m-group">
+      <div class="m-gl">Next meeting</div>
+      <div class="grid2"><div><input type="datetime-local" id="mt-next"></div><div></div></div>
+    </div>
+
+    <div class="m-foot" style="flex-wrap:wrap">
+      <button class="btn danger hidden" type="button" id="mt-del">Delete</button>
+      <button class="btn" type="button" id="mt-xlsx">Excel</button>
+      <button class="btn" type="button" id="mt-pdf">PDF</button>
+      <span class="grow"></span>
+      <button class="btn" type="button" id="mt-cancel">Cancel</button><button class="btn primary" type="button" id="mt-save">Save</button>
+    </div>
+  </div>
+</div>
+
 <!-- ================= Plan my day ================= -->
 <div class="overlay hidden" id="plan-modal">
   <div class="modal" style="max-width:560px">
     <div class="m-headrow"><h2>Plan my day</h2><span class="m-created" id="plan-n"></span><button type="button" class="x" id="plan-close" style="font-size:24px">×</button></div>
-    <p class="muted" style="margin:0 0 10px">Pick up to <b>3</b> tasks that would make today a good day. They stay at the top of <b>Today</b>.</p>
+    <p class="muted" style="margin:0 0 10px">Tick every task you want to see in <b>Today’s focus</b>. Then <b>star up to 3</b> that would make today a good day — they’re highlighted at the top.</p>
     <div id="plan-list" class="plist2"></div>
-    <div class="m-foot"><span class="grow"></span><button class="btn" type="button" id="plan-cancel">Cancel</button><button class="btn primary" type="button" id="plan-save">Set my Top 3</button></div>
+    <div class="m-foot"><span class="grow"></span><button class="btn" type="button" id="plan-cancel">Cancel</button><button class="btn primary" type="button" id="plan-save">Plan my day</button></div>
   </div>
 </div>
 
@@ -980,6 +1092,7 @@ const QUADS = {
 const STATUS = { todo: 'To do', doing: 'In progress', done: 'Done' };
 const QINBOX = { name: 'Inbox', sub: 'Not sorted yet', color: 'var(--muted)', hex: '#94a3b8' };
 const qOf = t => QUADS[t.quadrant] || QINBOX;
+const PIN = '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5"/><path d="M9 3h6l-1 7 4 4v2H6v-2l4-4z"/></svg>';
 const STAR = '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z"/></svg>';
 const CLOCK_ICON = '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
 const CAL_ICON = '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>';
@@ -1003,14 +1116,14 @@ const S = {
   token: null, user: '', me: {}, tasks: [], archived: [], archLoaded: false, cats: [], view: 'today',
   f: { q: '', labels: [], quad: '', status: 'open', sort: 'due' },
   cal: null, draft: null, draftInit: '', saving: false, uploads: [], expanded: new Set(),
-  authMode: 'login', hasUsers: true, allowSignup: true, maxMb: 10, maxCats: 10, archiveDays: 30, shareUrl: '', appName: 'North Star',
+  authMode: 'login', hasUsers: true, allowSignup: true, maxMb: 10, maxCats: 10, archiveDays: 30, shareUrl: '', appName: 'North Star Momentum',
   catDraft: [], remember: false, insPeriod: 'week', admin: null, adm: { q: '', sort: 'createdAt', dir: 1 }, installEvt: null,
   projects: [], projectOpen: null, projMode: 'tasks', boardBy: 'status', dragFrom: '', projCb: null, projEdit: null,
   info: null, archivedCount: 0, pending: 0, syncing: false, reloadAfterSave: false,
   quote: null, quoteSeen: [], quoteTouched: false, filtersOpen: false, office: false, ver: {},
-  planMode: 'matrix', timeMode: 'calendar'
+  planMode: 'matrix', timeMode: 'calendar', meetings: [], mt: null, mtInit: '', mtFilter: 'upcoming', mtQ: ''
 };
-try { S.planMode = localStorage.getItem('planMode') || 'matrix'; S.timeMode = localStorage.getItem('timeMode') || 'calendar'; } catch (e) {}
+try { S.mtFilter = localStorage.getItem('mtFilter') || 'upcoming'; S.planMode = localStorage.getItem('planMode') || 'matrix'; S.timeMode = localStorage.getItem('timeMode') || 'calendar'; } catch (e) {}
 /* Plan and Timeline tabs hold two or three screens each */
 const MODES = { plan: [['matrix', 'Focus Hub'], ['board', 'Board'], ['list', 'List']], timeline: [['calendar', 'Calendar'], ['gantt', 'Gantt']] };
 const curView = () => S.view === 'plan' ? S.planMode : S.view === 'timeline' ? S.timeMode : S.view;
@@ -1082,8 +1195,8 @@ function api(fn, ...args) {
         if (e.kind !== 'offline' && n < tries) return new Promise(r => setTimeout(r, 800 * n)).then(() => attempt(n + 1));
         fail(Object.assign(new Error(
           (e.kind === 'offline' ? 'You’re offline — check your internet connection.' :
-           e.kind === 'busy' ? 'The North Star server is busy right now.' :
-           'Couldn’t reach the North Star server.') + ' Please try again later.'), { network: true }));
+           e.kind === 'busy' ? 'The North Star Momentum server is busy right now.' :
+           'Couldn’t reach the North Star Momentum server.') + ' Please try again later.'), { network: true }));
       });
     attempt(1);
   });
@@ -1273,7 +1386,7 @@ $('#auth-form').addEventListener('submit', async e => {
 });
 function logoutLocal() {
   clearCache(); S.pending = 0; S.syncing = false; updateSync();
-  S.token = null; S.tasks = []; S.archived = []; S.archLoaded = false; S.draft = null; S.admin = null; store.set(null);
+  S.token = null; S.tasks = []; S.archived = []; S.meetings = []; S.mt = null; S.archLoaded = false; S.draft = null; S.admin = null; store.set(null);
   S.calUrl = null; S.quoteSeen = []; S.quoteTouched = false;
   try { if (window.google && google.accounts) google.accounts.id.disableAutoSelect(); } catch (e) {}
   $$('.overlay').forEach(o => o.classList.add('hidden'));
@@ -1427,12 +1540,13 @@ async function providerSignIn(provider, cred) {
 }
 
 function showWelcome() {
-  dialog('Welcome to ' + S.appName, `<p style="margin-top:0">Your North Star for HR projects. Four things to know:</p>
+  dialog('Welcome to ' + S.appName, `<p style="margin-top:0">Your North Star for HR projects. Five things to know:</p>
     <ol class="steps"><li><b>Inbox</b> — capture anything in one line. Sort it later.</li>
-    <li><b>Today</b> — pick your <b>Top 3</b> each morning, <b>Wrap up</b> each evening.</li>
+    <li><b>Today</b> — pick what you’ll work on, <b>star your Top 3</b>, <b>Wrap up</b> each evening.</li>
     <li><b>Focus Hub</b> — Priority, Schedule, <b>Assign</b> (with follow-up) or Remove.</li>
-    <li><b>Projects</b> — group tasks, see the Gantt chart, export a PDF.</li></ol>
-    <p class="hint">Shortcuts: <b>N</b> new task · <b>Q</b> quick add · <b>/</b> search · <b>1–6</b> switch screens.</p>`, 'Let’s start', false);
+    <li><b>Projects</b> — group tasks, see the Gantt chart, export a PDF.</li>
+    <li><b>Meetings</b> — minutes, decisions and action points, to Excel or PDF.</li></ol>
+    <p class="hint">Shortcuts: <b>N</b> new task · <b>Q</b> quick add · <b>/</b> search · <b>1–7</b> switch screens.</p>`, 'Let’s start', false);
 }
 function showPrivacy() {
   dialog('Privacy', `<p style="margin-top:0">Your tasks are stored in a private Google Sheet owned by the app owner (Ahmed Abdel-Dayem) and are only used to run the app.</p>
@@ -1524,7 +1638,7 @@ function saveCache() {
   cacheTimer = setTimeout(() => {
     if (!S.token || !S.me || !S.me.username) return;
     try {
-      const c = { tag: S.token.slice(-16), info: S.info, me: S.me, tasks: S.tasks, categories: S.cats, projects: S.projects, archivedCount: S.archivedCount, archived: S.archLoaded ? S.archived : null, quote: S.dailyQuote || null, at: Date.now() };
+      const c = { tag: S.token.slice(-16), info: S.info, me: S.me, tasks: S.tasks, categories: S.cats, projects: S.projects, meetings: S.meetings, archivedCount: S.archivedCount, archived: S.archLoaded ? S.archived : null, quote: S.dailyQuote || null, at: Date.now() };
       localStorage.removeItem(CACHE_KEY); sessionStorage.removeItem(CACHE_KEY);
       (store.remembered() ? localStorage : sessionStorage).setItem(CACHE_KEY, JSON.stringify(c));
     } catch (e) { /* storage full or blocked — fine, the app just starts the normal way */ }
@@ -1542,7 +1656,8 @@ function applyBoot(b) {
   if (S.pending) S.reloadAfterSave = true;          // a save is still on its way — refresh tasks right after it
   else { S.tasks = b.tasks; mergeOutbox(); }
   S.archivedCount = b.archivedCount || 0;
-  S.archived = Array.isArray(b.archived) ? b.archived : []; S.archLoaded = Array.isArray(b.archived);   // Projects / Insights open without waiting
+  S.archived = Array.isArray(b.archived) ? b.archived : []; S.archLoaded = Array.isArray(b.archived);
+  if (Array.isArray(b.meetings)) { const keep = S.meetings.filter(m => m._unsaved && !b.meetings.some(x => x.id === m.id)); S.meetings = b.meetings.concat(keep); }   // Projects / Insights open without waiting
   $('#btn-admin').classList.toggle('hidden', !b.me.isAdmin);
   if (b.quote && !S.quoteTouched) { S.dailyQuote = b.quote; S.quote = Object.assign({}, b.quote); renderQuote(); }
   renderGreeting(); renderAnnouncement(); render();
@@ -1631,14 +1746,14 @@ function render() {
   renderStats();
   renderLabelFilter();
   const v = $('#view');
-  const views = { today: renderToday, inbox: renderInbox, matrix: renderMatrix, board: renderBoard, calendar: renderCalendar, gantt: renderGanttView, projects: renderProjects, insights: renderInsights };
+  const views = { today: renderToday, inbox: renderInbox, matrix: renderMatrix, board: renderBoard, calendar: renderCalendar, gantt: renderGanttView, projects: renderProjects, meetings: renderMeetings, insights: renderInsights };
   const qa = $('#qa-in'), keep = qa && { v: qa.value, f: document.activeElement === qa, s: qa.selectionStart };   // don't lose a half-typed quick add
   v.innerHTML = (views[curView()] || renderList)();
   if (keep && $('#qa-in')) { $('#qa-in').value = keep.v; quickPreview(); if (keep.f) { $('#qa-in').focus(); $('#qa-in').setSelectionRange(keep.s, keep.s); } }
   const cv = curView();
   $('#f-quad').disabled = cv === 'matrix' || cv === 'inbox' || (cv === 'board' && S.boardBy === 'quad');
   $('#f-status').disabled = cv === 'today' || (cv === 'board' && S.boardBy === 'status');
-  const noBar = cv === 'insights' || cv === 'projects';
+  const noBar = cv === 'insights' || cv === 'projects' || cv === 'meetings';
   $('#toolbar').classList.toggle('hidden', noBar);
   $('#filters').classList.toggle('hidden', noBar || !S.filtersOpen);
   $('#f-toggle').setAttribute('aria-expanded', String(S.filtersOpen));
@@ -1686,7 +1801,9 @@ function renderToday() {
   const open = all.filter(t => t.status !== 'done'), used = new Set();
   const pick = list => { const r = list.filter(t => !used.has(t.id)); r.forEach(t => used.add(t.id)); return sortTasks(r); };
   const yd = addDays(td, -1);
-  const top = pick(open.filter(t => t.focusDate === td));
+  const isTop = t => t.topDate === td;
+  const top = pick(open.filter(t => t.focusDate === td || isTop(t))).sort((a, b) => isTop(b) - isTop(a));   // Top 3 first
+  const nTop = top.filter(isTop).length;
   const due = pick(open.filter(t => t.dueDate === td));
   const yest = pick(open.filter(t => t.dueDate === yd));
   const older = pick(open.filter(t => t.dueDate && t.dueDate < yd));
@@ -1703,9 +1820,10 @@ function renderToday() {
     <button class="btn sm" data-act="plan-day">${STAR} Plan my day</button>
     <button class="btn sm ${late ? 'primary' : ''}" data-act="wrap-up" title="Move what’s left to another day">Wrap up</button>`;
   const moveAll = from => `<button class="btn xs" data-act="overdue-today" data-from="${from}">Move all to today</button>`;
-  // Order: quick add → Top 3 → due today → due yesterday → … → older overdue at the very bottom
+  // Order: quick add → today's focus (Top 3 starred) → due today → due yesterday → … → older overdue at the very bottom
   return vhead('Today', top.length + overdue.length + due.length, right) + quickAddBar() +
-    sec('Top 3 today', 'top', top, 'Pick up to 3 tasks that matter most today — <button class="link" data-act="plan-day">Plan my day</button>') +
+    sec('Today’s focus', 'top', top, 'Pick the tasks you want to see today and star your Top 3 — <button class="link" data-act="plan-day">Plan my day</button>',
+      `<span class="vlabel muted" title="Starred tasks — the 3 that matter most">${STAR} ${nTop}/3 Top</span>`) +
     sec('Due today', 'now', due, top.length ? 'Nothing else is due today.' : 'Nothing due today — a good moment to plan ahead.') +
     (yest.length ? sec('Due yesterday', 'late', yest, '', moveAll('y')) : '') +
     (follow.length ? sec('Follow up', 'follow', follow, '') : '') +
@@ -1780,7 +1898,7 @@ function quickAdd() {
   const p = parseQuick(inp.value);
   if (!p.title) return toast('Write what the task is', 'err');
   const t = { id: newId(), isNew: true, title: p.title.slice(0, 300), notes: '', labels: p.labels, quadrant: p.quadrant, dueDate: p.dueDate, startDate: '',
-    status: 'todo', reminderAt: '', repeat: '', projectId: p.projectId, subtasks: [], attachments: [], focusDate: '', delegateTo: '', followUp: '',
+    status: 'todo', reminderAt: '', repeat: '', projectId: p.projectId, subtasks: [], attachments: [], focusDate: '', topDate: '', delegateTo: '', followUp: '',
     estimate: p.estimate, createdAt: new Date().toISOString() };
   fillDates(t); placeTask(t); inp.value = ''; render(); $('#qa-in') && $('#qa-in').focus();
   toast(t.quadrant ? 'Added' + (t.dueDate ? ' — due ' + fmtDate(t.dueDate) : '') : 'Added to your Inbox');
@@ -1789,18 +1907,20 @@ function quickAdd() {
 
 /* ---------- Plan my day (Top 3) and Wrap up ---------- */
 function openPlan() {
-  const td = today(), rank = t => t.focusDate === td ? 0 : t.dueDate && t.dueDate < td ? 1 : t.dueDate === td ? 2 : t.status === 'doing' ? 3 : t.quadrant === 'Q1' ? 4 : t.dueDate && t.dueDate <= addDays(td, 7) ? 5 : t.quadrant === 'Q2' ? 6 : 7;
+  const td = today(), rank = t => t.topDate === td ? -1 : t.focusDate === td ? 0 : t.dueDate && t.dueDate < td ? 1 : t.dueDate === td ? 2 : t.status === 'doing' ? 3 : t.quadrant === 'Q1' ? 4 : t.dueDate && t.dueDate <= addDays(td, 7) ? 5 : t.quadrant === 'Q2' ? 6 : 7;
   const list = sortTasks(S.tasks.filter(t => t.status !== 'done')).sort((a, b) => rank(a) - rank(b)).slice(0, 40);
   if (!list.length) return toast('No open tasks yet — add one first');
-  $('#plan-list').innerHTML = list.map(t => { const d = dueInfo(t); return `<label class="prow"><input type="checkbox" value="${esc(t.id)}" ${t.focusDate === td ? 'checked' : ''}>
+  $('#plan-list').innerHTML = list.map(t => { const d = dueInfo(t), top = t.topDate === td;
+    return `<label class="prow ${top ? 'is-top' : ''}"><input type="checkbox" value="${esc(t.id)}" ${t.focusDate === td || top ? 'checked' : ''}>
     <span class="dot" style="--q:${qOf(t).color}"></span><span class="grow" dir="auto">${esc(t.title)}</span>
-    ${t.estimate ? `<span class="muted">${fmtMin(t.estimate)}</span>` : ''}${d ? `<span class="due ${d.cls}">${d.text}</span>` : ''}</label>`; }).join('');
+    ${t.estimate ? `<span class="muted">${fmtMin(t.estimate)}</span>` : ''}${d ? `<span class="due ${d.cls}">${d.text}</span>` : ''}
+    <button type="button" class="pstar ${top ? 'on' : ''}" data-star="${esc(t.id)}" title="Top 3 — the ones that matter most">${STAR}</button></label>`; }).join('');
   planCount(); $('#plan-modal').classList.remove('hidden');
 }
-function planCount() { $('#plan-n').textContent = $$('#plan-list input:checked').length + ' of 3 picked'; }
+function planCount() { $('#plan-n').textContent = $$('#plan-list input:checked').length + ' for today · ' + $$('#plan-list .pstar.on').length + ' of 3 starred'; }
 function openWrap() {
   const td = today();
-  const list = sortTasks(S.tasks.filter(t => t.status !== 'done' && (t.focusDate === td || (t.dueDate && t.dueDate <= td))));
+  const list = sortTasks(S.tasks.filter(t => t.status !== 'done' && (t.focusDate === td || t.topDate === td || (t.dueDate && t.dueDate <= td))));
   if (!list.length) return toast('Nothing left for today — well done');
   $('#wrap-list').innerHTML = list.map(t => { const d = dueInfo(t); return `<div class="prow"><span class="dot" style="--q:${qOf(t).color}"></span>
     <span class="grow" dir="auto">${esc(t.title)}${d ? ` <span class="due ${d.cls}">· ${d.text}</span>` : ''}</span>
@@ -1813,16 +1933,28 @@ function snooze(id, n) {
   const before = clone(t);
   t.dueDate = n === null ? '' : addDays(today(), n);
   if (t.startDate && t.dueDate && t.startDate > t.dueDate) t.startDate = t.dueDate;
-  if (n !== 0 && t.focusDate === today()) t.focusDate = '';
+  if (n !== 0) unfocus(t);
   render(); persist(t, before);
   toast(n === null ? 'Date removed' : 'Moved to ' + (n === 0 ? 'today' : n === 1 ? 'tomorrow' : fmtDate(t.dueDate)));
 }
+/* Today's focus: pin = show it in Today (any number) · star = one of the Top 3 (highlighted) */
+const inFocus = t => t.focusDate === today() || t.topDate === today();
+const topCount = except => S.tasks.filter(x => x.topDate === today() && x.status !== 'done' && x.id !== except).length;
+function unfocus(t) { const td = today(); if (t.focusDate === td) t.focusDate = ''; if (t.topDate === td) t.topDate = ''; }
 function toggleFocus(id) {
   const t = S.tasks.find(x => x.id === id); if (!t) return;
-  const td = today(), on = t.focusDate !== td;
-  if (on && S.tasks.filter(x => x.focusDate === td && x.status !== 'done' && x.id !== id).length >= 3) return toast('Your Top 3 is full — remove one first', 'err');
-  const before = clone(t); t.focusDate = on ? td : '';
-  render(); persist(t, before); toast(on ? 'Added to Top 3 today' : 'Removed from Top 3');
+  const on = !inFocus(t), before = clone(t);
+  if (on) t.focusDate = today(); else unfocus(t);
+  render(); persist(t, before); toast(on ? 'Added to Today’s focus' : 'Removed from Today’s focus');
+}
+function toggleTop(id) {
+  const t = S.tasks.find(x => x.id === id); if (!t) return;
+  const td = today(), on = t.topDate !== td;
+  if (on && topCount(id) >= 3) return toast('Your Top 3 is full — unstar one first', 'err');
+  const before = clone(t);
+  t.topDate = on ? td : '';
+  if (on) t.focusDate = td;                        // a Top 3 task always shows in Today's focus
+  render(); persist(t, before); toast(on ? '★ Added to your Top 3' : 'Removed from Top 3 — still in Today’s focus');
 }
 /* Small menu next to a button (Move to …) */
 function openPop(anchor, id) {
@@ -1841,17 +1973,28 @@ document.addEventListener('click', e => { if (!e.target.closest('#pop') && !e.ta
 window.addEventListener('scroll', () => { const p = $('#pop'); if (Math.abs(window.scrollY - (+p.dataset.y || 0)) > 60) p.classList.add('hidden'); }, { passive: true });
 const closePlan = closable('plan-modal', 'plan-close plan-cancel');
 $('#plan-list').addEventListener('change', e => {
-  if (e.target.checked && $$('#plan-list input:checked').length > 3) { e.target.checked = false; toast('Three is the limit — keep it focused', 'err'); }
+  const row = e.target.closest('.prow');
+  if (!e.target.checked && row) { row.querySelector('.pstar').classList.remove('on'); row.classList.remove('is-top'); }
+  planCount();
+});
+$('#plan-list').addEventListener('click', e => {
+  const b = e.target.closest('[data-star]'); if (!b) return;
+  e.preventDefault();
+  const row = b.closest('.prow'), on = !b.classList.contains('on');
+  if (on && $$('#plan-list .pstar.on').length >= 3) return toast('Three is the limit — keep it focused', 'err');
+  b.classList.toggle('on', on); row.classList.toggle('is-top', on);
+  if (on) row.querySelector('input').checked = true;
   planCount();
 });
 $('#plan-save').addEventListener('click', () => {
-  const td = today(), sel = new Set($$('#plan-list input:checked').map(i => i.value));
-  S.tasks.filter(t => t.status !== 'done').forEach(t => {
-    const want = sel.has(t.id);
-    if (want === (t.focusDate === td)) return;
-    const before = clone(t); t.focusDate = want ? td : ''; persist(t, before);
+  const td = today(), sel = new Set($$('#plan-list input:checked').map(i => i.value)), stars = new Set($$('#plan-list .pstar.on').map(b => b.dataset.star));
+  const shown = new Set($$('#plan-list input').map(i => i.value));
+  S.tasks.filter(t => t.status !== 'done' && shown.has(t.id)).forEach(t => {
+    const f = sel.has(t.id) ? td : t.focusDate === td ? '' : t.focusDate, tp = stars.has(t.id) ? td : t.topDate === td ? '' : t.topDate;
+    if (f === t.focusDate && tp === (t.topDate || '')) return;
+    const before = clone(t); t.focusDate = f; t.topDate = tp; persist(t, before);
   });
-  closePlan(); render(); toast(sel.size ? 'Your Top 3 is set' : 'Top 3 cleared');
+  closePlan(); render(); toast(sel.size ? 'Your day is planned — ' + sel.size + ' in focus, ' + stars.size + ' starred' : 'Today’s focus cleared');
 });
 const closeWrap = closable('wrap-modal', 'wrap-close wrap-cancel');
 $('#wrap-save').addEventListener('click', () => {
@@ -1861,7 +2004,7 @@ $('#wrap-save').addEventListener('click', () => {
     const before = clone(t);
     if (v === 'done') { t.status = 'done'; done++; }
     else { t.dueDate = v === 'none' ? '' : addDays(td, +v); if (t.startDate && t.dueDate && t.startDate > t.dueDate) t.startDate = t.dueDate; moved++; }
-    if (t.focusDate === td && v !== 'done') t.focusDate = '';
+    if (v !== 'done') unfocus(t);
     persist(t, before);
   });
   closeWrap(); render(); toast('Day wrapped up — ' + done + ' done, ' + moved + ' moved');
@@ -1886,15 +2029,16 @@ function taskCard(t, mode) {
   const doing = t.status === 'doing' && !(curView() === 'board' && S.boardBy === 'status');
   const deleg = t.delegateTo ? `<span class="deleg" title="Delegated">→ ${esc(t.delegateTo)}${t.followUp ? ' · follow up ' + fmtDate(t.followUp) : ''}</span>` : '';
   const est = t.estimate ? `<span class="muted" title="Time estimate">${CLOCK_ICON} ${fmtMin(t.estimate)}</span>` : '';
-  const focus = t.focusDate === today() && !done;
-  const acts = list && !done ? `<div class="c-act"><button class="ico ${focus ? 'on' : ''}" data-act="focus" title="${focus ? 'In your Top 3 today' : 'Add to Top 3 today'}">${STAR}</button>
+  const top = t.topDate === today() && !done, focus = inFocus(t) && !done;
+  const acts = list && !done ? `<div class="c-act"><button class="ico ${top ? 'on' : ''}" data-act="top" title="${top ? 'In your Top 3 — click to unstar' : 'Star as one of your Top 3'}">${STAR}</button>
+    <button class="ico pin ${focus ? 'on' : ''}" data-act="focus" title="${focus ? 'In Today’s focus — click to remove' : 'Show in Today’s focus'}">${PIN}</button>
     <button class="ico" data-act="snooze" title="Move to another day">»</button></div>` : list ? '<div class="c-act"></div>' : '';
   const sortRow = list && !t.quadrant && !done ? `<div class="qsort"><span class="muted">Sort into</span>${Object.keys(QUADS).map(k => `<button data-act="qs" data-q="${k}" style="--q:${QUADS[k].color}">${QUADS[k].name}</button>`).join('')}</div>` : '';
-  return `<div class="card ${mode} ${done ? 'is-done' : ''} ${t.quadrant ? '' : 'inbox'} ${focus ? 'focus' : ''}" data-id="${esc(t.id)}" draggable="true" style="--q:${q.color}">
+  return `<div class="card ${mode} ${done ? 'is-done' : ''} ${t.quadrant ? '' : 'inbox'} ${top ? 'top' : ''}" data-id="${esc(t.id)}" draggable="true" style="--q:${q.color}">
     <div class="row">
       <button class="check ${done ? 'on' : ''}" data-act="toggle" title="${done ? 'Mark incomplete' : 'Mark complete'}">✓</button>
       <div class="grow">
-        <div class="title" dir="auto">${esc(t.title)}</div>
+        <div class="title" dir="auto">${top ? `<span class="tstar" title="Top 3 today">${STAR}</span>` : ''}${esc(t.title)}</div>
         <div class="meta">
           ${list ? `<span class="qbadge">${q.name}</span>` : ''}${pchip}${labels}
           ${list ? '' : dueHtml}
@@ -2181,6 +2325,7 @@ view.addEventListener('click', e => {
     if (a === 'plan-day') return openPlan();
     if (a === 'wrap-up') return openWrap();
     if (a === 'focus') return toggleFocus(card.dataset.id);
+    if (a === 'top') return toggleTop(card.dataset.id);
     if (a === 'snooze') return openPop(act, card.dataset.id);
     if (a === 'qs') { const t = S.tasks.find(x => x.id === card.dataset.id), before = clone(t); t.quadrant = act.dataset.q; render(); persist(t, before);
       toast('Sorted into ' + QUADS[t.quadrant].name); if (t.quadrant === 'Q4') removeHint(t.id); return; }
@@ -2388,7 +2533,7 @@ $('#cats-save').addEventListener('click', async () => {
 function openModal(id, preset) {
   const t = id ? S.tasks.find(x => x.id === id) : null;
   const blank = { id: '', title: '', notes: '', labels: [], quadrant: '', dueDate: '', status: 'todo', reminderAt: '', repeat: '', projectId: '', startDate: '', subtasks: [], attachments: [],
-    focusDate: '', delegateTo: '', followUp: '', estimate: 0 };
+    focusDate: '', topDate: '', delegateTo: '', followUp: '', estimate: 0 };
   S.draft = Object.assign(blank, t ? clone(t) : preset);
   if (S.draft.projectId && !S.projects.some(p => p.id === S.draft.projectId)) S.draft.projectId = '';
   S.draft.labels = S.draft.labels.filter(k => S.cats.some(c => c.key === k));   // drop deleted categories
@@ -2406,7 +2551,7 @@ function openModal(id, preset) {
   $('#m-start').value = S.draft.startDate || '';
   $('#m-dto').value = S.draft.delegateTo || ''; $('#m-fu').value = S.draft.followUp || '';
   $('#m-est').value = String([0, 15, 30, 60, 90, 120, 240, 480].includes(+S.draft.estimate) ? +S.draft.estimate : 0);
-  $('#m-focus').checked = S.draft.focusDate === today();
+  $('#m-focus').checked = inFocus(S.draft); $('#m-top').checked = S.draft.topDate === today();
   mProj();
   $('#m-sub-new').value = $('#m-link-url').value = $('#m-link-name').value = '';
   $('#m-upl-status').textContent = '';
@@ -2491,7 +2636,7 @@ function addToOutlook(t) {
     Office.context.mailbox.displayNewAppointmentForm({ subject: t.title || 'Task', start: new Date(y, m - 1, d, 9, 0), end: new Date(y, m - 1, d, 9, 30), body });
     return;
   }
-  const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//North Star//EN', 'BEGIN:VEVENT', 'UID:' + (t.id || uid()) + '@northstar',
+  const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//North Star Momentum//EN', 'BEGIN:VEVENT', 'UID:' + (t.id || uid()) + '@northstar',
     'DTSTAMP:' + new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, ''), 'DTSTART;VALUE=DATE:' + day.replace(/-/g, ''),
     'DTEND;VALUE=DATE:' + addDays(day, 1).replace(/-/g, ''), 'SUMMARY:' + icsEsc(t.title || 'Task'), 'DESCRIPTION:' + icsEsc(body),
     'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
@@ -2554,8 +2699,12 @@ $('#m-fu').addEventListener('change', e => { S.draft.followUp = e.target.value; 
 $('#m-fu-clear').addEventListener('click', () => { S.draft.followUp = ''; $('#m-fu').value = ''; });
 $('#m-est').addEventListener('change', e => { S.draft.estimate = +e.target.value; });
 $('#m-focus').addEventListener('change', e => {
-  if (e.target.checked && S.tasks.filter(x => x.focusDate === today() && x.status !== 'done' && x.id !== S.draft.id).length >= 3) { e.target.checked = false; return toast('Your Top 3 is full — remove one first', 'err'); }
-  S.draft.focusDate = e.target.checked ? today() : '';
+  if (e.target.checked) S.draft.focusDate = today(); else { unfocus(S.draft); $('#m-top').checked = false; }
+});
+$('#m-top').addEventListener('change', e => {
+  if (e.target.checked && topCount(S.draft.id) >= 3) { e.target.checked = false; return toast('Your Top 3 is full — unstar one first', 'err'); }
+  S.draft.topDate = e.target.checked ? today() : '';
+  if (e.target.checked) { S.draft.focusDate = today(); $('#m-focus').checked = true; }
 });
 $('#m-title').addEventListener('input', e => { S.draft.title = e.target.value; if (e.target.value.trim()) e.target.classList.remove('invalid'); mOcal(); });
 $('#m-notes').addEventListener('input', e => { S.draft.notes = e.target.value; });
@@ -2683,21 +2832,21 @@ document.addEventListener('keydown', e => {
   if (e.key !== 'Escape' && !(e.key === 'Enter' && (e.ctrlKey || e.metaKey))) return;
   const open = id => !$(id).classList.contains('hidden');
   if (open('#dlg')) { if (e.key === 'Escape') $('#dlg-cancel').click(); return; }
-  for (const [id, close] of [['#proj-modal', closeProjModal], ['#cats-modal', closeCats], ['#share-modal', closeShare], ['#acct-modal', closeAcct], ['#arch-modal', closeArch], ['#fb-modal', closeFb], ['#ol-modal', closeOl], ['#plan-modal', closePlan], ['#wrap-modal', closeWrap]])
+  for (const [id, close] of [['#proj-modal', closeProjModal], ['#cats-modal', closeCats], ['#share-modal', closeShare], ['#acct-modal', closeAcct], ['#arch-modal', closeArch], ['#fb-modal', closeFb], ['#ol-modal', closeOl], ['#plan-modal', closePlan], ['#wrap-modal', closeWrap], ['#mt-modal', attemptCloseMt]])
     if (open(id)) { if (e.key === 'Escape') close(); return; }
   if (!open('#task-modal')) return;
   if (e.key === 'Escape') attemptClose(); else saveModal();
 });
 
-/* Keyboard: N new task · Q quick add · / search · 1–6 switch screens */
+/* Keyboard: N new task · Q quick add · / search · 1–7 switch screens */
 document.addEventListener('keydown', e => {
   if (e.ctrlKey || e.metaKey || e.altKey || !S.token || $('#app').classList.contains('hidden')) return;
   if (e.target.closest('input, textarea, select, [contenteditable]') || $$('.overlay').some(o => !o.classList.contains('hidden'))) return;
-  const tabs = ['today', 'inbox', 'plan', 'timeline', 'projects', 'insights'];
+  const tabs = ['today', 'inbox', 'plan', 'timeline', 'projects', 'meetings', 'insights'];
   if (e.key === 'n' || e.key === 'N') { e.preventDefault(); openModal(null); }
   else if (e.key === 'q' || e.key === 'Q') { e.preventDefault(); if (!['today', 'inbox'].includes(S.view)) goView('today'); setTimeout(() => $('#qa-in') && $('#qa-in').focus(), 0); }
   else if (e.key === '/') { if (!$('#toolbar').classList.contains('hidden')) { e.preventDefault(); $('#f-q').focus(); } }
-  else if (/^[1-6]$/.test(e.key)) goView(tabs[+e.key - 1]);
+  else if (/^[1-7]$/.test(e.key)) goView(tabs[+e.key - 1]);
 });
 
 /* ================= Projects ================= */
@@ -2934,6 +3083,407 @@ h2{font-size:16px;margin:22px 0 10px}
   <h2>Tasks &amp; steps</h2>
   ${taskHtml}
   <div class="foot">${esc(S.appName)} · Developed by Ahmed Abdel-Dayem · linkedin.com/in/aabdel-dayem</div>
+</div>
+<script>window.addEventListener('load',function(){setTimeout(function(){window.print()},500)});<\/script>
+</body></html>`;
+  const w = window.open('', '_blank');
+  if (!w) return toast('Please allow pop-ups for this site to download the PDF', 'err');
+  w.document.open(); w.document.write(html); w.document.close();
+}
+
+/* ================= Meetings (minutes of meeting) ================= */
+const MT_KINDS = { meeting: 'Meeting', 'one-on-one': 'One-on-one', interview: 'Interview', workshop: 'Workshop / training', review: 'Review', other: 'Other' };
+const mtDate = s => (s || '').slice(0, 10);
+const mtTime = s => (s || '').length > 10 ? s.slice(11, 16) : '';
+function mtWhen(m) {
+  if (!m.start) return '';
+  const d = parseD(mtDate(m.start)), t1 = mtTime(m.start), t2 = mtTime(m.end), sameDay = !m.end || mtDate(m.end) === mtDate(m.start);
+  return WEEKDAYS[d.getDay()].slice(0, 3) + ', ' + fmtDate(mtDate(m.start)) + (t1 ? ' · ' + t1 : '') +
+    (m.end ? (sameDay ? (t2 ? '–' + t2 : '') : ' → ' + fmtDate(mtDate(m.end)) + (t2 ? ' ' + t2 : '')) : '');
+}
+function mtLongDate(s) { if (!s) return ''; const d = parseD(mtDate(s)); return WEEKDAYS[d.getDay()] + ', ' + MONTHS[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear(); }
+const nowLocal = () => { const d = new Date(); return ymd(d) + 'T' + fmtTime(d); };
+function actStats(m) {
+  const td = today(), a = m.actions || [];
+  return { total: a.length, done: a.filter(x => x.status === 'done').length, late: a.filter(x => x.status !== 'done' && x.due && x.due < td).length };
+}
+
+function renderMeetings() {
+  const f = S.mtFilter, q = S.mtQ.trim().toLowerCase();
+  const seg = `<div class="seg" id="mt-seg">${[['upcoming', 'Upcoming'], ['past', 'Past'], ['all', 'All'], ['actions', 'Action points']].map(([k, n]) => `<button data-mtf="${k}" class="${f === k ? 'on' : ''}">${n}</button>`).join('')}</div>`;
+  const right = `<button class="btn sm" data-mt="xlsx-all" title="All meetings and action points in one Excel file">Excel</button><button class="btn sm primary" data-mt="new">+ New meeting</button>`;
+  const openA = S.meetings.reduce((n, m) => n + (m.actions || []).filter(a => a.status !== 'done').length, 0);
+  return vhead('Meetings', S.meetings.length, right, openA ? openA + ' open action point' + (openA === 1 ? '' : 's') : '') +
+    `<div class="mt-tools">${seg}<input id="mt-q" type="search" placeholder="Search meetings, people, actions…" value="${esc(S.mtQ)}"></div>
+    <div id="mt-list">${meetingList(f, q)}</div>`;
+}
+function mtMatch(m, q) {
+  if (!q) return true;
+  return [m.title, m.location, m.organizer, m.agenda, m.notes, m.decisions, (m.attendees || []).join(' '), (m.actions || []).map(a => a.text + ' ' + a.owner).join(' ')]
+    .join(' ').toLowerCase().includes(q);
+}
+function meetingList(f, q) {
+  if (!S.meetings.length) return `<div class="empty big">No meetings yet.<br>Keep the minutes of every meeting here — who attended, what was agreed, who does what and by when.<br><br><button class="btn primary" data-mt="new">+ New meeting</button></div>`;
+  if (f === 'actions') return actionTable(q);
+  const now = nowLocal();
+  let list = S.meetings.filter(m => mtMatch(m, q));
+  const ended = m => (m.end || m.start) < now;
+  if (f === 'upcoming') list = list.filter(m => !ended(m) || mtDate(m.start) === today()).sort((a, b) => a.start.localeCompare(b.start));
+  else if (f === 'past') list = list.filter(m => ended(m) && mtDate(m.start) !== today()).sort((a, b) => b.start.localeCompare(a.start));
+  else list = list.slice().sort((a, b) => b.start.localeCompare(a.start));
+  if (!list.length) return `<div class="empty">${q ? 'No meetings match your search.' : f === 'upcoming' ? 'No upcoming meetings. <button class="link" data-mt="new">Add one</button>' : 'Nothing here yet.'}</div>`;
+  let lastGroup = '';
+  return list.map(m => {
+    const d = parseD(mtDate(m.start)), st = actStats(m), pj = m.projectId ? S.projects.find(p => p.id === m.projectId) : null;
+    const g = MONTHS[d.getMonth()] + ' ' + d.getFullYear(), head = g !== lastGroup ? `<div class="mt-group">${g}</div>` : ''; lastGroup = g;
+    const people = (m.attendees || []).length;
+    return head + `<div class="mtg ${ended(m) && mtDate(m.start) !== today() ? 'past' : ''}" data-mid="${esc(m.id)}" style="--c:${esc(pj ? pj.color : 'var(--primary)')}">
+      <div class="mday"><b>${d.getDate()}</b><span>${MONTHS[d.getMonth()].slice(0, 3)}</span></div>
+      <div class="grow" style="min-width:0">
+        <div class="mt-t" dir="auto">${esc(m.title)}</div>
+        <div class="meta"><span>${esc(mtWhen(m))}</span>${m.kind && m.kind !== 'meeting' ? `<span>${MT_KINDS[m.kind] || ''}</span>` : ''}
+          ${m.organizer ? `<span dir="auto">Owner: ${esc(m.organizer)}</span>` : ''}${people ? `<span>${people} attendee${people === 1 ? '' : 's'}</span>` : ''}
+          ${m.location ? `<span dir="auto">${esc(m.location.length > 40 ? m.location.slice(0, 40) + '…' : m.location)}</span>` : ''}
+          ${pj ? `<span class="pchip" style="--c:${esc(pj.color)}"><i></i>${esc(pj.name)}</span>` : ''}${m._unsaved ? '<span class="unsaved">Not saved yet</span>' : ''}</div>
+      </div>
+      <div class="mt-side">
+        ${st.total ? `<span class="apill ${st.late ? 'bad' : st.done === st.total ? 'ok' : ''}" title="Action points done">${st.done}/${st.total} actions${st.late ? ' · ' + st.late + ' late' : ''}</span>` : '<span class="apill">No actions</span>'}
+        <div class="row-b"><button class="btn xs" data-mt="xlsx" title="Download as Excel">Excel</button><button class="btn xs" data-mt="pdf" title="Download as PDF">PDF</button></div>
+      </div></div>`;
+  }).join('');
+}
+function actionTable(q) {
+  const td = today(), rows = [];
+  S.meetings.forEach(m => (m.actions || []).forEach(a => { if (!q || (a.text + ' ' + a.owner + ' ' + m.title).toLowerCase().includes(q)) rows.push({ m, a }); }));
+  if (!rows.length) return `<div class="empty">${q ? 'No action points match your search.' : 'No action points yet — add them inside a meeting.'}</div>`;
+  rows.sort((x, y) => (x.a.status === 'done') - (y.a.status === 'done') || (x.a.due || '9999').localeCompare(y.a.due || '9999'));
+  return `<table class="atable"><thead><tr><th></th><th>Action</th><th>Owner</th><th>Deadline</th><th class="hm">Meeting</th></tr></thead><tbody>${rows.map(({ m, a }) => `
+    <tr class="${a.status === 'done' ? 'd' : ''}" data-mid="${esc(m.id)}" data-aid="${esc(a.id)}">
+      <td><input type="checkbox" data-mt="adone" ${a.status === 'done' ? 'checked' : ''} title="Done"></td>
+      <td class="at" dir="auto">${esc(a.text)}</td><td dir="auto">${esc(a.owner) || '<span class="muted">—</span>'}</td>
+      <td class="${a.status !== 'done' && a.due && a.due < td ? 'late' : ''}">${a.due ? fmtDate(a.due) : '<span class="muted">—</span>'}</td>
+      <td class="hm"><button class="mlink" data-mt="open" dir="auto">${esc(m.title)}</button><div class="muted" style="font-size:11.5px">${fmtDate(mtDate(m.start))}</div></td></tr>`).join('')}</tbody></table>`;
+}
+
+view.addEventListener('click', e => {
+  if (curView() !== 'meetings') return;
+  const f = e.target.closest('[data-mtf]');
+  if (f) { S.mtFilter = f.dataset.mtf; ls.set('mtFilter', S.mtFilter); return render(); }
+  const b = e.target.closest('[data-mt]'), host = e.target.closest('[data-mid]');
+  const m = host ? S.meetings.find(x => x.id === host.dataset.mid) : null;
+  if (b) {
+    const k = b.dataset.mt;
+    if (k === 'new') return openMeeting(null);
+    if (k === 'xlsx-all') return exportMeetingsXlsx();
+    if (k === 'adone') return;                                      // handled in 'change'
+    if (k === 'xlsx' && m) return exportMeetingXlsx(m);
+    if (k === 'pdf' && m) return exportMeetingPDF(m);
+    if (k === 'open' && m) return openMeeting(m.id);
+  }
+  if (m && host.classList.contains('mtg')) openMeeting(m.id);
+});
+view.addEventListener('change', e => {
+  if (e.target.dataset.mt !== 'adone') return;
+  const tr = e.target.closest('[data-aid]'), m = S.meetings.find(x => x.id === tr.dataset.mid); if (!m) return;
+  const a = m.actions.find(x => x.id === tr.dataset.aid); if (!a) return;
+  a.status = e.target.checked ? 'done' : 'open';
+  render(); sendMeeting(m);
+});
+view.addEventListener('input', e => {
+  if (e.target.id !== 'mt-q') return;
+  S.mtQ = e.target.value; $('#mt-list').innerHTML = meetingList(S.mtFilter, S.mtQ.trim().toLowerCase());
+});
+
+/* ---------- Save / delete (instant on screen, sent in the background) ---------- */
+const mtFlight = new Map();
+function sendMeeting(m, quiet) {
+  const data = clone(m); delete data._unsaved;
+  S.pending++; updateSync();
+  const p = (mtFlight.get(m.id) || Promise.resolve()).catch(() => {})
+    .then(() => api('saveMeeting', S.token, data))
+    .then(saved => {
+      const i = S.meetings.findIndex(x => x.id === saved.id);
+      const cur = S.meetings[i];
+      if (cur && JSON.stringify(Object.assign({}, cur, { _unsaved: undefined, isNew: undefined, updatedAt: '', createdAt: '' })) === JSON.stringify(Object.assign({}, data, { _unsaved: undefined, isNew: undefined, updatedAt: '', createdAt: '' }))) S.meetings[i] = saved;
+      else if (cur) { delete cur._unsaved; delete cur.isNew; cur.createdAt = saved.createdAt; }
+      if (curView() === 'meetings') render(); else saveCache();
+      return saved;
+    }, err => {
+      const cur = S.meetings.find(x => x.id === m.id); if (cur) cur._unsaved = true;
+      if (curView() === 'meetings') render();
+      if (!quiet) toast('Meeting not saved — ' + err.message, 'err', { label: 'Try again', run: () => { const c = S.meetings.find(x => x.id === m.id); if (c) sendMeeting(c); } }, 8000);
+      throw err;
+    })
+    .finally(() => { S.pending--; updateSync(); if (mtFlight.get(m.id) === p) mtFlight.delete(m.id); });
+  mtFlight.set(m.id, p);
+  p.catch(() => {});
+  return p;
+}
+function deleteMeetingUndo(id) {
+  const i = S.meetings.findIndex(x => x.id === id); if (i < 0) return;
+  const m = S.meetings[i];
+  S.meetings.splice(i, 1); render();
+  api('deleteMeeting', S.token, id).catch(err => toast(err.message, 'err'));
+  toast('Meeting deleted', '', { label: 'Undo', run: () => { S.meetings.push(m); render(); sendMeeting(m); } }, 7000);
+}
+
+/* ---------- The meeting window ---------- */
+function openMeeting(id, preset) {
+  const m = id ? S.meetings.find(x => x.id === id) : null;
+  const start = new Date(); start.setMinutes(start.getMinutes() < 30 ? 30 : 60, 0, 0);
+  const end = new Date(start.getTime() + 3600000);
+  const blank = { id: '', title: '', kind: 'meeting', start: ymd(start) + 'T' + fmtTime(start), end: ymd(end) + 'T' + fmtTime(end), location: '', organizer: S.user,
+    attendees: [], absent: [], agenda: '', notes: '', decisions: '', actions: [], nextMeeting: '', projectId: S.view === 'projects' && S.projectOpen ? S.projectOpen : '' };
+  S.mt = Object.assign(blank, m ? clone(m) : preset);
+  S.mtInit = JSON.stringify(S.mt);
+  $('#mt-head').textContent = m ? 'Minutes of meeting' : 'New meeting';
+  $('#mt-created').textContent = m && m.updatedAt ? 'Updated ' + rel(m.updatedAt) : '';
+  $('#mt-title').value = S.mt.title; $('#mt-kind').value = MT_KINDS[S.mt.kind] ? S.mt.kind : 'meeting';
+  $('#mt-start').value = S.mt.start.length === 10 ? S.mt.start + 'T09:00' : S.mt.start;
+  $('#mt-end').value = S.mt.end && S.mt.end.length === 10 ? S.mt.end + 'T10:00' : S.mt.end;
+  $('#mt-loc').value = S.mt.location; $('#mt-org').value = S.mt.organizer;
+  $('#mt-agenda').value = S.mt.agenda; $('#mt-notes').value = S.mt.notes; $('#mt-dec').value = S.mt.decisions;
+  $('#mt-next').value = S.mt.nextMeeting;
+  $('#mt-project').innerHTML = '<option value="">No project</option>' + S.projects.map(p => `<option value="${esc(p.id)}">${esc(p.name)}</option>`).join('');
+  $('#mt-project').value = S.mt.projectId || '';
+  const del = $('#mt-del'); del.classList.toggle('hidden', !m); del.classList.remove('confirm'); del.textContent = 'Delete';
+  $('#mt-title').classList.remove('invalid'); $('#mt-start').classList.remove('invalid');
+  mtPeople(); mtActions();
+  $('#mt-modal').classList.remove('hidden');
+  setTimeout(() => $(m ? '#mt-notes' : '#mt-title').focus(), 30);
+}
+/* reads the form into S.mt */
+function mtRead() {
+  const m = S.mt;
+  m.title = $('#mt-title').value.trim(); m.kind = $('#mt-kind').value; m.projectId = $('#mt-project').value;
+  m.start = $('#mt-start').value; m.end = $('#mt-end').value; m.location = $('#mt-loc').value.trim(); m.organizer = $('#mt-org').value.trim();
+  m.agenda = $('#mt-agenda').value; m.notes = $('#mt-notes').value; m.decisions = $('#mt-dec').value; m.nextMeeting = $('#mt-next').value;
+  ['att', 'abs'].forEach(k => { const v = $('#mt-' + k + '-in').value.trim(); if (v) { addPerson(k, v); $('#mt-' + k + '-in').value = ''; } });
+  $$('#mt-actions .arow').forEach(r => {
+    const a = m.actions.find(x => x.id === r.dataset.aid); if (!a) return;
+    a.text = $('.a-text', r).value.trim(); a.owner = $('.a-owner', r).value.trim(); a.due = $('.a-due', r).value; a.status = $('.a-done', r).checked ? 'done' : 'open';
+  });
+  m.actions = m.actions.filter(a => a.text);
+  return m;
+}
+function mtPeople() {
+  const chips = (k, list) => list.map((n, i) => `<span class="pchip2" dir="auto">${esc(n)}<button type="button" data-rm="${k}:${i}" title="Remove">×</button></span>`).join('');
+  [['att', S.mt.attendees], ['abs', S.mt.absent]].forEach(([k, list]) => {
+    const box = $('#mt-' + k), inp = $('#mt-' + k + '-in');
+    $$('.pchip2', box).forEach(x => x.remove());
+    inp.insertAdjacentHTML('beforebegin', chips(k, list));
+  });
+  const names = new Set([S.user, $('#mt-org').value.trim()].concat(S.mt.attendees, S.meetings.flatMap(m => (m.attendees || []).concat(m.organizer || []))).filter(Boolean));
+  $('#mt-people').innerHTML = Array.from(names).slice(0, 200).map(n => `<option value="${esc(n)}">`).join('');
+}
+function addPerson(k, raw) {
+  const list = k === 'att' ? S.mt.attendees : S.mt.absent;
+  raw.split(/[,;\n]/).map(x => x.trim()).filter(Boolean).forEach(n => { if (!list.some(x => x.toLowerCase() === n.toLowerCase())) list.push(n.slice(0, 120)); });
+}
+['att', 'abs'].forEach(k => {
+  const inp = $('#mt-' + k + '-in');
+  inp.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ',' || e.key === ';') { e.preventDefault(); if (inp.value.trim()) { addPerson(k, inp.value); inp.value = ''; mtPeople(); } }
+    else if (e.key === 'Backspace' && !inp.value) { const list = k === 'att' ? S.mt.attendees : S.mt.absent; if (list.length) { list.pop(); mtPeople(); } }
+  });
+  inp.addEventListener('change', () => { if (/[,;]/.test(inp.value)) { addPerson(k, inp.value); inp.value = ''; mtPeople(); } });
+  inp.addEventListener('blur', () => { if (inp.value.trim()) { addPerson(k, inp.value); inp.value = ''; mtPeople(); } });
+  $('#mt-' + k).addEventListener('click', e => {
+    const b = e.target.closest('[data-rm]');
+    if (b) { const [kk, i] = b.dataset.rm.split(':'); (kk === 'att' ? S.mt.attendees : S.mt.absent).splice(+i, 1); mtPeople(); return; }
+    inp.focus();
+  });
+});
+function mtActions() {
+  const tk = id => id && findTask(id);
+  $('#mt-actions').innerHTML = S.mt.actions.map(a => `<div class="arow ${a.status === 'done' ? 'd' : ''}" data-aid="${esc(a.id)}">
+      <input type="checkbox" class="a-done" ${a.status === 'done' ? 'checked' : ''} title="Done">
+      <input class="a-text" dir="auto" maxlength="500" placeholder="What was agreed?" value="${esc(a.text)}">
+      <input class="a-owner" dir="auto" maxlength="120" placeholder="Owner" list="mt-people" value="${esc(a.owner)}">
+      <input class="a-due" type="date" value="${esc(a.due)}" title="Deadline">
+      <button class="btn icon-btn" type="button" data-arm="${esc(a.id)}" title="Remove">×</button>
+      ${tk(a.taskId) ? `<div class="a-task">✓ Task: ${esc(tk(a.taskId).title)}</div>` : ''}</div>`).join('') ||
+    '<div class="empty" style="padding:10px 12px">No action points yet.</div>';
+}
+$('#mt-a-add').addEventListener('click', () => {
+  mtRead(); S.mt.actions.push({ id: newId(), text: '', owner: '', due: '', status: 'open', taskId: '' });
+  // keep the empty row: mtRead() drops empty actions, so render it directly
+  mtActions(); const rows = $$('#mt-actions .a-text'); rows[rows.length - 1].focus();
+});
+$('#mt-actions').addEventListener('click', e => {
+  const b = e.target.closest('[data-arm]'); if (!b) return;
+  mtRead(); S.mt.actions = S.mt.actions.filter(a => a.id !== b.dataset.arm); mtActions();
+});
+$('#mt-actions').addEventListener('change', e => { if (e.target.classList.contains('a-done')) e.target.closest('.arow').classList.toggle('d', e.target.checked); });
+$('#mt-actions').addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.classList.contains('a-text') && !e.ctrlKey && !e.metaKey) { e.preventDefault(); $('#mt-a-add').click(); } });
+$('#mt-org').addEventListener('change', mtPeople);
+
+function mtValid() {
+  const m = S.mt, miss = [];
+  $('#mt-title').classList.toggle('invalid', !m.title); $('#mt-start').classList.toggle('invalid', !m.start);
+  if (!m.title) miss.push('title'); if (!m.start) miss.push('date');
+  if (miss.length) { toast('Please fill in: ' + miss.join(', '), 'err'); return false; }
+  if (m.end && m.end < m.start) { toast('The meeting can’t end before it starts', 'err'); return false; }
+  return true;
+}
+function saveMeetingModal() {
+  if (!S.mt) return;
+  const m = mtRead(); if (!mtValid()) return;
+  if (!m.id) { m.id = newId(); m.isNew = true; m.createdAt = new Date().toISOString(); }
+  const c = clone(m), i = S.meetings.findIndex(x => x.id === c.id);
+  if (i >= 0) S.meetings[i] = c; else S.meetings.push(c);
+  closeMt(); if (S.view !== 'meetings') goView('meetings'); else render();
+  toast('Meeting saved'); sendMeeting(c).catch(() => {});
+}
+function mtDirty() { return S.mt && JSON.stringify(mtRead()) !== S.mtInit; }
+const closeMt = () => { $('#mt-modal').classList.add('hidden'); S.mt = null; };
+async function attemptCloseMt() {
+  if (mtDirty() && !(await dialog('Discard changes?', 'This meeting has changes that are not saved yet.', 'Discard', 'Keep editing'))) return;
+  closeMt();
+}
+$('#mt-save').addEventListener('click', saveMeetingModal);
+$('#mt-close').addEventListener('click', attemptCloseMt);
+$('#mt-cancel').addEventListener('click', attemptCloseMt);
+$('#mt-modal').addEventListener('mousedown', e => { if (e.target.id === 'mt-modal') attemptCloseMt(); });
+$('#mt-del').addEventListener('click', e => {
+  const b = e.currentTarget;
+  if (!b.classList.contains('confirm')) { b.classList.add('confirm'); b.textContent = 'Confirm delete?'; return; }
+  const id = S.mt.id; closeMt(); deleteMeetingUndo(id);
+});
+$('#mt-xlsx').addEventListener('click', () => { const m = mtRead(); if (!m.title) m.title = 'Meeting'; exportMeetingXlsx(m); });
+$('#mt-pdf').addEventListener('click', () => { const m = mtRead(); if (!m.title) m.title = 'Meeting'; exportMeetingPDF(m); });
+$('#mt-start').addEventListener('change', e => {     // keep the length when the start moves
+  const old = S.mt.start, v = e.target.value, end = $('#mt-end').value;
+  if (v && old && end && end > old) { const ms = Date.parse(end) - Date.parse(old), ne = new Date(Date.parse(v) + ms); $('#mt-end').value = ymd(ne) + 'T' + fmtTime(ne); }
+  else if (v && (!end || end < v)) { const ne = new Date(Date.parse(v) + 3600000); $('#mt-end').value = ymd(ne) + 'T' + fmtTime(ne); }
+  S.mt.start = v;
+});
+
+/* Action points → tasks: yours go to Schedule, someone else's go to Assign with a follow-up on the deadline */
+$('#mt-a-tasks').addEventListener('click', () => {
+  const m = mtRead(); if (!mtValid()) return;
+  const mine = o => !o || o.toLowerCase() === String(S.user).toLowerCase() || /^(me|i|أنا|انا)$/i.test(o);
+  const todo = m.actions.filter(a => a.status !== 'done' && !(a.taskId && findTask(a.taskId)));
+  if (!todo.length) return toast(m.actions.length ? 'Every open action point already has a task' : 'Add an action point first', 'err');
+  todo.forEach(a => {
+    const deleg = !mine(a.owner);
+    const t = { id: newId(), isNew: true, createdAt: new Date().toISOString(), title: a.text, notes: 'From meeting: ' + m.title + ' (' + fmtDate(mtDate(m.start)) + ')',
+      labels: [], quadrant: deleg ? 'Q3' : 'Q2', dueDate: a.due || '', status: 'todo', reminderAt: '', repeat: '', projectId: m.projectId || '', startDate: '',
+      subtasks: [], attachments: [], focusDate: '', topDate: '', delegateTo: deleg ? a.owner : '', followUp: deleg ? a.due || '' : '', estimate: 0 };
+    fillDates(t); placeTask(t); sendTask(t, null).catch(() => {});
+    a.taskId = t.id;
+  });
+  mtActions();
+  toast(todo.length + ' task' + (todo.length === 1 ? '' : 's') + ' created — save the meeting to keep the links');
+});
+
+/* ---------- Excel (SheetJS, loaded only when needed) ---------- */
+let xlsxP = null;
+function loadXlsx() {
+  if (window.XLSX) return Promise.resolve(window.XLSX);
+  return xlsxP = xlsxP || new Promise((res, rej) => {
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+    s.onload = () => window.XLSX ? res(window.XLSX) : rej(new Error('Excel tool failed to load'));
+    s.onerror = () => { xlsxP = null; rej(new Error('Couldn’t load the Excel tool — check your connection')); };
+    document.head.appendChild(s);
+  });
+}
+const fileSafe = s => String(s || 'meeting').replace(/[\\/:*?"<>|]+/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 60) || 'meeting';
+const mtProj = m => { const p = m.projectId && S.projects.find(x => x.id === m.projectId); return p ? p.name : ''; };
+const aStatus = a => a.status === 'done' ? 'Done' : a.due && a.due < today() ? 'Overdue' : 'Open';
+function sheetOf(X, rows, widths) {
+  const ws = X.utils.aoa_to_sheet(rows);
+  ws['!cols'] = widths.map(w => ({ wch: w }));
+  return ws;
+}
+async function exportMeetingXlsx(m) {
+  try {
+    const X = await withBusy(loadXlsx());
+    const wb = X.utils.book_new();
+    const info = [['Minutes of meeting'], [], ['Meeting', m.title], ['Type', MT_KINDS[m.kind] || 'Meeting'], ['Date', mtLongDate(m.start)],
+      ['Time', [mtTime(m.start), mtTime(m.end)].filter(Boolean).join(' – ')], ['Location / link', m.location], ['Owner / chair', m.organizer],
+      ['Attendees', (m.attendees || []).join(', ')], ['Absent / apologies', (m.absent || []).join(', ')], ['Project', mtProj(m)], [],
+      ['Agenda', m.agenda], ['Discussion / notes', m.notes], ['Decisions', m.decisions], [],
+      ['Next meeting', m.nextMeeting ? mtLongDate(m.nextMeeting) + (mtTime(m.nextMeeting) ? ' · ' + mtTime(m.nextMeeting) : '') : ''],
+      ['Prepared by', S.user], ['Exported', mtLongDate(today())]];
+    X.utils.book_append_sheet(wb, sheetOf(X, info, [22, 90]), 'Minutes');
+    const acts = [['#', 'Action point', 'Owner', 'Deadline', 'Status']].concat((m.actions || []).map((a, i) => [i + 1, a.text, a.owner, a.due, aStatus(a)]));
+    X.utils.book_append_sheet(wb, sheetOf(X, acts, [5, 60, 24, 13, 11]), 'Action points');
+    X.writeFile(wb, fileSafe('MoM ' + mtDate(m.start) + ' ' + m.title) + '.xlsx');
+  } catch (err) { toast(err.message, 'err'); }
+}
+async function exportMeetingsXlsx() {
+  if (!S.meetings.length) return toast('No meetings yet', 'err');
+  try {
+    const X = await withBusy(loadXlsx());
+    const wb = X.utils.book_new(), list = S.meetings.slice().sort((a, b) => b.start.localeCompare(a.start));
+    const rows = [['Date', 'Start', 'End', 'Meeting', 'Type', 'Owner / chair', 'Attendees', 'Absent', 'Location / link', 'Project', 'Agenda', 'Decisions', 'Actions', 'Open actions', 'Next meeting']]
+      .concat(list.map(m => { const st = actStats(m); return [mtDate(m.start), mtTime(m.start), mtTime(m.end), m.title, MT_KINDS[m.kind] || 'Meeting', m.organizer,
+        (m.attendees || []).join(', '), (m.absent || []).join(', '), m.location, mtProj(m), m.agenda, m.decisions, st.total, st.total - st.done, m.nextMeeting.replace('T', ' ')]; }));
+    X.utils.book_append_sheet(wb, sheetOf(X, rows, [11, 7, 7, 34, 14, 18, 40, 20, 26, 16, 40, 40, 8, 11, 16]), 'Meetings');
+    const acts = [['Meeting date', 'Meeting', 'Action point', 'Owner', 'Deadline', 'Status']];
+    list.forEach(m => (m.actions || []).forEach(a => acts.push([mtDate(m.start), m.title, a.text, a.owner, a.due, aStatus(a)])));
+    X.utils.book_append_sheet(wb, sheetOf(X, acts, [12, 34, 60, 22, 12, 10]), 'Action points');
+    X.writeFile(wb, fileSafe(S.appName + ' meetings ' + today()) + '.xlsx');
+  } catch (err) { toast(err.message, 'err'); }
+}
+
+/* ---------- PDF: a print-ready minutes page → "Save as PDF" ---------- */
+function exportMeetingPDF(m) {
+  const logo = (document.querySelector('.logo') || {}).src || '';
+  const lines = s => String(s || '').split(/\r?\n/).map(x => x.replace(/^\s*(\d+[.)]|[-•*])\s*/, '').trim()).filter(Boolean);
+  const list = (s, ordered) => { const l = lines(s); return l.length ? `<${ordered ? 'ol' : 'ul'}>${l.map(x => `<li dir="auto">${esc(x)}</li>`).join('')}</${ordered ? 'ol' : 'ul'}>` : '<p class="muted">—</p>'; };
+  const people = l => (l || []).length ? (l || []).map(n => `<span class="p" dir="auto">${esc(n)}</span>`).join('') : '<span class="muted">—</span>';
+  const now = new Date(), td = today();
+  const acts = (m.actions || []).length ? `<table class="acts"><thead><tr><th>#</th><th>Action point</th><th>Owner</th><th>Deadline</th><th>Status</th></tr></thead><tbody>${m.actions.map((a, i) => `
+    <tr><td>${i + 1}</td><td dir="auto">${esc(a.text)}</td><td dir="auto">${esc(a.owner) || '—'}</td><td>${a.due ? fmtDate(a.due) : '—'}</td>
+    <td class="${a.status === 'done' ? 'ok' : a.due && a.due < td ? 'bad' : ''}">${aStatus(a)}</td></tr>`).join('')}</tbody></table>` : '<p class="muted">No action points.</p>';
+  const html = `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Minutes — ${esc(m.title)}</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;color:#111827;font-size:12.5px;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.page{max-width:900px;margin:0 auto;padding:24px}
+.toolbar{position:sticky;top:0;background:#1e1b4b;color:#fff;padding:10px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;font-size:13px}
+.toolbar button{background:#fff;color:#111;border:0;border-radius:8px;padding:7px 14px;font-weight:700;cursor:pointer}
+.hdr{display:flex;gap:14px;align-items:center;border-bottom:3px solid #4338ca;padding-bottom:14px}
+.hdr img{width:46px;height:46px;border-radius:12px}.hdr .app{color:#6b7280;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+h1{margin:2px 0 0;font-size:24px;letter-spacing:-.3px}
+h2{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:#4338ca;margin:20px 0 8px;border-bottom:1px solid #e5e7eb;padding-bottom:4px}
+.info{display:grid;grid-template-columns:150px 1fr 150px 1fr;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;margin-top:16px}
+.info div{padding:7px 10px;border-top:1px solid #e5e7eb}.info div:nth-child(-n+4){border-top:0}
+.info .k{background:#f5f5ff;font-weight:700;color:#3730a3}
+.p{display:inline-block;background:#eef0ff;color:#3730a3;border-radius:99px;padding:2px 10px;margin:0 5px 5px 0;font-weight:600}
+ol,ul{margin:0;padding-left:20px;line-height:1.6}.notes{white-space:pre-wrap;line-height:1.55}
+.acts{width:100%;border-collapse:collapse}.acts th{background:#4338ca;color:#fff;text-align:left;padding:7px 9px;font-size:11.5px}
+.acts td{border-bottom:1px solid #e5e7eb;padding:7px 9px;vertical-align:top}.acts tr:nth-child(even) td{background:#fafafe}
+.acts td:first-child{width:28px;color:#6b7280}.ok{color:#16a34a;font-weight:700}.bad{color:#dc2626;font-weight:700}
+.muted{color:#6b7280}
+.sign{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:34px}.sign div{border-top:1px solid #9ca3af;padding-top:6px;color:#6b7280;font-size:11.5px}
+.foot{margin-top:24px;padding-top:10px;border-top:1px solid #e5e7eb;color:#6b7280;font-size:11px;text-align:center}
+section{break-inside:avoid}
+@page{size:A4;margin:12mm}
+@media print{.toolbar{display:none}.page{padding:0;max-width:none}}
+@media (max-width:600px){.info{grid-template-columns:110px 1fr}.info div:nth-child(-n+4){border-top:1px solid #e5e7eb}.info div:nth-child(-n+2){border-top:0}}
+</style></head><body>
+<div class="toolbar"><button onclick="window.print()">Save as PDF</button><span>In the print window, choose <b>Save as PDF</b> as the destination.</span></div>
+<div class="page">
+  <div class="hdr">${logo ? `<img src="${logo}" alt="">` : ''}<div><div class="app">Minutes of meeting</div><h1 dir="auto">${esc(m.title)}</h1></div></div>
+  <div class="info">
+    <div class="k">Date</div><div>${esc(mtLongDate(m.start))}</div><div class="k">Time</div><div>${esc([mtTime(m.start), mtTime(m.end)].filter(Boolean).join(' – ') || '—')}</div>
+    <div class="k">Owner / chair</div><div dir="auto">${esc(m.organizer) || '—'}</div><div class="k">Type</div><div>${esc(MT_KINDS[m.kind] || 'Meeting')}</div>
+    <div class="k">Location / link</div><div dir="auto">${esc(m.location) || '—'}</div><div class="k">Project</div><div dir="auto">${esc(mtProj(m)) || '—'}</div>
+  </div>
+  <section><h2>Attendees (${(m.attendees || []).length})</h2>${people(m.attendees)}
+  ${(m.absent || []).length ? `<div style="margin-top:8px"><b class="muted">Absent / apologies:</b> ${people(m.absent)}</div>` : ''}</section>
+  <section><h2>Agenda</h2>${list(m.agenda, true)}</section>
+  ${m.notes.trim() ? `<section><h2>Discussion</h2><div class="notes" dir="auto">${esc(m.notes.trim())}</div></section>` : ''}
+  <section><h2>Decisions</h2>${list(m.decisions, false)}</section>
+  <section><h2>Action points</h2>${acts}</section>
+  ${m.nextMeeting ? `<section><h2>Next meeting</h2><p>${esc(mtLongDate(m.nextMeeting))}${mtTime(m.nextMeeting) ? ' · ' + mtTime(m.nextMeeting) : ''}</p></section>` : ''}
+  <div class="sign"><div>Prepared by: ${esc(S.user)}</div><div>Approved by:</div></div>
+  <div class="foot">${esc(S.appName)} · Generated ${WEEKDAYS[now.getDay()]}, ${MONTHS[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}</div>
 </div>
 <script>window.addEventListener('load',function(){setTimeout(function(){window.print()},500)});<\/script>
 </body></html>`;

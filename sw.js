@@ -1,9 +1,9 @@
-/* North Star — service worker
+/* North Star Momentum — service worker
  * Makes the app installable and opens it instantly (even on a weak connection).
  * Your data always comes live from Google Apps Script — it is never cached here.
  * When you upload a new index.html, change VERSION below so phones pick up the update.
  */
-const VERSION = 'v17';
+const VERSION = 'v19';
 const CACHE = 'mytasks-' + VERSION;
 const SHELL = ['./', 'index.html', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png', 'icons/favicon-32.png'];
 
