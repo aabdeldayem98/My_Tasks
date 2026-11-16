@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
-<base target="_top">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>My Tasks</title>
@@ -16,6 +15,8 @@
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <script>
+  /* Inside Outlook (add-in) → load Office.js; everywhere else nothing extra is downloaded */
+  if (/[?&]host=outlook/i.test(location.search)) document.write('<script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"><\/script>');
   /* Light / Dark: apply the saved choice before the page paints */
   (function () { try { var t = localStorage.getItem('theme'); if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
 </script>
@@ -109,8 +110,11 @@ a{color:inherit}
 .auth-links{display:flex;justify-content:space-between;gap:10px;margin-top:12px;font-size:13px;flex-wrap:wrap}
 
 /* ================= App header ================= */
-header.top{position:sticky;top:0;z-index:5;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;padding:10px 16px;flex-wrap:wrap}
-header.top h1{font-size:18px;margin:0}
+header.top{position:sticky;top:0;z-index:5;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px;padding:8px 16px}
+header.top h1{font-size:18px;margin:0;white-space:nowrap}
+.avatar{width:34px;height:34px;border-radius:50%;border:0;background:var(--primary);color:var(--on-primary);font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center;margin-left:2px}
+.menu-who{padding:8px 10px 6px;font-weight:700;border-bottom:1px solid var(--border);margin-bottom:4px;word-break:break-word}
+.fab{display:none}
 .brand{display:flex;align-items:center;gap:10px}
 .menu{position:relative}
 .menu-list{position:absolute;right:0;top:calc(100% + 6px);background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.15);min-width:210px;padding:6px;z-index:30}
@@ -122,15 +126,29 @@ header.top h1{font-size:18px;margin:0}
 .announce p{margin:0;flex:1;white-space:pre-wrap;line-height:1.5}
 
 /* Greeting + quote */
-.welcome{display:grid;grid-template-columns:1fr 1.3fr;gap:12px;margin-bottom:14px;align-items:stretch}
-.greet{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 18px}
+.welcome{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:12px;margin-bottom:12px;align-items:center}
+.greet{padding:2px 2px}
 .greet h2{margin:0;font-size:24px;font-weight:800;letter-spacing:-.3px}
-.greet .date{color:var(--muted);margin-top:4px}
-.quote{background:var(--primary);color:var(--on-primary);border-radius:14px;padding:16px 20px;display:flex;flex-direction:column;justify-content:center}
-.quote q{font-size:15.5px;line-height:1.5;font-style:italic}
-.quote .who{margin-top:8px;font-weight:700;font-size:13px;opacity:.9}
-.quote .src{font-size:11px;opacity:.6;margin-top:4px}
+.greet .date{color:var(--muted);margin-top:2px}
+.quote{background:var(--primary);color:var(--on-primary);border-radius:14px;padding:12px 16px}
+.quote q{font-size:14.5px;line-height:1.5;font-style:italic;display:block}
+.q-foot{display:flex;align-items:center;gap:4px;margin-top:6px}
+.quote .who{font-weight:700;font-size:12.5px;opacity:.9}
+.q-btn{border:0;background:transparent;color:inherit;opacity:.75;width:30px;height:30px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;padding:0}
+.q-btn:hover{opacity:1;background:color-mix(in srgb,var(--on-primary) 12%,transparent)}
+.q-btn .icon{width:17px;height:17px}
+.q-btn.on{opacity:1;color:#f43f5e}
+.q-btn.on .icon{fill:currentColor}
+.q-btn:disabled{opacity:.4;cursor:default}
+.q-btn.busy .icon{animation:sp .8s linear infinite}
+.quote .src{font-size:10.5px;opacity:.55;margin-top:2px}
 .quote .src a{color:inherit}
+
+.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));background:var(--surface);border:1px solid var(--border);border-radius:14px;margin-bottom:12px;overflow:hidden}
+.kpis .stat{border:0;border-radius:0;border-left:1px solid var(--border);padding:8px 14px;min-width:0}
+.kpis .stat:first-child{border-left:0}
+.kpis .stat b{font-size:19px;line-height:1.25}
+.kpis .stat span{font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
 
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:14px}
 .stat{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px 14px}
@@ -140,12 +158,19 @@ header.top h1{font-size:18px;margin:0}
 .stat .delta{display:block;font-size:12px;margin-top:2px;color:var(--muted)}
 .stat .delta.up{color:var(--ok)} .stat .delta.down{color:var(--danger)}
 
-.tabs{display:inline-flex;gap:4px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:4px;flex-wrap:wrap}
-.tab{border:0;background:transparent;padding:6px 14px;border-radius:8px;color:var(--muted);font-weight:600}
+.navrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.tabs{display:flex;gap:2px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:4px;overflow-x:auto;scrollbar-width:none;max-width:100%}
+.tabs::-webkit-scrollbar{display:none}
+.tab{border:0;background:transparent;padding:6px 12px;border-radius:8px;color:var(--muted);font-weight:600;white-space:nowrap;flex:none}
 .tab.active{background:var(--primary-soft);color:var(--text)}
-.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}
-.toolbar input[type=search]{max-width:240px}
+.toolbar{display:flex;gap:6px;align-items:center;margin-left:auto;flex:1 1 320px;justify-content:flex-end;min-width:0}
+.toolbar input[type=search]{max-width:240px;min-width:0}
 .toolbar select{width:auto}
+.toolbar .btn{padding:7px 11px}
+.fcount{background:var(--primary);color:var(--on-primary);border-radius:99px;font-size:11px;min-width:18px;height:18px;padding:0 5px;display:inline-flex;align-items:center;justify-content:center}
+.filters{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px 12px;margin:-2px 0 10px;display:flex;flex-direction:column;gap:10px}
+.filters .frow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.filters select{width:auto}
 .chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .chip{border:1px solid var(--border);background:var(--surface);border-radius:999px;padding:3px 12px;font-size:13px;display:inline-flex;align-items:center;gap:6px}
 .chip .dot{width:8px;height:8px;border-radius:50%;background:var(--c)}
@@ -187,7 +212,9 @@ header.top h1{font-size:18px;margin:0}
 .axis-side{display:grid;grid-template-rows:1fr 1fr;gap:12px}
 .axis-side span{writing-mode:vertical-rl;transform:rotate(180deg);text-align:center;font-weight:700;color:var(--muted);font-size:12px;align-self:center;justify-self:center}
 .matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.quad{background:var(--surface2);border:1px solid var(--border);border-top:4px solid var(--q);border-radius:12px;padding:10px;min-height:230px}
+.quad{background:var(--surface2);border:1px solid var(--border);border-top:4px solid var(--q);border-radius:12px;padding:10px;min-height:170px;min-width:0}
+.qcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
+.qcards .card{margin:0}
 .quad-h{display:flex;align-items:center;gap:8px;margin-bottom:8px}
 .quad-h h3{margin:0;font-size:15px;color:var(--q)}
 .quad-h small{color:var(--muted)}
@@ -298,6 +325,13 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
 .arch:first-child{border-top:0}
 .arch .t{font-weight:600;word-break:break-word}
 .gcal{font-size:12px;margin-top:6px;display:inline-flex;gap:5px;align-items:center}
+.link-btn{background:none;border:0;padding:0;cursor:pointer}
+.m-created{font-size:12px;color:var(--muted);background:var(--surface2);border:1px solid var(--border);border-radius:99px;padding:2px 9px;white-space:nowrap}
+.unsaved{font-size:11px;font-weight:700;color:var(--q3);border:1px dashed var(--q3);border-radius:6px;padding:0 6px}
+.ol-h{font-size:15px;margin:18px 0 6px}
+.ol-h:first-of-type{margin-top:4px}
+.steps{margin:4px 0 6px;padding-left:20px;line-height:1.7}
+.steps li{margin-bottom:6px}
 .temp-pw{font-size:22px;font-weight:800;letter-spacing:2px;text-align:center;padding:12px;border:1px dashed var(--border);border-radius:10px;margin:10px 0;user-select:all;font-variant-numeric:tabular-nums}
 
 /* Projects */
@@ -342,10 +376,36 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
 @keyframes sp{to{transform:rotate(360deg)}}
 
 @media (max-width:760px){
-  .welcome{grid-template-columns:1fr}
-  .matrix{grid-template-columns:1fr}
+  .welcome{grid-template-columns:1fr;gap:8px}
+  .greet h2{font-size:21px}
+  .kpis{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .kpis .stat:nth-child(4){border-left:0}
+  .kpis .stat:nth-child(n+4){border-top:1px solid var(--border)}
+  .kpis .stat{padding:7px 10px}
+  .kpis .stat b{font-size:17px}
+  .navrow{gap:6px}
+  .tabs{width:100%}
+  .toolbar{flex-basis:100%;margin-left:0}
+  .toolbar input[type=search]{max-width:none;flex:1}
+  .new-btn,header.top h1{display:none}
+  .fab{display:flex;position:fixed;right:16px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:15;width:54px;height:54px;border-radius:50%;border:0;background:var(--primary);color:var(--on-primary);font-size:28px;font-weight:400;line-height:1;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+  #app .credit{padding-bottom:84px}
+  .matrix{grid-template-columns:1fr 1fr;gap:8px}
   .matrix-wrap{grid-template-columns:1fr}
   .axis-top,.axis-side{display:none}
+  .quad{padding:8px;min-height:110px}
+  .quad-h small{display:none}
+  .quad-h h3{font-size:14px}
+  .qcards{grid-template-columns:1fr;gap:6px}
+  .matrix .card{padding:7px 8px;border-left-width:3px}
+  .matrix .card .row{gap:7px}
+  .matrix .card .title{font-size:13px}
+  .matrix .check{width:18px;height:18px}
+  .matrix .card .meta .tag,.matrix .card .meta .muted,.matrix .pchip{display:none}
+}
+@media (max-width:430px){
+  .f-label{display:none}
+  .toolbar select{max-width:118px}
   .board{grid-auto-flow:row;grid-auto-columns:auto;grid-template-columns:1fr}
   .panels{grid-template-columns:1fr}
   .grid2{grid-template-columns:1fr}
@@ -367,7 +427,7 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
   <div class="landing-top"><button class="btn icon-btn ghost theme-btn" title="Light / Dark"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg></button></div>
   <div class="landing">
     <section class="hero">
-      <img class="hero-logo" src="data:image/jpeg;base64,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" alt="logo">
+      <img class="hero-logo" src="icons/icon-192.png" alt="logo">
       <h1 class="app-name">My Tasks</h1>
       <div class="by">Developed by <b>Ahmed Abdel-Dayem</b> ·
         <a class="li" href="https://www.linkedin.com/in/aabdel-dayem" target="_blank" rel="noopener"><svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 110-4.13 2.06 2.06 0 010 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg> LinkedIn</a></div>
@@ -437,17 +497,20 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
 <!-- ================= App ================= -->
 <div id="app" class="hidden">
   <header class="top">
-    <div class="brand"><img class="logo" src="data:image/jpeg;base64,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" alt="logo"><h1 class="app-name">My Tasks</h1></div>
+    <div class="brand"><img class="logo" src="icons/icon-192.png" alt="logo"><h1 class="app-name">My Tasks</h1></div>
     <span class="grow"></span>
-    <button class="btn primary" data-act="new">+ New task</button>
     <span class="sync hidden" id="sync">Syncing…</span>
-    <button class="btn ghost" id="btn-refresh" title="Refresh">Refresh</button>
+    <button class="btn sm hidden" id="btn-from-mail" title="Make a task from the open email"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg> From email</button>
+    <button class="btn primary new-btn" data-act="new">+ New task</button>
+    <button class="btn ghost icon-btn" id="btn-refresh" title="Refresh"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 11-2.6-6.4L21 8"/><path d="M21 3v5h-5"/></svg></button>
     <button class="btn ghost icon-btn theme-btn" title="Light / Dark"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg></button>
     <div class="menu">
-      <button class="btn" id="btn-menu"><span id="menu-name"></span> ▾</button>
+      <button class="avatar" id="btn-menu" title="Account"><span id="menu-initial"></span></button>
       <div class="menu-list hidden" id="menu-list">
+        <div class="menu-who" id="menu-name"></div>
         <button id="btn-acct"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg> Manage account</button>
         <button id="btn-share"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg> Share app</button>
+        <button id="btn-outlook"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> Outlook &amp; calendar</button>
         <button id="btn-archive"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 002 2h12a2 2 0 002-2V8M10 12h4"/></svg> Archive</button>
         <button id="btn-feedback"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> Send feedback</button>
         <button id="btn-install" class="hidden"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M12 7v7M9 11l3 3 3-3"/></svg> Install app</button>
@@ -467,8 +530,9 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
       <div class="quote" id="quote"><q>Loading today’s quote…</q></div>
     </div>
 
-    <div class="stats" id="stats"></div>
+    <div class="kpis" id="stats"></div>
 
+    <div class="navrow">
     <div class="tabs" id="tabs">
       <button class="tab active" data-view="list">List</button>
       <button class="tab" data-view="matrix">Focus Hub</button>
@@ -481,8 +545,19 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
 
     <div class="toolbar" id="toolbar">
       <input type="search" id="f-q" placeholder="Search tasks…">
+      <button class="btn" type="button" id="f-toggle" aria-expanded="false"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></svg><span class="f-label">Filters</span><span class="fcount hidden" id="f-count"></span></button>
+      <select id="f-sort">
+        <option value="due">Sort: Due date</option>
+        <option value="quad">Sort: Priority</option>
+        <option value="progress">Sort: Progress</option>
+        <option value="created">Sort: Newest</option>
+      </select>
+    </div>
+    </div>
+
+    <div class="filters hidden" id="filters">
       <div class="chips" id="f-labels"></div>
-      <span class="grow"></span>
+      <div class="frow">
       <select id="f-quad">
         <option value="">All boxes</option>
         <option value="Q1">Priority</option>
@@ -497,12 +572,8 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
         <option value="doing">In progress</option>
         <option value="done">Completed</option>
       </select>
-      <select id="f-sort">
-        <option value="due">Sort: Due date</option>
-        <option value="quad">Sort: Priority</option>
-        <option value="progress">Sort: Progress</option>
-        <option value="created">Sort: Newest</option>
-      </select>
+      <button class="link" type="button" id="f-reset">Clear filters</button>
+      </div>
     </div>
 
     <div id="view"></div>
@@ -510,6 +581,7 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
 
   <!-- Admin -->
   <div class="wrap hidden" id="admin-view"></div>
+  <button class="fab" data-act="new" aria-label="New task" title="New task">+</button>
 
   <footer class="credit">Developed by <b>Ahmed Abdel-Dayem</b> ·
     <a class="li" href="https://www.linkedin.com/in/aabdel-dayem" target="_blank" rel="noopener"><svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 110-4.13 2.06 2.06 0 010 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg> LinkedIn</a></footer>
@@ -518,7 +590,7 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
 <!-- ================= Task modal ================= -->
 <div class="overlay hidden" id="task-modal">
   <div class="modal" role="dialog" aria-modal="true">
-    <div class="m-headrow"><h2 id="m-head">New task</h2><span class="autosave">Auto-saves when you close</span>
+    <div class="m-headrow"><h2 id="m-head">New task</h2><span class="m-created" id="m-created"></span><span class="autosave">Auto-saves when you close</span>
       <button type="button" class="x" id="m-close" title="Close &amp; save" style="font-size:24px">×</button></div>
     <input id="m-title" dir="auto" class="m-title" placeholder="Task title *" maxlength="300">
 
@@ -533,10 +605,9 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
     </div>
 
     <div class="sec grid2">
-      <div><label class="sec-h"><span>Due date<span class="req">*</span></span></label>
+      <div><label class="sec-h"><span>Due date <span class="opt">(empty = entry day)</span></span></label>
         <div style="display:flex;gap:6px"><input type="date" id="m-date"><button class="btn sm" id="m-date-clear" type="button">Clear</button></div>
-        <a class="gcal li hidden" id="m-gcal" target="_blank" rel="noopener"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> Add to Google Calendar</a>
-        <span class="gcal muted hidden" id="m-gcal-on"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> Synced to your Google Calendar</span>
+        <button type="button" class="gcal li link-btn" id="m-ocal"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> Add to Outlook Calendar</button>
       </div>
       <div><label class="sec-h"><span>Status<span class="req">*</span></span></label>
         <select id="m-status"><option value="todo">To do</option><option value="doing">In progress</option><option value="done">Done</option></select>
@@ -546,7 +617,7 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
     <div class="sec grid2">
       <div><label class="sec-h"><span>Project</span></label>
         <select id="m-project"></select></div>
-      <div><label class="sec-h"><span>Start date <span class="opt">(for the Gantt chart)</span></span></label>
+      <div><label class="sec-h"><span>Start date <span class="opt">(empty = entry day)</span></span></label>
         <div style="display:flex;gap:6px"><input type="date" id="m-start"><button class="btn sm" id="m-start-clear" type="button">Clear</button></div></div>
     </div>
 
@@ -631,10 +702,6 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
       <div class="hint">Linking an email lets you reset a forgotten password and get reminders. The app works fine without it.</div></div>
     <div class="field"><label>New password <span class="opt">(leave empty to keep current)</span></label>
       <div class="pw-wrap"><input id="ac-new" type="password" autocomplete="new-password"><button type="button" class="pw-eye" data-eye="ac-new">Show</button></div></div>
-    <div class="field hidden" id="ac-cal-wrap">
-      <label class="switch"><input type="checkbox" id="ac-cal"><span class="knob"></span> Show my tasks in Google Calendar</label>
-      <div class="hint">Tasks with a due date appear as all-day events in a calendar called “<span class="app-name">My Tasks</span>” in your Google Calendar. Saved right away.</div>
-    </div>
     <hr style="border:0;border-top:1px solid var(--border);margin:16px 0">
     <div class="field"><label>Current password<span class="req">*</span> <span class="opt">(required to save changes)</span></label>
       <div class="pw-wrap"><input id="ac-cur" type="password" required autocomplete="current-password"><button type="button" class="pw-eye" data-eye="ac-cur">Show</button></div></div>
@@ -654,6 +721,30 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
       <a class="btn" id="sh-mail" target="_blank" rel="noopener">Email</a>
       <a class="btn" id="sh-open" target="_blank" rel="noopener">Open intro page</a>
     </div>
+  </div>
+</div>
+
+<!-- ================= Outlook modal ================= -->
+<div class="overlay hidden" id="ol-modal">
+  <div class="modal" style="max-width:540px">
+    <div class="m-headrow"><h2>Outlook &amp; calendar</h2><button type="button" class="x" id="ol-close" style="font-size:24px">×</button></div>
+    <h3 class="ol-h">1 · Your tasks in Outlook Calendar</h3>
+    <p class="muted" style="margin:0 0 10px">Subscribe once. Every task appears on its due date as an all-day event, and Outlook keeps it up to date by itself (it checks every few hours).</p>
+    <div class="share-link"><input id="ol-url" readonly placeholder="Loading your link…"><button class="btn primary" type="button" id="ol-copy">Copy</button></div>
+    <div class="share-btns">
+      <a class="btn" id="ol-live" target="_blank" rel="noopener">Outlook.com</a>
+      <a class="btn" id="ol-work" target="_blank" rel="noopener">Outlook (work)</a>
+      <a class="btn" id="ol-desk">Outlook desktop</a>
+    </div>
+    <p class="hint">If a button doesn’t open the right place: in Outlook Calendar choose <b>Add calendar → Subscribe from web</b> and paste the link.<br>
+      Keep this link private — anyone who has it can see your task titles. <button type="button" class="link" id="ol-reset">Make a new link</button></p>
+    <h3 class="ol-h">2 · <span class="app-name">My Tasks</span> inside Outlook</h3>
+    <ol class="steps">
+      <li><a class="btn sm" href="outlook-addin.xml" download="MyTasks-Outlook-addin.xml">Download the add-in file</a></li>
+      <li>Open <a class="li" href="https://aka.ms/olksideload" target="_blank" rel="noopener">aka.ms/olksideload</a> (Outlook on the web) → <b>My add-ins</b> → <b>Add a custom add-in</b> → <b>Add from file</b> → choose the file.</li>
+      <li>Open any email → <b>Apps</b> (or <b>…</b>) → <b><span class="app-name">My Tasks</span></b>. Use <b>From email</b> to turn the email into a task.</li>
+    </ol>
+    <p class="hint">It also appears in the new Outlook for Windows and Outlook for Mac with the same account. Work accounts: if “Add a custom add-in” is missing, your IT admin has turned it off.</p>
   </div>
 </div>
 
@@ -714,6 +805,8 @@ const CLIP = '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentC
 const LINK = '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007 0l3-3a5 5 0 00-7-7l-1 1"/><path d="M14 11a5 5 0 00-7 0l-3 3a5 5 0 007 7l1-1"/></svg>';
 const BELL = '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg>';
 const REPEAT = '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>';
+const HEART = '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 00-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 000-7.8z"/></svg>';
+const RELOAD = '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 11-2.6-6.4L21 8"/><path d="M21 3v5h-5"/></svg>';
 const SUN = '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>', MOON = '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>';
 
 /* ================= State ================= */
@@ -724,7 +817,8 @@ const S = {
   authMode: 'login', hasUsers: true, allowSignup: true, maxMb: 10, maxCats: 10, archiveDays: 30, shareUrl: '', appName: 'My Tasks',
   catDraft: [], remember: false, insPeriod: 'week', admin: null, adm: { q: '', sort: 'createdAt', dir: 1 }, installEvt: null,
   projects: [], projectOpen: null, projMode: 'tasks', boardBy: 'status', dragFrom: '', projCb: null, projEdit: null,
-  info: null, archivedCount: 0, pending: 0, syncing: false, reloadAfterSave: false
+  info: null, archivedCount: 0, pending: 0, syncing: false, reloadAfterSave: false,
+  quote: null, quoteSeen: [], quoteTouched: false, filtersOpen: false, office: false, ver: {}
 };
 try { S.boardBy = localStorage.getItem('boardBy') || 'status'; } catch (e) {}
 
@@ -733,6 +827,7 @@ const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const uid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+const newId = () => (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : uid() + '-' + uid();
 const pad = n => String(n).padStart(2, '0');
 const ymd = d => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
 const today = () => ymd(new Date());
@@ -775,7 +870,7 @@ function api(fn, ...args) {
     const fail = err => {
       const msg = String((err && err.message) || err).replace(/^Error:\s*/, '');
       if (msg.includes('AUTH_REQUIRED') && S.token) { logoutLocal(); toast('Session expired, please log in again', 'err'); }
-      reject(new Error(msg));
+      reject(Object.assign(new Error(msg), { network: !!(err && err.network) }));
     };
     if (!/^https:\/\//.test(API_URL)) return fail(new Error('The app is not connected yet — paste your Apps Script URL into API_URL in index.html'));
     // A hiccup on Google's side (busy server, a dropped redirect) is retried quietly.
@@ -791,10 +886,10 @@ function api(fn, ...args) {
       .catch(e => {
         if (!e.kind) return fail(e);
         if (e.kind !== 'offline' && n < tries) return new Promise(r => setTimeout(r, 800 * n)).then(() => attempt(n + 1));
-        fail(new Error(
+        fail(Object.assign(new Error(
           (e.kind === 'offline' ? 'You’re offline — check your internet connection.' :
            e.kind === 'busy' ? 'The My Tasks server is busy right now.' :
-           'Couldn’t reach the My Tasks server.') + ' Please try again later.'));
+           'Couldn’t reach the My Tasks server.') + ' Please try again later.'), { network: true }));
       });
     attempt(1);
   });
@@ -807,6 +902,8 @@ async function withBusy(p) {
 }
 /* toast(message, 'err'?, {label, run}?, milliseconds?) */
 function toast(msg, type, action, ms) {
+  const last = $('#toast').lastElementChild;                  // the same message twice in a row → show it once
+  if (last && !action && last.firstChild.textContent === msg) last.remove();
   const el = document.createElement('div');
   el.className = 'toast' + (type === 'err' ? ' err' : '');
   const span = document.createElement('span'); span.textContent = msg; el.appendChild(span);
@@ -935,9 +1032,12 @@ function showLanding() {
   $('#cta').classList.remove('hidden');
   $('#auth-form').classList.add('hidden');
   $('#forgot-form').classList.add('hidden');
+  updateCtas();
+  window.scrollTo(0, 0);
+}
+function updateCtas() {
   $('#cta-login').classList.toggle('hidden', !S.hasUsers);
   $('#cta-signup').classList.toggle('hidden', S.hasUsers && !S.allowSignup);
-  window.scrollTo(0, 0);
 }
 function showAuth(mode) {
   S.authMode = mode;
@@ -972,12 +1072,13 @@ $('#auth-form').addEventListener('submit', async e => {
     S.token = r.token; S.user = r.username; S.remember = rem; store.set(r.token, rem);
     S.hasUsers = true;
     $('#a-pass').value = ''; $('#a-email').value = '';
-    enterApp();
+    enterApp(null, r.boot);
   } catch (err) { toast(err.message, 'err'); }
 });
 function logoutLocal() {
   clearCache(); S.pending = 0; S.syncing = false; updateSync();
   S.token = null; S.tasks = []; S.archived = []; S.archLoaded = false; S.draft = null; S.admin = null; store.set(null);
+  S.calUrl = null; S.quoteSeen = []; S.quoteTouched = false;
   $$('.overlay').forEach(o => o.classList.add('hidden'));
   $('#menu-list').classList.add('hidden');
   showMain();
@@ -1012,7 +1113,7 @@ $('#forgot-form').addEventListener('submit', async e => {
       const rem = $('#a-remember').checked;
       const r = await withBusy(api('resetPassword', u, $('#fg-code').value, $('#fg-pass').value, rem));
       S.token = r.token; S.user = r.username; S.remember = rem; store.set(r.token, rem);
-      toast('Password reset — you are logged in'); enterApp();
+      toast('Password reset — you are logged in'); enterApp(null, r.boot);
     }
   } catch (err) { toast(err.message, 'err'); }
 });
@@ -1030,8 +1131,6 @@ $('#btn-acct').addEventListener('click', async () => {
     const acc = await withBusy(api('getAccount', S.token));
     $('#acct-form').reset();
     $('#ac-user').value = acc.username; $('#ac-email').value = acc.email;
-    $('#ac-cal-wrap').classList.toggle('hidden', !S.me.isAdmin);
-    $('#ac-cal').checked = !!S.me.calendarSync;
     $('#acct-modal').classList.remove('hidden'); $('#ac-user').focus();
   } catch (err) { toast(err.message, 'err'); }
 });
@@ -1048,15 +1147,6 @@ $('#acct-form').addEventListener('submit', async e => {
     closeAcct(); toast(r.token ? 'Account updated — other devices were signed out' : 'Account updated');
   } catch (err) { toast(err.message, 'err'); }
 });
-$('#ac-cal').addEventListener('change', async e => {
-  const on = e.target.checked;
-  try {
-    const r = await withBusy(api('setCalendarSync', S.token, on));
-    S.me.calendarSync = r.calendarSync;
-    toast(on ? 'Google Calendar sync is on — ' + r.synced + ' task' + (r.synced === 1 ? '' : 's') + ' added' : 'Google Calendar sync is off');
-  } catch (err) { e.target.checked = !on; toast(err.message, 'err'); }
-});
-
 /* Share */
 $('#btn-share').addEventListener('click', () => {
   closeMenu();
@@ -1069,12 +1159,12 @@ $('#btn-share').addEventListener('click', () => {
   $('#share-modal').classList.remove('hidden');
 });
 const closeShare = closable('share-modal', 'share-close');
-$('#share-copy').addEventListener('click', async () => {
-  const inp = $('#share-url');
+async function copyInput(inp) {
   try { await navigator.clipboard.writeText(inp.value); }
   catch (e) { inp.select(); document.execCommand('copy'); }
   toast('Link copied');
-});
+}
+$('#share-copy').addEventListener('click', () => copyInput($('#share-url')));
 
 /* Archive */
 async function loadArchived() {
@@ -1147,7 +1237,7 @@ function saveCache() {
   cacheTimer = setTimeout(() => {
     if (!S.token || !S.me || !S.me.username) return;
     try {
-      const c = { tag: S.token.slice(-16), info: S.info, me: S.me, tasks: S.tasks, categories: S.cats, projects: S.projects, archivedCount: S.archivedCount, at: Date.now() };
+      const c = { tag: S.token.slice(-16), info: S.info, me: S.me, tasks: S.tasks, categories: S.cats, projects: S.projects, archivedCount: S.archivedCount, quote: S.dailyQuote || null, at: Date.now() };
       localStorage.removeItem(CACHE_KEY); sessionStorage.removeItem(CACHE_KEY);
       (store.remembered() ? localStorage : sessionStorage).setItem(CACHE_KEY, JSON.stringify(c));
     } catch (e) { /* storage full or blocked — fine, the app just starts the normal way */ }
@@ -1160,25 +1250,32 @@ function updateSync() {
   el.classList.toggle('hidden', !S.pending && !S.syncing);
 }
 function applyBoot(b) {
+  if (b.info) applyInfo(b.info);
   S.me = b.me; S.user = b.me.username; S.cats = b.categories; S.projects = b.projects;
   if (S.pending) S.reloadAfterSave = true;          // a save is still on its way — refresh tasks right after it
-  else S.tasks = b.tasks;
+  else { S.tasks = b.tasks; mergeOutbox(); }
   S.archivedCount = b.archivedCount || 0;
   S.archived = []; S.archLoaded = false;
   $('#btn-admin').classList.toggle('hidden', !b.me.isAdmin);
+  if (b.quote && !S.quoteTouched) { S.dailyQuote = b.quote; S.quote = Object.assign({}, b.quote); renderQuote(); }
   renderGreeting(); renderAnnouncement(); render();
 }
-async function enterApp(cached) {
+/* Opens the app: from the login answer (boot), from the copy saved on this device (cached), or by asking the server */
+async function enterApp(cached, boot) {
   $('#landing').classList.add('hidden');
   $('#app').classList.remove('hidden');
+  window.scrollTo(0, 0);
   showMain();
   renderGreeting();
-  loadQuote();
+  if (boot) { applyBoot(boot); flushOutbox(); return; }
   if (cached) applyBoot(cached);
   const fresh = api('bootstrap', S.token);
   try {
     if (cached) { S.syncing = true; updateSync(); }
-    applyBoot(await (cached ? fresh : withBusy(fresh)));
+    const b = await (cached ? fresh : withBusy(fresh));
+    applyBoot(b);
+    if (!b.quote && !S.quote) loadQuote();          // older backend
+    flushOutbox();
   } catch (e) { if (S.token) toast(e.message, 'err'); }
   finally { S.syncing = false; updateSync(); }
 }
@@ -1209,16 +1306,41 @@ function renderGreeting() {
   $('#greet').textContent = part + ', ' + firstName();
   $('#today-date').textContent = WEEKDAYS[d.getDay()] + ', ' + MONTHS[d.getMonth()] + ' ' + d.getDate();
   $('#menu-name').textContent = S.user;
+  $('#menu-initial').textContent = (firstName() || '?').charAt(0);
 }
 setInterval(() => { if (S.token) renderGreeting(); }, 60000);
 async function loadQuote() {
-  try {
-    const q = await api('getDailyQuote');
-    $('#quote').classList.remove('hidden');
-    $('#quote').innerHTML = `<q>${esc(q.text)}</q><div class="who">— ${esc(q.author)}</div>` +
-      (q.source === 'zenquotes' ? '<div class="src">Quote via <a href="https://zenquotes.io" target="_blank" rel="noopener">ZenQuotes</a></div>' : '');
-  } catch (e) { $('#quote').classList.add('hidden'); }
+  try { S.dailyQuote = await api('getDailyQuote'); S.quote = Object.assign({}, S.dailyQuote); renderQuote(); }
+  catch (e) { $('#quote').classList.add('hidden'); }
 }
+function renderQuote() {
+  const q = S.quote; if (!q) return;
+  $('#quote').classList.remove('hidden');
+  $('#quote').innerHTML = `<q dir="auto">${esc(q.text)}</q>
+    <div class="q-foot"><span class="who">— ${esc(q.author)}</span><span class="grow"></span>
+      <button class="q-btn ${q.liked ? 'on' : ''}" data-qa="love" aria-pressed="${!!q.liked}" title="${q.liked ? 'You love this quote' : 'Love it — see more quotes like this'}">${HEART}</button>
+      <button class="q-btn" data-qa="next" title="New quote">${RELOAD}</button></div>
+    <div class="src">Quote via <a href="https://zenquotes.io" target="_blank" rel="noopener">ZenQuotes</a></div>`;
+}
+$('#quote').addEventListener('click', async e => {
+  const b = e.target.closest('[data-qa]'); if (!b || !S.quote || !S.token) return;
+  const q = S.quote;
+  S.quoteTouched = true;
+  if (b.dataset.qa === 'love') {
+    const on = !q.liked; q.liked = on;
+    if (S.dailyQuote && S.dailyQuote.text === q.text) { S.dailyQuote.liked = on; saveCache(); }
+    renderQuote();
+    try { await api('likeQuote', S.token, { text: q.text, author: q.author }, on); if (on) toast('Loved — you’ll see more quotes like this'); }
+    catch (err) { q.liked = !on; renderQuote(); toast(err.message, 'err'); }
+    return;
+  }
+  b.disabled = true; b.classList.add('busy');
+  try {
+    S.quoteSeen.push(q.text);
+    S.quote = await api('nextQuote', S.token, S.quoteSeen.slice(-50));
+    renderQuote();
+  } catch (err) { toast(err.message, 'err'); b.disabled = false; b.classList.remove('busy'); }
+});
 
 function render() {
   renderStats();
@@ -1228,7 +1350,12 @@ function render() {
   v.innerHTML = (views[S.view] || renderList)();
   $('#f-quad').disabled = S.view === 'matrix' || (S.view === 'board' && S.boardBy === 'quad');
   $('#f-status').disabled = S.view === 'board' && S.boardBy === 'status';
-  $('#toolbar').classList.toggle('hidden', S.view === 'insights' || S.view === 'projects');
+  const noBar = S.view === 'insights' || S.view === 'projects';
+  $('#toolbar').classList.toggle('hidden', noBar);
+  $('#filters').classList.toggle('hidden', noBar || !S.filtersOpen);
+  $('#f-toggle').setAttribute('aria-expanded', String(S.filtersOpen));
+  const n = S.f.labels.length + (S.f.quad ? 1 : 0) + (S.f.status !== 'open' ? 1 : 0);
+  $('#f-count').textContent = n; $('#f-count').classList.toggle('hidden', !n);
   saveCache();
 }
 
@@ -1274,6 +1401,7 @@ function taskCard(t, mode) {
           ${due ? `<span class="due ${due.cls}">${due.text}</span>` : ''}
           ${t.status === 'doing' ? '<span class="muted">In progress</span>' : ''}
           ${rep}${remind}
+          ${t._unsaved ? '<span class="unsaved" title="Kept on this device — it will be saved when the connection is back">Not saved yet</span>' : ''}
           ${t.attachments.length ? `<span class="muted">${CLIP} ${t.attachments.length}</span>` : ''}
         </div>
         ${t.subtasks.length ? `<div class="prog"><div class="bar"><i style="width:${p}%"></i></div>
@@ -1299,7 +1427,7 @@ function renderMatrix() {
       <div class="quad-h"><div class="grow"><h3>${q.name}</h3><small>${q.sub}</small></div>
         <span class="count">${items.length}</span>
         <button class="btn sm" data-act="add-q" data-q="${k}">+</button></div>
-      ${items.map(t => taskCard(t, 'compact')).join('') || '<div class="empty">Drag a task here</div>'}
+      ${items.length ? `<div class="qcards">${items.map(t => taskCard(t, 'compact')).join('')}</div>` : '<div class="empty">Drag a task here</div>'}
     </section>`;
   };
   return `<div class="matrix-wrap">
@@ -1485,6 +1613,10 @@ $('#tabs').addEventListener('click', e => {
   render();
 });
 $('#f-q').addEventListener('input', e => { S.f.q = e.target.value; render(); });
+$('#f-toggle').addEventListener('click', () => { S.filtersOpen = !S.filtersOpen; render(); });
+$('#f-reset').addEventListener('click', () => {
+  S.f.labels = []; S.f.quad = ''; S.f.status = 'open'; $('#f-quad').value = ''; $('#f-status').value = 'open'; render();
+});
 $('#f-quad').addEventListener('change', e => { S.f.quad = e.target.value; render(); });
 $('#f-status').addEventListener('change', e => { S.f.status = e.target.value; render(); });
 $('#f-sort').addEventListener('change', e => { S.f.sort = e.target.value; render(); });
@@ -1582,23 +1714,74 @@ async function toggleDone(id) {
   t.status = t.status === 'done' ? (t.subtasks.some(s => s.done) ? 'doing' : 'todo') : 'done';
   render(); persist(t, before);
 }
-async function persist(t, before) {
+function persist(t, before) { sendTask(t, before).catch(() => {}); }
+
+/* ================= Saving: instant on screen, sent in the background =================
+   Saves of the same task go one after another. No connection → the task stays on this device
+   ("Not saved yet") and is sent again automatically — nothing is lost. */
+const inflight = new Map();
+const OUTBOX = 'mt_outbox';
+function outbox() { try { return JSON.parse(localStorage.getItem(OUTBOX) || '{}') || {}; } catch (e) { return {}; } }
+function setOutbox(o) { try { Object.keys(o).length ? localStorage.setItem(OUTBOX, JSON.stringify(o)) : localStorage.removeItem(OUTBOX); } catch (e) {} }
+function findTask(id) { return S.tasks.find(x => x.id === id) || S.archived.find(x => x.id === id); }
+function sendTask(t, before, quiet) {
+  const id = t.id, v = S.ver[id] = (S.ver[id] || 0) + 1, data = clone(t);
+  delete data._unsaved; delete data.owner;
   S.pending++; updateSync();
-  try {
-    const saved = await api('saveTask', S.token, t);
-    const hadNext = takeNext(saved);
-    Object.assign(t, saved);
-    hadNext ? render() : (renderStats(), saveCache());
-  }
-  catch (e) { Object.assign(t, before); render(); toast('Could not save: ' + e.message, 'err'); }
-  finally {
-    S.pending--; updateSync();
-    if (!S.pending && S.reloadAfterSave) { S.reloadAfterSave = false; api('listTasks', S.token).then(ts => { S.tasks = ts; render(); }).catch(() => {}); }
-  }
+  const p = (inflight.get(id) || Promise.resolve()).catch(() => {})
+    .then(() => api('saveTask', S.token, data))
+    .then(saved => {
+      const o = outbox(); if (o[id]) { delete o[id]; setOutbox(o); }
+      const hadNext = takeNext(saved), cur = findTask(id), was = cur && cur._unsaved;
+      if (S.ver[id] === v) placeTask(saved);
+      if (hadNext || was) render(); else { renderStats(); saveCache(); }
+      return saved;
+    }, e => {
+      if (e.network && S.token) {                       // keep it here and send it again later
+        const o = outbox(); o[id] = Object.assign(data, { owner: S.user }); setOutbox(o);
+        const cur = findTask(id); if (cur) cur._unsaved = true;
+        render(); scheduleFlush();
+        if (!quiet) toast('No connection — “' + (t.title || 'Task') + '” is kept on this device and will be saved automatically.', 'err', null, 6000);
+      } else {
+        const cur = findTask(id);
+        if (before && cur) Object.assign(cur, before);
+        else if (!before) { S.tasks = S.tasks.filter(x => x.id !== id); S.archived = S.archived.filter(x => x.id !== id); }
+        render(); toast('Could not save: ' + e.message, 'err');
+      }
+      throw e;
+    })
+    .finally(() => {
+      if (inflight.get(id) === p) inflight.delete(id);
+      S.pending--; updateSync();
+      if (!S.pending && S.reloadAfterSave) { S.reloadAfterSave = false; api('listTasks', S.token).then(ts => { S.tasks = ts; mergeOutbox(); render(); }).catch(() => {}); }
+    });
+  inflight.set(id, p);
+  return p;
 }
+/* Unsaved tasks from the last visit are shown again and re-sent */
+function mergeOutbox() {
+  Object.values(outbox()).forEach(t => {
+    if (t.owner !== S.user) return;
+    const c = Object.assign({}, t, { _unsaved: true }); delete c.owner;
+    S.tasks = S.tasks.filter(x => x.id !== c.id); S.tasks.push(c);
+  });
+}
+let flushTimer = null;
+function scheduleFlush() { clearTimeout(flushTimer); flushTimer = setTimeout(flushOutbox, 20000); }
+function flushOutbox() {
+  if (!S.token) return;
+  Object.values(outbox()).filter(t => t.owner === S.user && !inflight.has(t.id))
+    .forEach(t => sendTask(findTask(t.id) || t, null, true).catch(() => {}));
+}
+window.addEventListener('online', flushOutbox);
+
 /* Delete with Undo (the server keeps deleted tasks for 24 hours) */
 async function deleteWithUndo(id) {
-  try { await withBusy(api('deleteTask', S.token, id)); } catch (e) { toast(e.message, 'err'); return false; }
+  try { await inflight.get(id); } catch (e) { /* its save failed — still delete it */ }
+  const o = outbox(), localOnly = !!(o[id] && o[id].isNew);
+  if (o[id]) { delete o[id]; setOutbox(o); }
+  try { await withBusy(api('deleteTask', S.token, id)); }
+  catch (e) { if (!(localOnly && e.network)) { toast(e.message, 'err'); return false; } }
   S.tasks = S.tasks.filter(x => x.id !== id); S.archived = S.archived.filter(x => x.id !== id);
   render(); renderArchive();
   toast('Task deleted', '', { label: 'Undo', run: async () => {
@@ -1675,7 +1858,8 @@ function openModal(id, preset) {
   $('#m-sub-new').value = $('#m-link-url').value = $('#m-link-name').value = '';
   $('#m-upl-status').textContent = '';
   const del = $('#m-del'); del.classList.toggle('hidden', !t); del.classList.remove('confirm'); del.textContent = 'Delete';
-  mLabels(); mEis(); mSubs(); mAtts(); mRem(); mGcal();
+  $('#m-created').textContent = t && t.createdAt ? 'Created ' + fmtDate(ymd(new Date(t.createdAt))) : 'Created today · ' + fmtDate(today());
+  mLabels(); mEis(); mSubs(); mAtts(); mRem(); mOcal();
   $('#task-modal').classList.remove('hidden');
   setTimeout(() => $('#m-title').focus(), 30);
 }
@@ -1699,7 +1883,6 @@ function validateDraft() {
   chk('#m-title', !d.title.trim(), 'title');
   chk('#m-labels', !d.labels.length, 'category');
   chk('#m-eis', !d.quadrant, 'Focus Hub box');
-  chk('#m-date', !d.dueDate, 'due date');
   chk('#m-status', !d.status, 'status');
   const badStart = !!(d.startDate && d.dueDate && d.startDate > d.dueDate);
   $('#m-start').classList.toggle('invalid', badStart);
@@ -1737,16 +1920,75 @@ function mRem() {
   $('#m-rem-sent').classList.toggle('hidden', !sent);
   if (sent) $('#m-rem-sent').textContent = 'Reminder sent ' + fmtWhen(d.reminderSentAt);
 }
-function mGcal() {
-  const d = S.draft, synced = S.me.isAdmin && S.me.calendarSync;
-  $('#m-gcal-on').classList.toggle('hidden', !(synced && d.dueDate));
-  $('#m-gcal').classList.toggle('hidden', !(!synced && d.dueDate));
-  if (!synced && d.dueDate) {
-    const a = d.dueDate.replace(/-/g, ''), b = addDays(d.dueDate, 1).replace(/-/g, '');
-    $('#m-gcal').href = 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + encodeURIComponent(d.title || 'Task') +
-      '&dates=' + a + '/' + b + '&details=' + encodeURIComponent((d.notes || '') + (S.shareUrl ? '\n\n' + S.shareUrl : ''));
-  }
+function mOcal() { $('#m-ocal').classList.toggle('hidden', !S.draft.title.trim()); }
+$('#m-ocal').addEventListener('click', () => addToOutlook(Object.assign({}, S.draft, { title: $('#m-title').value.trim() })));
+/* Empty start / due date → the day the task was entered (same rule as the server) */
+function fillDates(t) {
+  const entry = t.createdAt ? ymd(new Date(t.createdAt)) : today();
+  if (!t.startDate) t.startDate = t.dueDate && t.dueDate < entry ? t.dueDate : entry;
+  if (!t.dueDate) t.dueDate = t.startDate > entry ? t.startDate : entry;
 }
+
+/* ================= Outlook ================= */
+const icsEsc = v => String(v).replace(/\\/g, '\\\\').replace(/;/g, '\;').replace(/,/g, '\\,').replace(/\r?\n/g, '\\n');
+/* One task → Outlook Calendar. Inside Outlook: a new appointment opens. Elsewhere: a calendar file (.ics) that Outlook opens. */
+function addToOutlook(t) {
+  const day = t.dueDate || t.startDate || today();
+  const body = [t.notes, (QUADS[t.quadrant] || {}).name, S.shareUrl].filter(Boolean).join('\n\n');
+  if (S.office && Office.context.mailbox && Office.context.mailbox.displayNewAppointmentForm) {
+    const [y, m, d] = day.split('-').map(Number);
+    Office.context.mailbox.displayNewAppointmentForm({ subject: t.title || 'Task', start: new Date(y, m - 1, d, 9, 0), end: new Date(y, m - 1, d, 9, 30), body });
+    return;
+  }
+  const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//My Tasks//EN', 'BEGIN:VEVENT', 'UID:' + (t.id || uid()) + '@mytasks',
+    'DTSTAMP:' + new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, ''), 'DTSTART;VALUE=DATE:' + day.replace(/-/g, ''),
+    'DTEND;VALUE=DATE:' + addDays(day, 1).replace(/-/g, ''), 'SUMMARY:' + icsEsc(t.title || 'Task'), 'DESCRIPTION:' + icsEsc(body),
+    'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([ics], { type: 'text/calendar' }));
+  a.download = (t.title || 'task').replace(/[\\/:*?"<>|]+/g, ' ').slice(0, 60) + '.ics';
+  document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+  toast('Calendar file downloaded — open it to add the task to Outlook');
+}
+/* Outlook window: calendar subscription link + how to add the app to Outlook */
+$('#btn-outlook').addEventListener('click', async () => {
+  closeMenu(); $('#ol-modal').classList.remove('hidden');
+  if (S.calUrl) return;
+  try { setCalUrl((await api('getCalendarFeed', S.token)).calToken); } catch (e) { toast(e.message, 'err'); }
+});
+function setCalUrl(tok) {
+  S.calUrl = API_URL + '?cal=' + tok;
+  const u = encodeURIComponent(S.calUrl), n = encodeURIComponent(S.appName);
+  $('#ol-url').value = S.calUrl;
+  $('#ol-live').href = 'https://outlook.live.com/calendar/0/addfromweb?url=' + u + '&name=' + n;
+  $('#ol-work').href = 'https://outlook.office.com/calendar/0/addfromweb?url=' + u + '&name=' + n;
+  $('#ol-desk').href = S.calUrl.replace(/^https:/, 'webcal:');
+}
+const closeOl = closable('ol-modal', 'ol-close');
+$('#ol-copy').addEventListener('click', () => { if (S.calUrl) copyInput($('#ol-url')); });
+$('#ol-reset').addEventListener('click', async () => {
+  if (!await dialog('Make a new link', '<p>The old link stops working right away. Any calendar subscribed with it stops updating — subscribe again with the new link.</p>', 'Make new link')) return;
+  try { setCalUrl((await withBusy(api('resetCalendarFeed', S.token))).calToken); toast('New link ready'); }
+  catch (e) { toast(e.message, 'err'); }
+});
+/* Inside Outlook (add-in): "From email" turns the open email into a task */
+if (window.Office && Office.onReady) Office.onReady(info => {
+  if (!info || info.host !== Office.HostType.Outlook) return;
+  S.office = true; document.documentElement.classList.add('in-outlook');
+  $('#btn-from-mail').classList.remove('hidden');
+});
+$('#btn-from-mail').addEventListener('click', async () => {
+  const item = S.office && Office.context.mailbox.item;
+  if (!item || typeof item.subject !== 'string') return toast('Open an email first', 'err');
+  const from = item.from ? (item.from.displayName || '') + (item.from.emailAddress ? ' <' + item.from.emailAddress + '>' : '') : '';
+  const body = await new Promise(res => {
+    try { item.body.getAsync(Office.CoercionType.Text, r => res(r.status === 'succeeded' ? String(r.value || '') : '')); } catch (e) { res(''); }
+  });
+  const when = item.dateTimeCreated ? fmtWhen(new Date(item.dateTimeCreated).toISOString()) : '';
+  openModal(null, { title: (item.subject || 'Email').slice(0, 300),
+    notes: ['Email from: ' + from, when ? 'Received: ' + when : '', '', body.replace(/\n{3,}/g, '\n\n').trim().slice(0, 1500)].filter((x, i) => x || i === 2).join('\n') });
+});
 
 $('#m-edit-cats').addEventListener('click', openCats);
 $('#m-labels').addEventListener('click', e => {
@@ -1756,10 +1998,10 @@ $('#m-labels').addEventListener('click', e => {
   if (L.length) $('#m-labels').classList.remove('invalid');
 });
 $('#m-eis').addEventListener('click', e => { const b = e.target.closest('[data-q]'); if (b) { S.draft.quadrant = b.dataset.q; mEis(); $('#m-eis').classList.remove('invalid'); } });
-$('#m-title').addEventListener('input', e => { S.draft.title = e.target.value; if (e.target.value.trim()) e.target.classList.remove('invalid'); mGcal(); });
-$('#m-notes').addEventListener('input', e => { S.draft.notes = e.target.value; mGcal(); });
-$('#m-date').addEventListener('change', e => { S.draft.dueDate = e.target.value; if (e.target.value) e.target.classList.remove('invalid'); mGcal(); });
-$('#m-date-clear').addEventListener('click', () => { S.draft.dueDate = ''; $('#m-date').value = ''; mGcal(); });
+$('#m-title').addEventListener('input', e => { S.draft.title = e.target.value; if (e.target.value.trim()) e.target.classList.remove('invalid'); mOcal(); });
+$('#m-notes').addEventListener('input', e => { S.draft.notes = e.target.value; });
+$('#m-date').addEventListener('change', e => { S.draft.dueDate = e.target.value; });
+$('#m-date-clear').addEventListener('click', () => { S.draft.dueDate = ''; $('#m-date').value = ''; });
 $('#m-status').addEventListener('change', e => { S.draft.status = e.target.value; mProg(); });
 $('#m-rem').addEventListener('change', e => {
   const v = e.target.value; S.draft.reminderAt = v ? new Date(v).toISOString() : '';
@@ -1859,14 +2101,13 @@ async function saveModal() {
   if (miss.length) { toast('Please fill in: ' + miss.join(', '), 'err'); return; }
   if (d.startDate && d.dueDate && d.startDate > d.dueDate) { toast('The start date can’t be after the due date', 'err'); return; }
   d.subtasks = d.subtasks.filter(s => s.title.trim());
-  S.saving = true;
-  try {
-    const saved = await withBusy(api('saveTask', S.token, d));
-    takeNext(saved);
-    placeTask(saved);
-    closeModal(true); render(); toast('Saved');
-  } catch (e) { toast(e.message, 'err'); }
-  finally { S.saving = false; }
+  const old = d.id ? findTask(d.id) : null, before = old ? clone(old) : null;
+  if (!d.id) { d.id = newId(); d.isNew = true; d.createdAt = new Date().toISOString(); }   // the app makes the id → a retry can never create a copy
+  fillDates(d);
+  const t = clone(d);
+  placeTask(t);
+  closeModal(true); render(); toast('Saved');                   // closes at once — the save continues in the background
+  sendTask(t, before).catch(() => {});
 }
 $('#m-save').addEventListener('click', saveModal);
 $('#m-close').addEventListener('click', attemptClose);
@@ -1882,7 +2123,7 @@ document.addEventListener('keydown', e => {
   if (e.key !== 'Escape' && !(e.key === 'Enter' && (e.ctrlKey || e.metaKey))) return;
   const open = id => !$(id).classList.contains('hidden');
   if (open('#dlg')) { if (e.key === 'Escape') $('#dlg-cancel').click(); return; }
-  for (const [id, close] of [['#proj-modal', closeProjModal], ['#cats-modal', closeCats], ['#share-modal', closeShare], ['#acct-modal', closeAcct], ['#arch-modal', closeArch], ['#fb-modal', closeFb]])
+  for (const [id, close] of [['#proj-modal', closeProjModal], ['#cats-modal', closeCats], ['#share-modal', closeShare], ['#acct-modal', closeAcct], ['#arch-modal', closeArch], ['#fb-modal', closeFb], ['#ol-modal', closeOl]])
     if (open(id)) { if (e.key === 'Escape') close(); return; }
   if (!open('#task-modal')) return;
   if (e.key === 'Escape') attemptClose(); else saveModal();
@@ -1944,10 +2185,9 @@ function renderProjectDetail(id) {
     <div class="prog" style="margin:0"><div class="bar"><i style="width:${st.pct}%"></i></div><b style="font-size:12px">${st.pct}% complete</b></div></div>`;
   if (gantt) {
     const g = ganttSVG(st.ts, p.color, {});
-    const undated = st.ts.filter(t => !t.dueDate).length;
     return top + head + (g ? `<div class="gantt-wrap">${g}</div>
-      <p class="hint">Each bar runs from the task’s start date (or the day it was created) to its due date. The solid part shows progress. The red line is today.${undated ? ' ' + undated + ' task(s) without a due date are not shown.' : ''}</p>`
-      : `<div class="empty big">Add due dates to this project’s tasks to see the Gantt chart.</div>`);
+      <p class="hint">Each bar runs from the task’s start date to its due date (a task without dates sits on the day it was entered). The solid part shows progress. The red line is today.</p>`
+      : `<div class="empty big">No tasks in this project yet.</div>`);
   }
   return top + head + (active.length ? active.map(t => taskCard(t, 'list')).join('') : `<div class="empty big">No tasks in this project yet.<br><br><button class="btn primary" data-pa="add">+ Add task</button></div>`) +
     (archived.length ? `<div class="panel" style="margin-top:12px"><h3>Archived (${archived.length})</h3><div class="sub">Completed more than ${S.archiveDays} days ago</div>
@@ -1956,7 +2196,7 @@ function renderProjectDetail(id) {
 /* Gantt chart as inline SVG. opts.width → fixed width (used for the PDF); otherwise the day width adapts */
 function ganttSVG(tasks, color, opts) {
   const colorOf = typeof color === 'function' ? color : () => color;
-  const rows = tasks.filter(t => t.dueDate).map(t => ({ t, s: tStart(t), e: t.dueDate }))
+  const rows = tasks.map(t => { const s = tStart(t); return s ? { t, s, e: t.dueDate && t.dueDate >= s ? t.dueDate : s } : null; }).filter(Boolean)
     .sort((a, b) => a.s.localeCompare(b.s) || a.e.localeCompare(b.e));
   if (!rows.length) return '';
   let min = parseD(rows.reduce((a, r) => r.s < a ? r.s : a, rows[0].s)), max = parseD(rows.reduce((a, r) => r.e > a ? r.e : a, rows[0].e));
@@ -2000,11 +2240,10 @@ function ganttSVG(tasks, color, opts) {
 function renderGanttView() {
   const list = filtered();
   const g = ganttSVG(list, t => (QUADS[t.quadrant] || QUADS.Q2).hex, {});
-  const undated = list.filter(t => !t.dueDate).length;
-  if (!g) return `<div class="empty big">No tasks with a due date to show.<br><br><button class="btn primary" data-act="new">+ New task</button></div>`;
+  if (!g) return `<div class="empty big">No tasks to show.<br><br><button class="btn primary" data-act="new">+ New task</button></div>`;
   const legend = `<div class="legend">${Object.keys(QUADS).map(k => `<span style="--c:${QUADS[k].hex}"><i></i>${QUADS[k].name}</span>`).join('')}</div>`;
   return legend + `<div class="gantt-wrap">${g}</div>
-    <p class="hint">Each bar runs from the task’s start date (or the day it was created) to its due date. The solid part shows progress. The red line is today. Click a bar to open the task.${undated ? ' ' + undated + ' task(s) without a due date are not shown.' : ''}</p>`;
+    <p class="hint">Each bar runs from the task’s start date to its due date (a task without dates sits on the day it was entered). The solid part shows progress. The red line is today. Click a bar to open the task.</p>`;
 }
 async function projectAction(act, id) {
   if (act === 'new') return openProjModal(null);
@@ -2265,20 +2504,22 @@ function applyInfo(info) {
   S.maxCats = info.maxCategories || 10; S.appName = info.appName; S.archiveDays = info.archiveDays || 30;
   S.shareUrl = info.shareUrl || location.origin + location.pathname;
   $$('.app-name').forEach(el => el.textContent = info.appName); document.title = info.appName;
+  ls.set('mt_info', JSON.stringify(info));
 }
 (async function init() {
   if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
   const t = store.get();
   const cached = readCache(t);
-  if (cached && cached.info) applyInfo(cached.info);
+  let info = cached && cached.info;
+  if (!info) try { info = JSON.parse(ls.get('mt_info') || 'null'); } catch (e) { info = null; }
+  if (info) applyInfo(info);
   if (t) {                                   // logged in → open the app now (from the device copy if there is one)
     S.token = t; S.remember = store.remembered();
-    api('getAppInfo').then(info => { applyInfo(info); saveCache(); }).catch(() => {});
     return enterApp(cached);
   }
-  try { applyInfo(await withBusy(api('getAppInfo'))); }
-  catch (e) { toast(e.message, 'err'); }
-  showLanding();
+  showLanding();                             // the intro page shows at once; the server answer only fine-tunes the buttons
+  try { applyInfo(await api('getAppInfo')); if (!$('#landing').classList.contains('hidden')) updateCtas(); }
+  catch (e) { /* offline — the buttons still work */ }
 })();
 </script>
 </body>
