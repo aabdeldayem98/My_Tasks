@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  My Tasks — Outlook add-in (manifest)
+  North Star — Outlook add-in (manifest)
   Add it in Outlook on the web: https://aka.ms/olksideload → My add-ins → Add a custom add-in → Add from file.
   It opens https://aabdeldayem98.github.io/My_Tasks/ in a side pane next to your email.
   If you ever move the app to another address, change the 4 links below that start with https://aabdeldayem98.github.io
@@ -14,7 +14,7 @@
   <Version>1.0.0.0</Version>
   <ProviderName>Ahmed Abdel-Dayem</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
-  <DisplayName DefaultValue="My Tasks"/>
+  <DisplayName DefaultValue="North Star"/>
   <Description DefaultValue="Your tasks, Focus Hub, projects and Gantt chart next to your email. Turn any email into a task in one click."/>
   <IconUrl DefaultValue="https://aabdeldayem98.github.io/My_Tasks/icons/icon-64.png"/>
   <HighResolutionIconUrl DefaultValue="https://aabdeldayem98.github.io/My_Tasks/icons/icon-128.png"/>
@@ -88,11 +88,11 @@
         <bt:Url id="Taskpane.Url" DefaultValue="https://aabdeldayem98.github.io/My_Tasks/?host=outlook"/>
       </bt:Urls>
       <bt:ShortStrings>
-        <bt:String id="Group.Label" DefaultValue="My Tasks"/>
-        <bt:String id="Button.Label" DefaultValue="My Tasks"/>
+        <bt:String id="Group.Label" DefaultValue="North Star"/>
+        <bt:String id="Button.Label" DefaultValue="North Star"/>
       </bt:ShortStrings>
       <bt:LongStrings>
-        <bt:String id="Button.Tooltip" DefaultValue="Open My Tasks next to this email. Use “From email” to turn it into a task."/>
+        <bt:String id="Button.Tooltip" DefaultValue="Open North Star next to this email. Use “From email” to turn it into a task."/>
       </bt:LongStrings>
     </Resources>
 
@@ -142,11 +142,11 @@
           <bt:Url id="Taskpane.Url" DefaultValue="https://aabdeldayem98.github.io/My_Tasks/?host=outlook"/>
         </bt:Urls>
         <bt:ShortStrings>
-          <bt:String id="Group.Label" DefaultValue="My Tasks"/>
-          <bt:String id="Button.Label" DefaultValue="My Tasks"/>
+          <bt:String id="Group.Label" DefaultValue="North Star"/>
+          <bt:String id="Button.Label" DefaultValue="North Star"/>
         </bt:ShortStrings>
         <bt:LongStrings>
-          <bt:String id="Button.Tooltip" DefaultValue="Open My Tasks next to this email. Use “From email” to turn it into a task."/>
+          <bt:String id="Button.Tooltip" DefaultValue="Open North Star next to this email. Use “From email” to turn it into a task."/>
         </bt:LongStrings>
       </Resources>
     </VersionOverrides>

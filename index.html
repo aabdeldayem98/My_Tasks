@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>My Tasks</title>
-<meta name="description" content="A simple, focused space to organize your tasks, manage your priorities, and keep everything that matters in one place.">
-<meta name="theme-color" content="#18181b">
+<title>North Star</title>
+<meta name="description" content="North Star — the task and project manager for HR experts. Capture everything, focus on what matters today, and deliver every project on time.">
+<meta name="theme-color" content="#312e81">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
-<meta name="apple-mobile-web-app-title" content="My Tasks">
+<meta name="apple-mobile-web-app-title" content="North Star">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
@@ -22,20 +22,29 @@
 </script>
 <style>
 :root{
-  --bg:#f4f5f7; --surface:#fff; --surface2:#f8fafc; --text:#111827; --muted:#6b7280; --border:#e5e7eb;
-  --primary:#18181b; --on-primary:#fff; --primary-soft:#ececef; --danger:#dc2626; --ok:#16a34a; --shadow:0 1px 3px rgba(0,0,0,.06);
-  --q1:#dc2626; --q2:#2563eb; --q3:#d97706; --q4:#9ca3af; --link:#0a66c2; --chart:#2563eb; --grid:#eceef1;
+  --bg:#f5f6fb; --surface:#fff; --surface2:#f7f8fc; --text:#111827; --muted:#6b7280; --border:#e4e6ef;
+  --primary:#4338ca; --on-primary:#fff; --primary-soft:#eef0ff; --ink:#3730a3; --gold:#f59e0b; --gold-ink:#b45309; --teal:#0d9488;
+  --danger:#dc2626; --ok:#16a34a; --shadow:0 1px 3px rgba(30,27,75,.06);
+  --hero:linear-gradient(135deg,#312e81 0%,#4338ca 55%,#7c3aed 100%);
+  --hero-text:linear-gradient(135deg,#312e81 0%,#4338ca 55%,#7c3aed 100%);
+  --q1:#dc2626; --q2:#2563eb; --q3:#d97706; --q4:#9ca3af; --link:#4338ca; --chart:#4f46e5; --grid:#eceef4;
   color-scheme: light;
 }
 :root[data-theme="dark"]{
-  --bg:#0f1115; --surface:#181b22; --surface2:#1f232c; --text:#e5e7eb; --muted:#9ca3af; --border:#2a2f3a;
-  --primary:#f4f4f5; --on-primary:#111; --primary-soft:#2c2d33; --shadow:none; --q4:#6b7280; --link:#70b5f9; --chart:#60a5fa; --grid:#262a33;
+  --bg:#0e1020; --surface:#171a2e; --surface2:#1d2138; --text:#e6e8f2; --muted:#9aa0b8; --border:#2a2f4a;
+  --primary:#818cf8; --on-primary:#0e1020; --primary-soft:#262a52; --ink:#c7d2fe; --gold:#fbbf24; --gold-ink:#fbbf24; --teal:#2dd4bf;
+  --hero:linear-gradient(135deg,#1e1b4b 0%,#312e81 55%,#4c1d95 100%);
+  --hero-text:linear-gradient(135deg,#a5b4fc 0%,#c4b5fd 100%);
+  --shadow:none; --q4:#6b7280; --link:#a5b4fc; --chart:#818cf8; --grid:#262a42;
   color-scheme: dark;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#0f1115; --surface:#181b22; --surface2:#1f232c; --text:#e5e7eb; --muted:#9ca3af; --border:#2a2f3a;
-    --primary:#f4f4f5; --on-primary:#111; --primary-soft:#2c2d33; --shadow:none; --q4:#6b7280; --link:#70b5f9; --chart:#60a5fa; --grid:#262a33;
+    --bg:#0e1020; --surface:#171a2e; --surface2:#1d2138; --text:#e6e8f2; --muted:#9aa0b8; --border:#2a2f4a;
+    --primary:#818cf8; --on-primary:#0e1020; --primary-soft:#262a52; --ink:#c7d2fe; --gold:#fbbf24; --gold-ink:#fbbf24; --teal:#2dd4bf;
+    --hero:linear-gradient(135deg,#1e1b4b 0%,#312e81 55%,#4c1d95 100%);
+    --hero-text:linear-gradient(135deg,#a5b4fc 0%,#c4b5fd 100%);
+    --shadow:none; --q4:#6b7280; --link:#a5b4fc; --chart:#818cf8; --grid:#262a42;
     color-scheme: dark;
   }
 }
@@ -93,11 +102,14 @@ a{color:inherit}
 .hero-logo{width:96px;height:96px;border-radius:24px;display:block;margin:0 auto 18px;box-shadow:0 8px 30px rgba(0,0,0,.18)}
 .hero h1{font-size:34px;margin:0 0 6px;font-weight:800;letter-spacing:-.5px}
 .hero .by{color:var(--muted);font-size:13px;margin-bottom:18px}
+.hero .for{display:inline-block;background:var(--primary-soft);color:var(--ink);font-weight:700;font-size:13px;border-radius:99px;padding:4px 14px;margin-bottom:12px}
+#landing{background:radial-gradient(1200px 420px at 50% -120px,color-mix(in srgb,var(--primary) 16%,transparent),transparent)}
+.hero h1{background:var(--hero-text);-webkit-background-clip:text;background-clip:text;color:transparent}
 .hero .lead{font-size:17px;line-height:1.6;max-width:620px;margin:0 auto;color:var(--text)}
 .inside-h{text-align:center;font-size:20px;margin:36px 0 16px}
 .features{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
 .feat{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;box-shadow:var(--shadow)}
-.feat .fi{width:36px;height:36px;border-radius:10px;background:var(--primary);color:var(--on-primary);display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+.feat .fi{width:36px;height:36px;border-radius:10px;background:var(--hero);color:#fff;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
 .feat .fi svg{width:19px;height:19px}
 .feat h3{margin:0 0 6px;font-size:15px}
 .feat p{margin:0;color:var(--muted);line-height:1.55;font-size:13.5px}
@@ -107,12 +119,21 @@ a{color:inherit}
 .auth-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:24px;width:100%;max-width:400px;margin:0 auto;box-shadow:var(--shadow)}
 .auth-card h2{margin:0 0 4px;font-size:20px;text-align:center}
 .auth-card p.sub{margin:0 0 16px;text-align:center;color:var(--muted)}
+.sso{display:flex;flex-direction:column;gap:10px;align-items:center;margin:4px 0 14px}
+.g-btn{min-height:40px;display:flex;justify-content:center;width:100%}
+.sso-ms{width:300px;max-width:100%;border-radius:99px;padding:9px 16px;font-weight:600}
+.or{display:flex;align-items:center;gap:10px;width:100%;color:var(--muted);font-size:12px;margin-top:4px}
+.or::before,.or::after{content:'';flex:1;border-top:1px solid var(--border)}
+.sso-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--border);min-height:48px}
+.sso-row:first-of-type{border-top:0}
+.sso-row .grow{display:flex;align-items:center;gap:8px;font-weight:600}
+.in-outlook .sso,.in-outlook #ac-sso{display:none!important}
 .auth-links{display:flex;justify-content:space-between;gap:10px;margin-top:12px;font-size:13px;flex-wrap:wrap}
 
 /* ================= App header ================= */
 header.top{position:sticky;top:0;z-index:5;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px;padding:8px 16px}
 header.top h1{font-size:18px;margin:0;white-space:nowrap}
-.avatar{width:34px;height:34px;border-radius:50%;border:0;background:var(--primary);color:var(--on-primary);font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center;margin-left:2px}
+.avatar{width:34px;height:34px;border-radius:50%;border:0;background:var(--hero);color:#fff;font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center;margin-left:2px}
 .menu-who{padding:8px 10px 6px;font-weight:700;border-bottom:1px solid var(--border);margin-bottom:4px;word-break:break-word}
 .fab{display:none}
 .brand{display:flex;align-items:center;gap:10px}
@@ -130,14 +151,18 @@ header.top h1{font-size:18px;margin:0;white-space:nowrap}
 .greet{padding:2px 2px}
 .greet h2{margin:0;font-size:24px;font-weight:800;letter-spacing:-.3px}
 .greet .date{color:var(--muted);margin-top:2px}
-.quote{background:var(--primary);color:var(--on-primary);border-radius:14px;padding:12px 16px}
+.today-sum{margin-top:8px;font-size:13px;color:var(--muted)}
+.today-sum b{color:var(--text);font-size:14px}
+.today-sum b.late{color:var(--danger)}
+.greet h2{background:var(--hero-text);-webkit-background-clip:text;background-clip:text;color:transparent}
+.quote{background:var(--hero);color:#fff;border-radius:14px;padding:12px 16px;box-shadow:0 8px 24px rgba(67,56,202,.18)}
 .quote q{font-size:14.5px;line-height:1.5;font-style:italic;display:block}
 .q-foot{display:flex;align-items:center;gap:4px;margin-top:6px}
 .quote .who{font-weight:700;font-size:12.5px;opacity:.9}
 .q-btn{border:0;background:transparent;color:inherit;opacity:.75;width:30px;height:30px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;padding:0}
-.q-btn:hover{opacity:1;background:color-mix(in srgb,var(--on-primary) 12%,transparent)}
+.q-btn:hover{opacity:1;background:rgba(255,255,255,.15)}
 .q-btn .icon{width:17px;height:17px}
-.q-btn.on{opacity:1;color:#f43f5e}
+.q-btn.on{opacity:1;color:#fda4af}
 .q-btn.on .icon{fill:currentColor}
 .q-btn:disabled{opacity:.4;cursor:default}
 .q-btn.busy .icon{animation:sp .8s linear infinite}
@@ -145,10 +170,81 @@ header.top h1{font-size:18px;margin:0;white-space:nowrap}
 .quote .src a{color:inherit}
 
 .kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));background:var(--surface);border:1px solid var(--border);border-radius:14px;margin-bottom:12px;overflow:hidden}
-.kpis .stat{border:0;border-radius:0;border-left:1px solid var(--border);padding:8px 14px;min-width:0}
+.kpis .stat{border:0;border-radius:0;border-left:1px solid var(--border);padding:8px 14px;min-width:0;box-shadow:inset 0 3px 0 var(--k,transparent)}
 .kpis .stat:first-child{border-left:0}
 .kpis .stat b{font-size:19px;line-height:1.25}
 .kpis .stat span{font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.kpis-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.kpis-7{grid-template-columns:repeat(7,minmax(0,1fr))}
+.kpis-9{grid-template-columns:repeat(9,minmax(0,1fr))}
+
+/* One header for every screen */
+.vhead{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:4px 0 12px;min-height:32px}
+.vhead h2{margin:0;font-size:18px;font-weight:800;letter-spacing:-.2px}
+.vhead .vsub{color:var(--muted);font-size:13px;margin-left:4px}
+.vhead .vlabel{font-size:12px}
+.vhead .legend{margin:0}
+.cal-nav{display:flex;align-items:center;gap:6px}
+.cal-nav b{min-width:130px;text-align:center;font-size:14px}
+
+/* Today */
+.tsec{margin-bottom:18px}
+.tsec-h{display:flex;align-items:center;gap:8px;margin:0 0 8px;padding-left:2px}
+.tsec-h h3{margin:0;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.tsec.late .tsec-h h3{color:var(--danger)}
+.tsec.now .tsec-h h3{color:var(--ink)}
+.tsec.top .tsec-h h3{color:var(--gold-ink)}
+.tsec.top .tsec-h h3::before{content:'★ '}
+.tsec.follow .tsec-h h3{color:var(--q3)}
+.card.focus{background:linear-gradient(90deg,color-mix(in srgb,var(--gold) 9%,var(--surface)),var(--surface) 45%)}
+.card.inbox{border-left-style:dashed}
+.c-act{display:flex;gap:2px;justify-content:flex-end}
+.ico{border:0;background:transparent;width:30px;height:30px;border-radius:8px;color:var(--muted);display:inline-flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;padding:0}
+.ico:hover{background:var(--primary-soft);color:var(--ink)}
+.ico .icon{width:16px;height:16px}
+.ico.on{color:var(--gold)}
+.ico.on .icon{fill:currentColor}
+.deleg{font-size:11.5px;font-weight:600;color:var(--q3)}
+.qsort{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:7px;font-size:12px}
+.qsort button{border:1px solid color-mix(in srgb,var(--q) 40%,var(--border));background:color-mix(in srgb,var(--q) 8%,var(--surface));color:var(--q);border-radius:99px;font-size:11.5px;font-weight:700;padding:2px 10px}
+.qsort button:hover{background:color-mix(in srgb,var(--q) 18%,var(--surface))}
+/* Quick add */
+.qadd{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:10px;margin:0 0 16px;box-shadow:var(--shadow)}
+.qadd-row{display:flex;gap:8px}
+.qadd input{border-color:transparent;background:var(--surface2);font-size:14.5px}
+.qadd input:focus{border-color:var(--primary);background:var(--surface)}
+.qa-prev{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:8px;font-size:12px;min-height:20px}
+.qa-prev .qbadge{--q:var(--muted)}
+.chip-s{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600;border:1px solid var(--border);border-radius:99px;padding:1px 8px;color:var(--text)}
+/* Plan my day / Wrap up rows */
+.plist2{max-height:min(60vh,520px);overflow:auto;border:1px solid var(--border);border-radius:12px}
+.prow{display:flex;align-items:center;gap:10px;padding:9px 12px;border-top:1px solid var(--border);cursor:pointer;font-size:13.5px}
+.prow:first-child{border-top:0}
+.prow:hover{background:var(--surface2)}
+.prow input[type=checkbox]{width:18px;height:18px;accent-color:var(--primary);flex:none}
+.prow .dot{width:9px;height:9px;border-radius:50%;background:var(--q);flex:none}
+.prow select{width:auto;flex:none;padding:5px 8px;font-size:13px}
+.prow .due{font-size:12px;white-space:nowrap}
+/* Pop-up menu */
+.pop{position:fixed;z-index:35;background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,.18);padding:5px;min-width:150px}
+.pop button{display:block;width:100%;text-align:left;border:0;background:none;padding:8px 10px;border-radius:8px;font-weight:600}
+.pop button:hover{background:var(--primary-soft);color:var(--ink)}
+/* Insights extras */
+.tips{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.tips li{padding:10px 12px 10px 38px;border-radius:10px;position:relative;line-height:1.5;background:var(--surface2);border:1px solid var(--border)}
+.tips li::before{position:absolute;left:12px;top:9px;font-weight:800}
+.tips li.good{border-color:color-mix(in srgb,var(--ok) 35%,var(--border))}.tips li.good::before{content:'✓';color:var(--ok)}
+.tips li.bad{border-color:color-mix(in srgb,var(--danger) 35%,var(--border))}.tips li.bad::before{content:'!';color:var(--danger)}
+.tips li.warn{border-color:color-mix(in srgb,var(--q3) 40%,var(--border))}.tips li.warn::before{content:'→';color:var(--q3)}
+.review{list-style:none;margin:0;padding:0}
+.review li{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--border);font-size:13.5px}
+.review li:first-child{border-top:0}
+.review .rn{width:22px;height:22px;border-radius:50%;background:var(--primary-soft);color:var(--ink);font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center;flex:none}
+.count.warn{background:color-mix(in srgb,var(--q3) 15%,var(--surface));color:var(--q3);border-color:color-mix(in srgb,var(--q3) 40%,var(--border))}
+.mixbar{display:flex;height:16px;border-radius:99px;overflow:hidden;gap:2px;background:var(--surface2)}
+.mixbar i{display:block;height:100%}
+.tsec .empty{background:var(--surface);border:1px dashed var(--border);border-radius:12px;text-align:left;padding:14px 16px}
+.tsec.done .card{opacity:.7}
 
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:14px}
 .stat{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px 14px}
@@ -162,7 +258,8 @@ header.top h1{font-size:18px;margin:0;white-space:nowrap}
 .tabs{display:flex;gap:2px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:4px;overflow-x:auto;scrollbar-width:none;max-width:100%}
 .tabs::-webkit-scrollbar{display:none}
 .tab{border:0;background:transparent;padding:6px 12px;border-radius:8px;color:var(--muted);font-weight:600;white-space:nowrap;flex:none}
-.tab.active{background:var(--primary-soft);color:var(--text)}
+.tab.active{background:var(--primary-soft);color:var(--ink)}
+.tcount{background:var(--gold);color:#1f1300;border-radius:99px;font-size:10.5px;font-weight:800;padding:0 6px;margin-left:3px;vertical-align:1px}
 .toolbar{display:flex;gap:6px;align-items:center;margin-left:auto;flex:1 1 320px;justify-content:flex-end;min-width:0}
 .toolbar input[type=search]{max-width:240px;min-width:0}
 .toolbar select{width:auto}
@@ -178,7 +275,7 @@ header.top h1{font-size:18px;margin:0;white-space:nowrap}
 .chip.edit{border-style:dashed;color:var(--muted)}
 .seg{display:inline-flex;border:1px solid var(--border);border-radius:10px;overflow:hidden}
 .seg button{border:0;background:var(--surface);padding:4px 10px;font-size:12px;font-weight:600;color:var(--muted)}
-.seg button.on{background:var(--primary-soft);color:var(--text)}
+.seg button.on{background:var(--primary-soft);color:var(--ink)}
 
 /* Cards */
 .card{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--q);border-radius:12px;padding:10px 12px;margin-bottom:8px;cursor:pointer;box-shadow:var(--shadow);transition:transform .1s}
@@ -191,7 +288,7 @@ header.top h1{font-size:18px;margin:0;white-space:nowrap}
 .check.on{background:var(--ok);border-color:var(--ok);color:#fff}
 .meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:4px;font-size:12px}
 .tag{font-size:11px;padding:1px 8px;border-radius:999px;background:color-mix(in srgb,var(--c) 15%,transparent);color:var(--c);font-weight:700}
-.qbadge{font-size:11px;padding:1px 8px;border-radius:6px;background:color-mix(in srgb,var(--q) 14%,transparent);color:var(--q);font-weight:700}
+.qbadge{font-size:11px;padding:1px 8px;border-radius:999px;background:color-mix(in srgb,var(--q) 14%,transparent);color:var(--q);font-weight:700}
 .due{color:var(--muted)} .due.late{color:var(--danger);font-weight:700} .due.soon{color:var(--q3);font-weight:700}
 .prog{display:flex;align-items:center;gap:8px;margin-top:8px}
 .bar{flex:1;height:6px;background:var(--border);border-radius:99px;overflow:hidden}
@@ -203,6 +300,14 @@ header.top h1{font-size:18px;margin:0;white-space:nowrap}
 .subs input{width:auto}
 .subs .d span{text-decoration:line-through;color:var(--muted)}
 .card.compact{padding:8px 10px}
+.st-doing{font-size:11px;font-weight:700;color:var(--q3);display:inline-flex;align-items:center;gap:4px}
+.st-doing::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
+/* List rows: title + tags | progress | due — lined up in columns */
+.card.list .row{display:grid;grid-template-columns:auto minmax(0,1fr) 170px 104px 64px;align-items:center;gap:6px 14px}
+.card.list .c-prog .prog{margin:0}
+.card.list .c-prog .link{white-space:nowrap}
+.card.list .c-due{text-align:right;font-size:12.5px;white-space:nowrap}
+.card.list .check{margin-top:0}
 .empty{color:var(--muted);text-align:center;padding:18px;font-size:13px}
 .empty.big{padding:50px 10px;font-size:15px}
 
@@ -223,15 +328,12 @@ header.top h1{font-size:18px;margin:0;white-space:nowrap}
 
 /* Board (Kanban) */
 .board{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(250px,1fr);gap:12px;align-items:start;overflow-x:auto;padding-bottom:6px}
-.board-opts{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;font-size:13px}
 .col-h .cdot{width:10px;height:10px;border-radius:3px;background:var(--c);flex:none}
 .col{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:10px;min-height:300px}
 .col-h{display:flex;align-items:center;gap:8px;margin-bottom:8px}
 .col-h h3{margin:0;font-size:15px;flex:1}
 
 /* Calendar */
-.cal-h{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
-.cal-h h3{margin:0 6px;min-width:140px;text-align:center}
 .cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
 .dow{text-align:center;font-weight:700;color:var(--muted);font-size:12px;padding:4px 0;overflow:hidden;white-space:nowrap}
 .day{background:var(--surface);border:1px solid var(--border);border-radius:8px;min-height:104px;max-height:150px;overflow-y:auto;padding:4px 5px;cursor:copy}
@@ -298,7 +400,8 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
 .m-title{font-size:17px;font-weight:700}
 .sec{margin-top:16px}
 .sec>label,.sec-h{display:flex;align-items:center;justify-content:space-between;font-weight:700;margin-bottom:6px;font-size:13px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.grid2>div{min-width:0}
 .eis{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .eis button{text-align:left;border:1px solid var(--border);background:var(--surface);border-radius:10px;padding:8px 10px;border-left:4px solid var(--q)}
 .eis button b{display:block;color:var(--q)}
@@ -314,6 +417,17 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
 .atts li{display:flex;align-items:center;gap:8px;padding:6px 8px;border:1px solid var(--border);border-radius:8px;margin-bottom:6px}
 .atts a{color:var(--text);text-decoration:underline;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .m-foot{display:flex;gap:8px;margin-top:20px;align-items:center}
+.m-group{border-top:1px solid var(--border);margin-top:16px;padding-top:4px}
+.m-group .m-gl + .sec{margin-top:0}
+.m-gl{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:10px 0 8px}
+.date-row{display:flex;gap:6px;min-width:0}
+.date-row input{min-width:0;flex:1}
+.date-row .icon-btn{font-size:16px;line-height:1;color:var(--muted);flex:none}
+.m-hint-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:6px 0 12px}
+.m-hint-row .hint{margin:0}
+.m-hint-row .gcal{margin:0 0 0 auto}
+.add-row.wrap{flex-wrap:wrap}
+.add-row.wrap input{flex:1 1 160px}
 .x{background:none;border:0;color:var(--muted);font-size:18px;line-height:1;padding:2px 6px}
 .x:hover{color:var(--danger)}
 .cat-row{display:flex;gap:8px;align-items:center;margin-bottom:8px}
@@ -344,7 +458,7 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
 .proj .pmeta{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
 .proj .pside{width:170px;flex:none}
 .proj .pside .prog{margin-top:0}
-.pchip{font-size:11px;padding:1px 8px;border-radius:6px;border:1px solid var(--border);color:var(--muted);font-weight:600;display:inline-flex;align-items:center;gap:5px}
+.pchip{font-size:11px;padding:1px 8px;border-radius:999px;border:1px solid var(--border);color:var(--muted);font-weight:600;display:inline-flex;align-items:center;gap:5px}
 .pchip i{width:8px;height:8px;border-radius:2px;background:var(--c)}
 .proj-head{background:var(--surface);border:1px solid var(--border);border-top:5px solid var(--c);border-radius:14px;padding:16px 18px;margin-bottom:12px}
 .proj-head h2{margin:0;font-size:22px;word-break:break-word}
@@ -379,8 +493,11 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
   .welcome{grid-template-columns:1fr;gap:8px}
   .greet h2{font-size:21px}
   .kpis{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .kpis .stat:nth-child(4){border-left:0}
+  .kpis .stat:nth-child(3n+1){border-left:0}
   .kpis .stat:nth-child(n+4){border-top:1px solid var(--border)}
+  .kpis-4 .stat{border-left:1px solid var(--border)!important;border-top:0!important}
+  .kpis-4 .stat:nth-child(odd){border-left:0!important}
+  .kpis-4 .stat:nth-child(n+3){border-top:1px solid var(--border)!important}
   .kpis .stat{padding:7px 10px}
   .kpis .stat b{font-size:17px}
   .navrow{gap:6px}
@@ -404,11 +521,27 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
   .matrix .card .meta .tag,.matrix .card .meta .muted,.matrix .pchip{display:none}
 }
 @media (max-width:430px){
+  .keep2 .date-row .icon-btn{display:none}
   .f-label{display:none}
   .toolbar select{max-width:118px}
   .board{grid-auto-flow:row;grid-auto-columns:auto;grid-template-columns:1fr}
   .panels{grid-template-columns:1fr}
-  .grid2{grid-template-columns:1fr}
+  .grid2:not(.keep2){grid-template-columns:1fr}
+  .card.list .row{grid-template-columns:auto minmax(0,1fr) auto;gap:4px 10px;align-items:start}
+  .card.list .check{margin-top:2px}
+  .card.list .c-prog{grid-column:2/3;grid-row:2;align-self:center}
+  .card.list .c-prog:empty{display:none}
+  .kpis-4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .kpis-7,.kpis-9{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .card.list .c-act{grid-column:3;grid-row:2;align-self:center}
+  .card.list .c-act:empty{display:none}
+  .qadd-row .btn{padding:7px 12px}
+  .vhead .btn.sm{padding:4px 8px}
+  .vhead .vsub{flex-basis:100%;margin:0;order:5}
+  .m-hint-row .gcal{margin:0}
+  .autosave{display:none}
+  .modal{padding:16px}
+  .date-row .icon-btn{padding:6px 8px}
   .day{min-height:64px;padding:2px 3px}
   .pill{font-size:10px;padding:0 3px}
   .dow{font-size:10px}
@@ -428,10 +561,11 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
   <div class="landing">
     <section class="hero">
       <img class="hero-logo" src="icons/icon-192.png" alt="logo">
-      <h1 class="app-name">My Tasks</h1>
+      <h1 class="app-name">North Star</h1>
       <div class="by">Developed by <b>Ahmed Abdel-Dayem</b> ·
         <a class="li" href="https://www.linkedin.com/in/aabdel-dayem" target="_blank" rel="noopener"><svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 110-4.13 2.06 2.06 0 010 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg> LinkedIn</a></div>
-      <p class="lead">A simple, focused space to organize your tasks, manage your priorities, and keep everything that matters in one place.</p>
+      <div class="for">For HR experts who run their own projects</div>
+      <p class="lead">Capture every request in seconds, focus on the three things that matter today, and deliver every HR project on time — from workforce plans to field visits.</p>
     </section>
 
     <h2 class="inside-h">What’s inside?</h2>
@@ -452,7 +586,7 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
         <p>Get a quick snapshot of what needs your attention today, what’s coming next, and how much you’ve already accomplished.</p></div>
     </div>
 
-    <p class="tagline">Built for clarity. Built for focus. Built to keep things moving.</p>
+    <p class="tagline">Built for clarity. Built for focus. Built to keep HR projects moving.</p>
 
     <div class="cta" id="cta">
       <button class="btn primary lg" id="cta-login">Log in</button>
@@ -463,6 +597,11 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
     <form class="auth-card hidden" id="auth-form" autocomplete="on">
       <h2 id="auth-title">Log in</h2>
       <p class="sub" id="auth-sub">Welcome back</p>
+      <div class="sso hidden" id="sso">
+        <div class="g-btn" id="g-btn"></div>
+        <button type="button" class="btn sso-ms hidden" id="ms-btn"><svg class="icon" viewBox="0 0 23 23" aria-hidden="true"><path fill="#f25022" d="M1 1h10v10H1z"/><path fill="#7fba00" d="M12 1h10v10H12z"/><path fill="#00a4ef" d="M1 12h10v10H1z"/><path fill="#ffb900" d="M12 12h10v10H12z"/></svg> Continue with Microsoft</button>
+        <div class="or"><span>or with a username</span></div>
+      </div>
       <div class="field hidden" id="a-email-wrap"><label>Email <span class="opt">(optional — for password reset &amp; reminders)</span></label>
         <input id="a-email" type="email" autocomplete="email"></div>
       <div class="field"><label>Username</label><input id="a-user" autocomplete="username" required></div>
@@ -491,13 +630,14 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
     </form>
   </div>
   <footer class="credit">Developed by <b>Ahmed Abdel-Dayem</b> ·
-    <a class="li" href="https://www.linkedin.com/in/aabdel-dayem" target="_blank" rel="noopener"><svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 110-4.13 2.06 2.06 0 010 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg> linkedin.com/in/aabdel-dayem</a></footer>
+    <a class="li" href="https://www.linkedin.com/in/aabdel-dayem" target="_blank" rel="noopener"><svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 110-4.13 2.06 2.06 0 010 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg> linkedin.com/in/aabdel-dayem</a>
+    · <button type="button" class="link" id="land-privacy" style="font-size:12px">Privacy</button></footer>
 </div>
 
 <!-- ================= App ================= -->
 <div id="app" class="hidden">
   <header class="top">
-    <div class="brand"><img class="logo" src="icons/icon-192.png" alt="logo"><h1 class="app-name">My Tasks</h1></div>
+    <div class="brand"><img class="logo" src="icons/icon-192.png" alt="logo"><h1 class="app-name">North Star</h1></div>
     <span class="grow"></span>
     <span class="sync hidden" id="sync">Syncing…</span>
     <button class="btn sm hidden" id="btn-from-mail" title="Make a task from the open email"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg> From email</button>
@@ -512,6 +652,7 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
         <button id="btn-share"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg> Share app</button>
         <button id="btn-outlook"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> Outlook &amp; calendar</button>
         <button id="btn-archive"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 002 2h12a2 2 0 002-2V8M10 12h4"/></svg> Archive</button>
+        <button id="btn-privacy"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg> Privacy</button>
         <button id="btn-feedback"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> Send feedback</button>
         <button id="btn-install" class="hidden"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M12 7v7M9 11l3 3 3-3"/></svg> Install app</button>
         <button id="btn-admin" class="hidden"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg> Admin</button>
@@ -526,7 +667,7 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
     <div class="announce hidden" id="announce"><span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg></span><p id="announce-text"></p><button class="x" id="announce-close" title="Dismiss">×</button></div>
 
     <div class="welcome">
-      <div class="greet"><h2 id="greet"></h2><div class="date" id="today-date"></div></div>
+      <div class="greet"><h2 id="greet"></h2><div class="date" id="today-date"></div><div class="today-sum" id="today-sum"></div></div>
       <div class="quote" id="quote"><q>Loading today’s quote…</q></div>
     </div>
 
@@ -534,11 +675,10 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
 
     <div class="navrow">
     <div class="tabs" id="tabs">
-      <button class="tab active" data-view="list">List</button>
-      <button class="tab" data-view="matrix">Focus Hub</button>
-      <button class="tab" data-view="board">Board</button>
-      <button class="tab" data-view="calendar">Calendar</button>
-      <button class="tab" data-view="gantt">Gantt</button>
+      <button class="tab active" data-view="today">Today</button>
+      <button class="tab" data-view="inbox">Inbox <span class="tcount hidden" id="inbox-count"></span></button>
+      <button class="tab" data-view="plan">Plan</button>
+      <button class="tab" data-view="timeline">Timeline</button>
       <button class="tab" data-view="projects">Projects</button>
       <button class="tab" data-view="insights">Insights</button>
     </div>
@@ -594,69 +734,87 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
       <button type="button" class="x" id="m-close" title="Close &amp; save" style="font-size:24px">×</button></div>
     <input id="m-title" dir="auto" class="m-title" placeholder="Task title *" maxlength="300">
 
-    <div class="sec">
-      <label><span>Category<span class="req">*</span></span><button type="button" class="link" id="m-edit-cats" style="font-size:12px">Edit categories</button></label>
-      <div class="chips" id="m-labels"></div>
-    </div>
-
-    <div class="sec">
-      <label><span>Focus Hub<span class="req">*</span></span></label>
-      <div class="eis" id="m-eis"></div>
-    </div>
-
-    <div class="sec grid2">
-      <div><label class="sec-h"><span>Due date <span class="opt">(empty = entry day)</span></span></label>
-        <div style="display:flex;gap:6px"><input type="date" id="m-date"><button class="btn sm" id="m-date-clear" type="button">Clear</button></div>
-        <button type="button" class="gcal li link-btn" id="m-ocal"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> Add to Outlook Calendar</button>
+    <div class="m-group">
+      <div class="m-gl">What</div>
+      <div class="sec">
+        <label><span>Category</span><button type="button" class="link" id="m-edit-cats" style="font-size:12px">Edit categories</button></label>
+        <div class="chips" id="m-labels"></div>
       </div>
-      <div><label class="sec-h"><span>Status<span class="req">*</span></span></label>
-        <select id="m-status"><option value="todo">To do</option><option value="doing">In progress</option><option value="done">Done</option></select>
+      <div class="sec">
+        <label><span>Focus Hub</span></label>
+        <div class="eis" id="m-eis"></div>
+        <div class="hint" id="m-inbox-hint">No box yet? The task waits in your <b>Inbox</b> until you sort it.</div>
+      </div>
+      <div class="sec grid2 hidden" id="m-deleg">
+        <div><label class="sec-h"><span>Assigned to</span></label><input id="m-dto" dir="auto" maxlength="100" placeholder="Who is doing it?"></div>
+        <div><label class="sec-h"><span>Follow up on</span></label><div class="date-row"><input type="date" id="m-fu"><button class="btn icon-btn" id="m-fu-clear" type="button" title="Clear">×</button></div></div>
       </div>
     </div>
 
-    <div class="sec grid2">
-      <div><label class="sec-h"><span>Project</span></label>
-        <select id="m-project"></select></div>
-      <div><label class="sec-h"><span>Start date <span class="opt">(empty = entry day)</span></span></label>
-        <div style="display:flex;gap:6px"><input type="date" id="m-start"><button class="btn sm" id="m-start-clear" type="button">Clear</button></div></div>
-    </div>
-
-    <div class="sec grid2">
-      <div><label class="sec-h"><span>Reminder <span class="opt">(email)</span></span></label>
-        <div style="display:flex;gap:6px"><input type="datetime-local" id="m-rem"><button class="btn sm" id="m-rem-clear" type="button">Clear</button></div>
-        <div class="hint hidden" id="m-rem-hint">Link an email in Manage account to receive reminders.</div>
-        <div class="hint hidden" id="m-rem-sent"></div>
+    <div class="m-group">
+      <div class="m-gl">When</div>
+      <div class="grid2 keep2">
+        <div><label class="sec-h"><span>Start date</span></label>
+          <div class="date-row"><input type="date" id="m-start"><button class="btn icon-btn" id="m-start-clear" type="button" title="Clear start date">×</button></div></div>
+        <div><label class="sec-h"><span>Due date</span></label>
+          <div class="date-row"><input type="date" id="m-date"><button class="btn icon-btn" id="m-date-clear" type="button" title="Clear due date">×</button></div></div>
       </div>
-      <div><label class="sec-h"><span>Repeat</span></label>
-        <select id="m-repeat"><option value="">Doesn’t repeat</option><option value="daily">Every day</option><option value="weekly">Every week</option><option value="monthly">Every month</option></select>
-        <div class="hint">When you complete it, the next one is created automatically.</div>
-      </div>
-    </div>
-
-    <div class="sec">
-      <label>Notes</label>
-      <textarea id="m-notes" dir="auto" placeholder="Extra details…"></textarea>
-    </div>
-
-    <div class="sec">
-      <div class="sec-h"><span>Subtasks</span><span class="muted" id="m-prog-txt"></span></div>
-      <div class="prog" style="margin:0 0 8px"><div class="bar"><i id="m-prog" style="width:0"></i></div></div>
-      <ul class="m-subs" id="m-subs"></ul>
-      <div class="add-row">
-        <input id="m-sub-new" dir="auto" placeholder="Add a subtask — press Enter or just click away (paste many lines to add many)">
-        <button class="btn" id="m-sub-add" type="button">Add</button>
+      <div class="m-hint-row"><span class="hint">No start date = the day you enter it. No due date = “No date” (it never turns overdue by itself).</span>
+        <button type="button" class="gcal li link-btn" id="m-ocal"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> Add to Outlook Calendar</button></div>
+      <div class="grid2">
+        <div><label class="sec-h"><span>Reminder <span class="opt">(email)</span></span></label>
+          <div class="date-row"><input type="datetime-local" id="m-rem"><button class="btn icon-btn" id="m-rem-clear" type="button" title="Clear reminder">×</button></div>
+          <div class="hint hidden" id="m-rem-hint">Link an email in Manage account to receive reminders.</div>
+          <div class="hint hidden" id="m-rem-sent"></div>
+        </div>
+        <div><label class="sec-h"><span>Repeat</span></label>
+          <select id="m-repeat"><option value="">Doesn’t repeat</option><option value="daily">Every day</option><option value="weekly">Every week</option><option value="monthly">Every month</option></select>
+          <div class="hint">When you complete it, the next one is created automatically.</div>
+        </div>
       </div>
     </div>
 
-    <div class="sec">
-      <div class="sec-h"><span>Attachments</span><span class="muted" id="m-upl-status"></span></div>
-      <ul class="atts" id="m-atts"></ul>
-      <div class="add-row">
-        <button class="btn" id="m-file-btn" type="button">Upload file</button>
-        <input type="file" id="m-file" multiple class="hidden">
-        <input id="m-link-url" placeholder="or paste a link https://…">
-        <input id="m-link-name" placeholder="Link name" style="max-width:150px">
-        <button class="btn" id="m-link-add" type="button">Add</button>
+    <div class="m-group">
+      <div class="m-gl">Organize</div>
+      <div class="grid2">
+        <div><label class="sec-h"><span>Status</span></label>
+          <select id="m-status"><option value="todo">To do</option><option value="doing">In progress</option><option value="done">Done</option></select></div>
+        <div><label class="sec-h"><span>Project</span></label>
+          <select id="m-project"></select></div>
+      </div>
+      <div class="grid2" style="margin-top:12px">
+        <div><label class="sec-h"><span>Time needed</span></label>
+          <select id="m-est"><option value="0">Not set</option><option value="15">15 min</option><option value="30">30 min</option><option value="60">1 hour</option><option value="90">1½ hours</option><option value="120">2 hours</option><option value="240">Half a day</option><option value="480">A full day</option></select></div>
+        <div><label class="sec-h"><span>Today</span></label>
+          <label class="check-row" style="margin:8px 0 0"><input type="checkbox" id="m-focus"> In my Top 3 today</label></div>
+      </div>
+    </div>
+
+    <div class="m-group">
+      <div class="m-gl">Details</div>
+      <div class="sec">
+        <label>Notes</label>
+        <textarea id="m-notes" dir="auto" placeholder="Extra details…"></textarea>
+      </div>
+      <div class="sec">
+        <div class="sec-h"><span>Subtasks</span><span class="muted" id="m-prog-txt"></span></div>
+        <div class="prog" style="margin:0 0 8px"><div class="bar"><i id="m-prog" style="width:0"></i></div></div>
+        <ul class="m-subs" id="m-subs"></ul>
+        <div class="add-row">
+          <input id="m-sub-new" dir="auto" placeholder="Add a subtask — press Enter or just click away (paste many lines to add many)">
+          <button class="btn" id="m-sub-add" type="button">Add</button>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sec-h"><span>Attachments</span><span class="muted" id="m-upl-status"></span></div>
+        <ul class="atts" id="m-atts"></ul>
+        <div class="add-row wrap">
+          <button class="btn" id="m-file-btn" type="button">Upload file</button>
+          <input type="file" id="m-file" multiple class="hidden">
+          <input id="m-link-url" placeholder="or paste a link https://…">
+          <input id="m-link-name" placeholder="Link name" style="max-width:150px">
+          <button class="btn" id="m-link-add" type="button">Add</button>
+        </div>
       </div>
     </div>
 
@@ -700,10 +858,14 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
     <div class="field"><label>Username</label><input id="ac-user" required autocomplete="username"></div>
     <div class="field"><label>Email <span class="opt">(optional)</span></label><input id="ac-email" type="email" autocomplete="email">
       <div class="hint">Linking an email lets you reset a forgotten password and get reminders. The app works fine without it.</div></div>
-    <div class="field"><label>New password <span class="opt">(leave empty to keep current)</span></label>
+    <div class="field hidden" id="ac-sso"><label>Sign in with</label>
+      <div class="sso-row" id="ac-g-row"><span class="grow">Google</span><span class="badge green hidden" id="ac-g-on">✓ Linked</span><div id="ac-g-btn"></div></div>
+      <div class="sso-row" id="ac-ms-row"><span class="grow"><svg class="icon" viewBox="0 0 23 23" aria-hidden="true"><path fill="#f25022" d="M1 1h10v10H1z"/><path fill="#7fba00" d="M12 1h10v10H12z"/><path fill="#00a4ef" d="M1 12h10v10H1z"/><path fill="#ffb900" d="M12 12h10v10H12z"/></svg> Microsoft</span><span class="badge green hidden" id="ac-ms-on">✓ Linked</span><button type="button" class="btn sm" id="ac-ms">Link</button></div>
+      <div class="hint">Link once, then use the button on the log-in page instead of your password.</div></div>
+    <div class="field"><label><span id="ac-new-l">New password</span> <span class="opt" id="ac-new-o">(leave empty to keep current)</span></label>
       <div class="pw-wrap"><input id="ac-new" type="password" autocomplete="new-password"><button type="button" class="pw-eye" data-eye="ac-new">Show</button></div></div>
     <hr style="border:0;border-top:1px solid var(--border);margin:16px 0">
-    <div class="field"><label>Current password<span class="req">*</span> <span class="opt">(required to save changes)</span></label>
+    <div class="field" id="ac-cur-wrap"><label>Current password<span class="req">*</span> <span class="opt">(required to save changes)</span></label>
       <div class="pw-wrap"><input id="ac-cur" type="password" required autocomplete="current-password"><button type="button" class="pw-eye" data-eye="ac-cur">Show</button></div></div>
     <div class="m-foot"><span class="grow"></span><button class="btn" type="button" id="acct-cancel">Cancel</button><button class="btn primary">Save changes</button></div>
   </form>
@@ -712,7 +874,7 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
 <!-- ================= Share modal ================= -->
 <div class="overlay hidden" id="share-modal">
   <div class="modal" style="max-width:460px">
-    <div class="m-headrow"><h2>Share <span class="app-name">My Tasks</span></h2><button type="button" class="x" id="share-close" style="font-size:24px">×</button></div>
+    <div class="m-headrow"><h2>Share <span class="app-name">North Star</span></h2><button type="button" class="x" id="share-close" style="font-size:24px">×</button></div>
     <p class="muted" style="margin:0 0 12px">This link opens the intro page, where people can read about the app and sign up with their own account.</p>
     <div class="share-link"><input id="share-url" readonly><button class="btn primary" type="button" id="share-copy">Copy</button></div>
     <div class="share-btns">
@@ -738,11 +900,11 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
     </div>
     <p class="hint">If a button doesn’t open the right place: in Outlook Calendar choose <b>Add calendar → Subscribe from web</b> and paste the link.<br>
       Keep this link private — anyone who has it can see your task titles. <button type="button" class="link" id="ol-reset">Make a new link</button></p>
-    <h3 class="ol-h">2 · <span class="app-name">My Tasks</span> inside Outlook</h3>
+    <h3 class="ol-h">2 · <span class="app-name">North Star</span> inside Outlook</h3>
     <ol class="steps">
       <li><a class="btn sm" href="outlook-addin.xml" download="MyTasks-Outlook-addin.xml">Download the add-in file</a></li>
       <li>Open <a class="li" href="https://aka.ms/olksideload" target="_blank" rel="noopener">aka.ms/olksideload</a> (Outlook on the web) → <b>My add-ins</b> → <b>Add a custom add-in</b> → <b>Add from file</b> → choose the file.</li>
-      <li>Open any email → <b>Apps</b> (or <b>…</b>) → <b><span class="app-name">My Tasks</span></b>. Use <b>From email</b> to turn the email into a task.</li>
+      <li>Open any email → <b>Apps</b> (or <b>…</b>) → <b><span class="app-name">North Star</span></b>. Use <b>From email</b> to turn the email into a task.</li>
     </ol>
     <p class="hint">It also appears in the new Outlook for Windows and Outlook for Mac with the same account. Work accounts: if “Add a custom add-in” is missing, your IT admin has turned it off.</p>
   </div>
@@ -777,6 +939,27 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
 </div>
 
 <div id="tip" class="hidden"></div>
+<div id="pop" class="pop hidden"></div>
+
+<!-- ================= Plan my day ================= -->
+<div class="overlay hidden" id="plan-modal">
+  <div class="modal" style="max-width:560px">
+    <div class="m-headrow"><h2>Plan my day</h2><span class="m-created" id="plan-n"></span><button type="button" class="x" id="plan-close" style="font-size:24px">×</button></div>
+    <p class="muted" style="margin:0 0 10px">Pick up to <b>3</b> tasks that would make today a good day. They stay at the top of <b>Today</b>.</p>
+    <div id="plan-list" class="plist2"></div>
+    <div class="m-foot"><span class="grow"></span><button class="btn" type="button" id="plan-cancel">Cancel</button><button class="btn primary" type="button" id="plan-save">Set my Top 3</button></div>
+  </div>
+</div>
+
+<!-- ================= Wrap up the day ================= -->
+<div class="overlay hidden" id="wrap-modal">
+  <div class="modal" style="max-width:600px">
+    <div class="m-headrow"><h2>Wrap up the day</h2><button type="button" class="x" id="wrap-close" style="font-size:24px">×</button></div>
+    <p class="muted" style="margin:0 0 10px">Decide where each unfinished task goes, so tomorrow starts clean.</p>
+    <div id="wrap-list" class="plist2"></div>
+    <div class="m-foot"><span class="grow"></span><button class="btn" type="button" id="wrap-cancel">Cancel</button><button class="btn primary" type="button" id="wrap-save">Done for today</button></div>
+  </div>
+</div>
 <div id="busy" class="hidden"><div class="spin"></div></div>
 <div id="toast"></div>
 
@@ -795,6 +978,12 @@ const QUADS = {
   Q4: { name: 'Remove',   sub: 'Not urgent, not important — drop it', color: 'var(--q4)', hex: '#6b7280' }
 };
 const STATUS = { todo: 'To do', doing: 'In progress', done: 'Done' };
+const QINBOX = { name: 'Inbox', sub: 'Not sorted yet', color: 'var(--muted)', hex: '#94a3b8' };
+const qOf = t => QUADS[t.quadrant] || QINBOX;
+const STAR = '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z"/></svg>';
+const CLOCK_ICON = '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
+const CAL_ICON = '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>';
+const fmtMin = m => !m ? '' : m < 60 ? m + 'm' : Math.floor(m / 60) + 'h' + (m % 60 ? ' ' + m % 60 + 'm' : '');
 const REPEAT_LABEL = { daily: 'Daily', weekly: 'Weekly', monthly: 'Monthly' };
 const PALETTE = ['#8b5cf6','#0ea5e9','#10b981','#f59e0b','#e11d48','#14b8a6','#6366f1','#f97316','#84cc16','#ec4899'];
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -811,15 +1000,20 @@ const SUN = '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentCo
 
 /* ================= State ================= */
 const S = {
-  token: null, user: '', me: {}, tasks: [], archived: [], archLoaded: false, cats: [], view: 'list',
+  token: null, user: '', me: {}, tasks: [], archived: [], archLoaded: false, cats: [], view: 'today',
   f: { q: '', labels: [], quad: '', status: 'open', sort: 'due' },
   cal: null, draft: null, draftInit: '', saving: false, uploads: [], expanded: new Set(),
-  authMode: 'login', hasUsers: true, allowSignup: true, maxMb: 10, maxCats: 10, archiveDays: 30, shareUrl: '', appName: 'My Tasks',
+  authMode: 'login', hasUsers: true, allowSignup: true, maxMb: 10, maxCats: 10, archiveDays: 30, shareUrl: '', appName: 'North Star',
   catDraft: [], remember: false, insPeriod: 'week', admin: null, adm: { q: '', sort: 'createdAt', dir: 1 }, installEvt: null,
   projects: [], projectOpen: null, projMode: 'tasks', boardBy: 'status', dragFrom: '', projCb: null, projEdit: null,
   info: null, archivedCount: 0, pending: 0, syncing: false, reloadAfterSave: false,
-  quote: null, quoteSeen: [], quoteTouched: false, filtersOpen: false, office: false, ver: {}
+  quote: null, quoteSeen: [], quoteTouched: false, filtersOpen: false, office: false, ver: {},
+  planMode: 'matrix', timeMode: 'calendar'
 };
+try { S.planMode = localStorage.getItem('planMode') || 'matrix'; S.timeMode = localStorage.getItem('timeMode') || 'calendar'; } catch (e) {}
+/* Plan and Timeline tabs hold two or three screens each */
+const MODES = { plan: [['matrix', 'Focus Hub'], ['board', 'Board'], ['list', 'List']], timeline: [['calendar', 'Calendar'], ['gantt', 'Gantt']] };
+const curView = () => S.view === 'plan' ? S.planMode : S.view === 'timeline' ? S.timeMode : S.view;
 try { S.boardBy = localStorage.getItem('boardBy') || 'status'; } catch (e) {}
 
 /* ================= Utils ================= */
@@ -888,8 +1082,8 @@ function api(fn, ...args) {
         if (e.kind !== 'offline' && n < tries) return new Promise(r => setTimeout(r, 800 * n)).then(() => attempt(n + 1));
         fail(Object.assign(new Error(
           (e.kind === 'offline' ? 'You’re offline — check your internet connection.' :
-           e.kind === 'busy' ? 'The My Tasks server is busy right now.' :
-           'Couldn’t reach the My Tasks server.') + ' Please try again later.'), { network: true }));
+           e.kind === 'busy' ? 'The North Star server is busy right now.' :
+           'Couldn’t reach the North Star server.') + ' Please try again later.'), { network: true }));
       });
     attempt(1);
   });
@@ -959,7 +1153,7 @@ function isDark() {
 }
 function paintThemeBtns() {
   $$('.theme-btn').forEach(b => { b.innerHTML = isDark() ? SUN : MOON; b.title = isDark() ? 'Switch to light mode' : 'Switch to dark mode'; });
-  const m = $('meta[name="theme-color"]'); if (m) m.setAttribute('content', isDark() ? '#0f1115' : '#18181b');
+  const m = $('meta[name="theme-color"]'); if (m) m.setAttribute('content', isDark() ? '#0e1020' : '#312e81');
 }
 document.addEventListener('click', e => {
   if (!e.target.closest('.theme-btn')) return;
@@ -1057,6 +1251,7 @@ function showAuth(mode) {
   $('#auth-switch').innerHTML = signup
     ? (S.hasUsers ? 'Have an account? <button type="button" class="link" data-mode="login">Log in</button>' : '')
     : (canSignup ? 'New here? <button type="button" class="link" data-mode="signup">Sign up</button>' : '');
+  renderGoogleBtn($('#g-btn'));
   f.scrollIntoView({ behavior: 'smooth', block: 'center' });
   setTimeout(() => (signup ? $('#a-email') : $('#a-user')).focus(), 250);
 }
@@ -1073,12 +1268,14 @@ $('#auth-form').addEventListener('submit', async e => {
     S.hasUsers = true;
     $('#a-pass').value = ''; $('#a-email').value = '';
     enterApp(null, r.boot);
+    if (signup) setTimeout(showWelcome, 500);
   } catch (err) { toast(err.message, 'err'); }
 });
 function logoutLocal() {
   clearCache(); S.pending = 0; S.syncing = false; updateSync();
   S.token = null; S.tasks = []; S.archived = []; S.archLoaded = false; S.draft = null; S.admin = null; store.set(null);
   S.calUrl = null; S.quoteSeen = []; S.quoteTouched = false;
+  try { if (window.google && google.accounts) google.accounts.id.disableAutoSelect(); } catch (e) {}
   $$('.overlay').forEach(o => o.classList.add('hidden'));
   $('#menu-list').classList.add('hidden');
   showMain();
@@ -1131,9 +1328,19 @@ $('#btn-acct').addEventListener('click', async () => {
     const acc = await withBusy(api('getAccount', S.token));
     $('#acct-form').reset();
     $('#ac-user').value = acc.username; $('#ac-email').value = acc.email;
+    fillAcctSso(acc);
     $('#acct-modal').classList.remove('hidden'); $('#ac-user').focus();
+    if (!acc.google) renderGoogleBtn($('#ac-g-btn'), 'signin_with');
   } catch (err) { toast(err.message, 'err'); }
 });
+function fillAcctSso(acc) {
+  S.noPassword = !!acc.noPassword;
+  $('#ac-cur-wrap').classList.toggle('hidden', S.noPassword); $('#ac-cur').required = !S.noPassword;
+  $('#ac-new-l').textContent = S.noPassword ? 'Set a password' : 'New password';
+  $('#ac-new-o').textContent = S.noPassword ? '(optional — you sign in with Google / Microsoft)' : '(leave empty to keep current)';
+  $('#ac-g-on').classList.toggle('hidden', !acc.google); $('#ac-g-btn').classList.toggle('hidden', !!acc.google);
+  $('#ac-ms-on').classList.toggle('hidden', !acc.microsoft); $('#ac-ms').classList.toggle('hidden', !!acc.microsoft);
+}
 const closeAcct = closable('acct-modal', 'acct-close acct-cancel');
 $('#acct-form').addEventListener('submit', async e => {
   e.preventDefault();
@@ -1150,7 +1357,7 @@ $('#acct-form').addEventListener('submit', async e => {
 /* Share */
 $('#btn-share').addEventListener('click', () => {
   closeMenu();
-  const url = S.shareUrl, msg = S.appName + ' — a simple, focused space to organize your tasks and priorities: ' + url;
+  const url = S.shareUrl, msg = S.appName + ' — the task and project manager for HR experts: ' + url;
   $('#share-url').value = url;
   $('#sh-wa').href = 'https://wa.me/?text=' + encodeURIComponent(msg);
   $('#sh-li').href = 'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(url);
@@ -1159,6 +1366,85 @@ $('#btn-share').addEventListener('click', () => {
   $('#share-modal').classList.remove('hidden');
 });
 const closeShare = closable('share-modal', 'share-close');
+/* ================= Continue with Google / Microsoft =================
+   Turned on by the client IDs in Code.gs (CONFIG). Hidden inside the Outlook pane (pop-ups don't work there). */
+const MSAL_URLS = ['https://alcdn.msauth.net/browser/2.38.3/js/msal-browser.min.js', 'https://cdn.jsdelivr.net/npm/@azure/msal-browser@2.38.3/lib/msal-browser.min.js'];
+const loadScript = src => new Promise((res, rej) => {
+  if (document.querySelector('script[src="' + src + '"]')) return res();
+  const el = document.createElement('script'); el.src = src; el.async = true; el.onload = res; el.onerror = () => { el.remove(); rej(new Error('load')); };
+  document.head.appendChild(el);
+});
+let gReady = null, msReady = null, msApp = null;
+function setupProviders() {
+  const g = S.info && S.info.googleClientId, m = S.info && S.info.microsoftClientId;
+  $('#sso').classList.toggle('hidden', !(g || m));
+  $('#ms-btn').classList.toggle('hidden', !m);
+  $('#ac-sso').classList.toggle('hidden', !(g || m)); $('#ac-g-row').classList.toggle('hidden', !g); $('#ac-ms-row').classList.toggle('hidden', !m);
+  if (g && !gReady) gReady = loadScript('https://accounts.google.com/gsi/client').then(() => {
+    google.accounts.id.initialize({ client_id: g, callback: r => providerSignIn('google', r.credential), ux_mode: 'popup', auto_select: false, cancel_on_tap_outside: true });
+  }).catch(() => { gReady = null; });
+  if (m && !msReady) msReady = loadScript(MSAL_URLS[0]).catch(() => loadScript(MSAL_URLS[1])).then(async () => {   // ready before the click, so the pop-up isn't blocked
+    msApp = new msal.PublicClientApplication({ auth: { clientId: m, authority: 'https://login.microsoftonline.com/common', redirectUri: new URL('auth.html', location.href).href },
+      cache: { cacheLocation: 'sessionStorage' } });
+    if (msApp.initialize) await msApp.initialize();
+  }).catch(() => { msReady = null; });
+}
+function renderGoogleBtn(el, text) {
+  if (!gReady || !el) return;
+  gReady.then(() => {
+    if (el.dataset.done || !window.google) return;
+    el.dataset.done = '1';
+    google.accounts.id.renderButton(el, { theme: isDark() ? 'filled_black' : 'outline', size: text ? 'medium' : 'large', text: text || 'continue_with', shape: 'pill', width: text ? 200 : 300, logo_alignment: 'center' });
+  });
+}
+async function msClick() {
+  if (!msApp) { setupProviders(); return toast('Getting Microsoft sign-in ready — tap again in a second'); }
+  try {
+    const r = await msApp.loginPopup({ scopes: ['User.Read'], prompt: 'select_account' });
+    await providerSignIn('microsoft', r.accessToken);
+  } catch (e) {
+    const code = String((e && (e.errorCode || e.message)) || e);
+    if (!/cancel|user_cancelled/i.test(code)) toast(/popup/i.test(code) ? 'Allow pop-ups for this site to sign in with Microsoft' : 'Microsoft sign-in didn’t finish — please try again', 'err');
+  }
+}
+$('#ms-btn').addEventListener('click', msClick);
+$('#ac-ms').addEventListener('click', msClick);
+/* One handler for both: on the log-in page → log in; in Manage account → link to this account */
+async function providerSignIn(provider, cred) {
+  const name = provider === 'google' ? 'Google' : 'Microsoft';
+  try {
+    if (S.token && !$('#acct-modal').classList.contains('hidden')) {
+      await withBusy(api('linkProvider', S.token, provider, cred));
+      fillAcctSso(await api('getAccount', S.token));
+      return toast(name + ' is linked — next time just tap “Continue with ' + name + '”');
+    }
+    const rem = $('#a-remember').checked;
+    const r = await withBusy(api('loginWithProvider', provider, cred, rem));
+    S.token = r.token; S.user = r.username; S.remember = rem; store.set(r.token, rem); S.hasUsers = true;
+    enterApp(null, r.boot);
+    if (r.created) setTimeout(showWelcome, 500);
+  } catch (err) { toast(err.message, 'err'); }
+}
+
+function showWelcome() {
+  dialog('Welcome to ' + S.appName, `<p style="margin-top:0">Your North Star for HR projects. Four things to know:</p>
+    <ol class="steps"><li><b>Inbox</b> — capture anything in one line. Sort it later.</li>
+    <li><b>Today</b> — pick your <b>Top 3</b> each morning, <b>Wrap up</b> each evening.</li>
+    <li><b>Focus Hub</b> — Priority, Schedule, <b>Assign</b> (with follow-up) or Remove.</li>
+    <li><b>Projects</b> — group tasks, see the Gantt chart, export a PDF.</li></ol>
+    <p class="hint">Shortcuts: <b>N</b> new task · <b>Q</b> quick add · <b>/</b> search · <b>1–6</b> switch screens.</p>`, 'Let’s start', false);
+}
+function showPrivacy() {
+  dialog('Privacy', `<p style="margin-top:0">Your tasks are stored in a private Google Sheet owned by the app owner (Ahmed Abdel-Dayem) and are only used to run the app.</p>
+    <ul class="steps"><li>Passwords are stored as salted hashes — nobody can read them.</li>
+    <li>The admin page shows numbers only (how many tasks, last active) — never your task titles, notes or files.</li>
+    <li>Attachments are saved in the owner’s Google Drive and are private unless you share the link.</li>
+    <li>Your Outlook calendar link is private to you — make a new one any time.</li>
+    <li>Want your account and data removed? Use <b>Send feedback</b> and it will be deleted.</li></ul>
+    <p class="hint">Work data: check your company’s policy before storing confidential HR information in any personal tool.</p>`, 'Got it', false);
+}
+$('#btn-privacy').addEventListener('click', () => { closeMenu(); showPrivacy(); });
+$('#land-privacy').addEventListener('click', showPrivacy);
 async function copyInput(inp) {
   try { await navigator.clipboard.writeText(inp.value); }
   catch (e) { inp.select(); document.execCommand('copy'); }
@@ -1346,11 +1632,14 @@ function render() {
   renderStats();
   renderLabelFilter();
   const v = $('#view');
-  const views = { matrix: renderMatrix, board: renderBoard, calendar: renderCalendar, gantt: renderGanttView, projects: renderProjects, insights: renderInsights };
-  v.innerHTML = (views[S.view] || renderList)();
-  $('#f-quad').disabled = S.view === 'matrix' || (S.view === 'board' && S.boardBy === 'quad');
-  $('#f-status').disabled = S.view === 'board' && S.boardBy === 'status';
-  const noBar = S.view === 'insights' || S.view === 'projects';
+  const views = { today: renderToday, inbox: renderInbox, matrix: renderMatrix, board: renderBoard, calendar: renderCalendar, gantt: renderGanttView, projects: renderProjects, insights: renderInsights };
+  const qa = $('#qa-in'), keep = qa && { v: qa.value, f: document.activeElement === qa, s: qa.selectionStart };   // don't lose a half-typed quick add
+  v.innerHTML = (views[curView()] || renderList)();
+  if (keep && $('#qa-in')) { $('#qa-in').value = keep.v; quickPreview(); if (keep.f) { $('#qa-in').focus(); $('#qa-in').setSelectionRange(keep.s, keep.s); } }
+  const cv = curView();
+  $('#f-quad').disabled = cv === 'matrix' || cv === 'inbox' || (cv === 'board' && S.boardBy === 'quad');
+  $('#f-status').disabled = cv === 'today' || (cv === 'board' && S.boardBy === 'status');
+  const noBar = cv === 'insights' || cv === 'projects';
   $('#toolbar').classList.toggle('hidden', noBar);
   $('#filters').classList.toggle('hidden', noBar || !S.filtersOpen);
   $('#f-toggle').setAttribute('aria-expanded', String(S.filtersOpen));
@@ -1367,10 +1656,16 @@ function renderStats() {
   const q1 = open.filter(t => t.quadrant === 'Q1').length;
   const rate = all.length ? Math.round(done / all.length * 100) : 0;
   const completed = done + (S.archLoaded ? S.archived.length : S.archivedCount || 0);   // includes archived (finished long ago)
+  const doing = open.filter(t => t.status === 'doing').length;
+  $('#today-sum').innerHTML = (overdue + dueToday
+    ? [dueToday ? `<b>${dueToday}</b> due today` : '', overdue ? `<b class="late">${overdue}</b> overdue` : '', doing ? `<b>${doing}</b> in progress` : ''].filter(Boolean).join(' · ')
+    : 'Nothing due today' + (doing ? ` · <b>${doing}</b> in progress` : '')) ;
   $('#stats').innerHTML = [
-    ['Open tasks', open.length, ''], ['Completed', completed, 'good'], ['Due today', dueToday, ''], ['Overdue', overdue, overdue ? 'bad' : ''],
-    ['Priority', q1, q1 ? 'bad' : ''], ['Completion rate', rate + '%', 'good']
-  ].map(([l, v, c]) => `<div class="stat ${c}"><b>${v}</b><span>${l}</span></div>`).join('');
+    ['Open tasks', open.length, '', 'var(--primary)'], ['Completed', completed, 'good', 'var(--ok)'], ['Due today', dueToday, '', 'var(--q3)'],
+    ['Overdue', overdue, overdue ? 'bad' : '', 'var(--danger)'], ['Priority', q1, q1 ? 'bad' : '', 'var(--q1)'], ['Completion rate', rate + '%', 'good', 'var(--teal)']
+  ].map(([l, v, c, k]) => `<div class="stat ${c}" style="--k:${k}"><b>${v}</b><span>${l}</span></div>`).join('');
+  const inboxN = open.filter(t => !t.quadrant).length;
+  $('#inbox-count').textContent = inboxN; $('#inbox-count').classList.toggle('hidden', !inboxN);
 }
 
 function renderLabelFilter() {
@@ -1380,8 +1675,197 @@ function renderLabelFilter() {
     `<button class="chip edit" id="f-edit-cats" title="Edit categories">✎ Edit</button>`;
 }
 
+/* Same header on every screen: title + count on the left, that screen's controls on the right */
+function vhead(title, count, right, sub) {
+  const modes = MODES[S.view] ? `<div class="seg mode-seg">${MODES[S.view].map(([k, n]) => `<button data-mode="${k}" class="${curView() === k ? 'on' : ''}">${n}</button>`).join('')}</div>` : '';
+  return `<div class="vhead"><h2>${title}</h2>${count == null ? '' : `<span class="count">${count}</span>`}${sub ? `<span class="vsub">${sub}</span>` : ''}<span class="grow"></span>${right || ''}${modes}</div>`;
+}
+
+/* ================= Today (the screen the app opens on) ================= */
+function renderToday() {
+  const td = today(), week = addDays(td, 7), all = filtered({ noStatus: true });
+  const open = all.filter(t => t.status !== 'done'), used = new Set();
+  const pick = list => { const r = list.filter(t => !used.has(t.id)); r.forEach(t => used.add(t.id)); return sortTasks(r); };
+  const top = pick(open.filter(t => t.focusDate === td));
+  const overdue = pick(open.filter(t => t.dueDate && t.dueDate < td));
+  const due = pick(open.filter(t => t.dueDate === td));
+  const follow = pick(open.filter(t => t.followUp && t.followUp <= td));
+  const doing = pick(open.filter(t => t.status === 'doing'));
+  const soon = pick(open.filter(t => t.dueDate > td && t.dueDate <= week));
+  const doneToday = all.filter(t => t.status === 'done' && t.completedAt && ymd(new Date(t.completedAt)) === td);
+  const mins = top.concat(overdue, due).reduce((a, t) => a + (t.estimate || 0), 0);
+  const late = new Date().getHours() >= 17;
+  const sec = (title, cls, items, empty, extra) => `<section class="tsec ${cls}"><div class="tsec-h"><h3>${title}</h3><span class="count">${items.length}</span><span class="grow"></span>${extra || ''}</div>
+    ${items.length ? items.map(t => taskCard(t, 'list')).join('') : `<div class="empty">${empty}</div>`}</section>`;
+  const right = `${mins ? `<span class="vlabel muted">≈ ${fmtMin(mins)} planned</span>` : ''}
+    <button class="btn sm" data-act="plan-day">${STAR} Plan my day</button>
+    <button class="btn sm ${late ? 'primary' : ''}" data-act="wrap-up" title="Move what’s left to another day">Wrap up</button>`;
+  return vhead('Today', top.length + overdue.length + due.length, right) + quickAddBar() +
+    sec('Top 3 today', 'top', top, 'Pick up to 3 tasks that matter most today — <button class="link" data-act="plan-day">Plan my day</button>') +
+    (overdue.length ? sec('Overdue', 'late', overdue, '', '<button class="btn xs" data-act="overdue-today">Move all to today</button>') : '') +
+    sec('Due today', 'now', due, overdue.length || top.length ? 'Nothing else is due today.' : 'Nothing due today — a good moment to plan ahead.') +
+    (follow.length ? sec('Follow up', 'follow', follow, '') : '') +
+    (doing.length ? sec('In progress', '', doing, '') : '') +
+    sec('Coming up · next 7 days', 'soon', soon, 'Nothing planned for the next 7 days.') +
+    (doneToday.length ? sec('Done today', 'done', doneToday, '') : '');
+}
+
+/* Inbox: everything captured but not sorted into a Focus Hub box yet */
+function renderInbox() {
+  const list = sortTasks(filtered({ noQuad: true }).filter(t => !t.quadrant));
+  return vhead('Inbox', list.length, '', 'Capture first, sort later — pick a box for each task') + quickAddBar() +
+    (list.length ? list.map(t => taskCard(t, 'list')).join('') : '<div class="empty big">Inbox zero — everything is sorted.</div>');
+}
+
+/* ---------- Quick add: one line → a task.  tomorrow · fri · 20/11 · #category · !1-4 · @project · ~30m ---------- */
+function quickAddBar() {
+  return `<div class="qadd"><div class="qadd-row"><input id="qa-in" autocomplete="off" placeholder="Quick add — e.g. Call HRD tomorrow #professional !1 ~30m" dir="auto">
+    <button class="btn primary" data-act="qa-add">Add</button></div><div class="qa-prev" id="qa-prev"></div></div>`;
+}
+const WD = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+function parseQuick(text) {
+  let t = ' ' + text + ' ';
+  const out = { labels: [], quadrant: '', dueDate: '', projectId: '', estimate: 0 };
+  const take = re => { const m = t.match(re); if (m) t = t.replace(m[0], ' '); return m; };
+  const td = today();
+  let m = take(/\s~(\d+(?:\.\d+)?)\s*(m|min|mins|h|hr|hrs|hours?)?(?=\s)/i);
+  if (m) out.estimate = Math.round(parseFloat(m[1]) * (/^h/i.test(m[2] || 'm') ? 60 : 1));
+  m = take(/\s!(1|2|3|4|p|priority|s|schedule|a|assign|r|remove)(?=\s)/i);
+  if (m) out.quadrant = { 1: 'Q1', p: 'Q1', priority: 'Q1', 2: 'Q2', s: 'Q2', schedule: 'Q2', 3: 'Q3', a: 'Q3', assign: 'Q3', 4: 'Q4', r: 'Q4', remove: 'Q4' }[m[1].toLowerCase()];
+  while ((m = take(/\s#([^\s#!@~]+)(?=\s)/))) {
+    const w = m[1].toLowerCase(), c = S.cats.find(c => c.name.toLowerCase().startsWith(w) || c.key.startsWith(w));
+    if (c && !out.labels.includes(c.key)) out.labels.push(c.key);
+  }
+  m = take(/\s@([^\s#!@~]+)(?=\s)/);
+  if (m) { const w = m[1].toLowerCase().replace(/[-_]/g, ' '), pj = S.projects.find(p => p.name.toLowerCase().startsWith(w)); if (pj) out.projectId = pj.id; }
+  if (take(/\s(today|tonight)(?=\s)/i)) out.dueDate = td;
+  else if (take(/\s(tomorrow|tmr|tmrw)(?=\s)/i)) out.dueDate = addDays(td, 1);
+  else if (take(/\snext week(?=\s)/i)) out.dueDate = addDays(td, 7);
+  else if ((m = take(/\sin (\d+) (day|days|week|weeks)(?=\s)/i))) out.dueDate = addDays(td, +m[1] * (/week/i.test(m[2]) ? 7 : 1));
+  else if ((m = take(/\s(?:next\s)?(saturday|sunday|monday|tuesday|wednesday|thursday|friday|sat|sun|mon|tue|tues|wed|thu|thur|thurs|fri)(?=\s)/i))) {
+    const want = WD.indexOf(m[1].slice(0, 3).toLowerCase()), now = new Date().getDay();
+    out.dueDate = addDays(td, ((want - now + 7) % 7) || 7);
+  }
+  else if ((m = take(/\s(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?(?=\s)/))) out.dueDate = quickDate(+m[1], +m[2], m[3]);
+  else if ((m = take(/\s(\d{1,2})\s+(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*(?=\s)/i))) out.dueDate = quickDate(+m[1], MONTHS.findIndex(x => x.toLowerCase().startsWith(m[2].toLowerCase())) + 1);
+  else if ((m = take(/\s(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s+(\d{1,2})(?=\s)/i))) out.dueDate = quickDate(+m[2], MONTHS.findIndex(x => x.toLowerCase().startsWith(m[1].toLowerCase())) + 1);
+  out.title = t.replace(/\s+/g, ' ').trim();
+  return out;
+}
+/* day / month (/ year) — this year, or next year if the day has passed */
+function quickDate(d, mo, y) {
+  if (!(d >= 1 && d <= 31 && mo >= 1 && mo <= 12)) return '';
+  const now = new Date(); let yr = y ? (+y < 100 ? 2000 + +y : +y) : now.getFullYear();
+  let s = yr + '-' + pad(mo) + '-' + pad(d);
+  if (!y && s < today()) s = (yr + 1) + '-' + pad(mo) + '-' + pad(d);
+  return s;
+}
+function quickPreview() {
+  const inp = $('#qa-in'), box = $('#qa-prev'); if (!inp || !box) return;
+  if (!inp.value.trim()) { box.innerHTML = '<span class="muted">Words you can use: <b>tomorrow</b>, <b>fri</b>, <b>20/11</b> · <b>#category</b> · <b>!1</b>–<b>!4</b> for the box · <b>@project</b> · <b>~30m</b></span>'; return; }
+  const p = parseQuick(inp.value), cm = catMap(), pj = S.projects.find(x => x.id === p.projectId);
+  box.innerHTML = [p.dueDate ? `<span class="chip-s">${CAL_ICON} ${fmtDate(p.dueDate)}</span>` : '',
+    p.quadrant ? `<span class="qbadge" style="--q:${QUADS[p.quadrant].color}">${QUADS[p.quadrant].name}</span>` : '<span class="qbadge" style="--q:var(--muted)">Inbox</span>',
+    ...p.labels.map(k => `<span class="tag" style="--c:${esc(cm[k].color)}">${esc(cm[k].name)}</span>`),
+    pj ? `<span class="pchip" style="--c:${esc(pj.color)}"><i></i>${esc(pj.name)}</span>` : '',
+    p.estimate ? `<span class="chip-s">${CLOCK_ICON} ${fmtMin(p.estimate)}</span>` : ''].join('');
+}
+function quickAdd() {
+  const inp = $('#qa-in'); if (!inp || !inp.value.trim()) return;
+  const p = parseQuick(inp.value);
+  if (!p.title) return toast('Write what the task is', 'err');
+  const t = { id: newId(), isNew: true, title: p.title.slice(0, 300), notes: '', labels: p.labels, quadrant: p.quadrant, dueDate: p.dueDate, startDate: '',
+    status: 'todo', reminderAt: '', repeat: '', projectId: p.projectId, subtasks: [], attachments: [], focusDate: '', delegateTo: '', followUp: '',
+    estimate: p.estimate, createdAt: new Date().toISOString() };
+  fillDates(t); placeTask(t); inp.value = ''; render(); $('#qa-in') && $('#qa-in').focus();
+  toast(t.quadrant ? 'Added' + (t.dueDate ? ' — due ' + fmtDate(t.dueDate) : '') : 'Added to your Inbox');
+  sendTask(t, null).catch(() => {});
+}
+
+/* ---------- Plan my day (Top 3) and Wrap up ---------- */
+function openPlan() {
+  const td = today(), rank = t => t.focusDate === td ? 0 : t.dueDate && t.dueDate < td ? 1 : t.dueDate === td ? 2 : t.status === 'doing' ? 3 : t.quadrant === 'Q1' ? 4 : t.dueDate && t.dueDate <= addDays(td, 7) ? 5 : t.quadrant === 'Q2' ? 6 : 7;
+  const list = sortTasks(S.tasks.filter(t => t.status !== 'done')).sort((a, b) => rank(a) - rank(b)).slice(0, 40);
+  if (!list.length) return toast('No open tasks yet — add one first');
+  $('#plan-list').innerHTML = list.map(t => { const d = dueInfo(t); return `<label class="prow"><input type="checkbox" value="${esc(t.id)}" ${t.focusDate === td ? 'checked' : ''}>
+    <span class="dot" style="--q:${qOf(t).color}"></span><span class="grow" dir="auto">${esc(t.title)}</span>
+    ${t.estimate ? `<span class="muted">${fmtMin(t.estimate)}</span>` : ''}${d ? `<span class="due ${d.cls}">${d.text}</span>` : ''}</label>`; }).join('');
+  planCount(); $('#plan-modal').classList.remove('hidden');
+}
+function planCount() { $('#plan-n').textContent = $$('#plan-list input:checked').length + ' of 3 picked'; }
+function openWrap() {
+  const td = today();
+  const list = sortTasks(S.tasks.filter(t => t.status !== 'done' && (t.focusDate === td || (t.dueDate && t.dueDate <= td))));
+  if (!list.length) return toast('Nothing left for today — well done');
+  $('#wrap-list').innerHTML = list.map(t => { const d = dueInfo(t); return `<div class="prow"><span class="dot" style="--q:${qOf(t).color}"></span>
+    <span class="grow" dir="auto">${esc(t.title)}${d ? ` <span class="due ${d.cls}">· ${d.text}</span>` : ''}</span>
+    <select data-wid="${esc(t.id)}"><option value="1">Tomorrow</option><option value="7">Next week</option><option value="done">It’s done</option><option value="none">No date</option><option value="keep">Leave as is</option></select></div>`; }).join('');
+  $('#wrap-modal').classList.remove('hidden');
+}
+/* Move a task to another day (n = days from today, null = no date) */
+function snooze(id, n) {
+  const t = S.tasks.find(x => x.id === id); if (!t) return;
+  const before = clone(t);
+  t.dueDate = n === null ? '' : addDays(today(), n);
+  if (t.startDate && t.dueDate && t.startDate > t.dueDate) t.startDate = t.dueDate;
+  if (n !== 0 && t.focusDate === today()) t.focusDate = '';
+  render(); persist(t, before);
+  toast(n === null ? 'Date removed' : 'Moved to ' + (n === 0 ? 'today' : n === 1 ? 'tomorrow' : fmtDate(t.dueDate)));
+}
+function toggleFocus(id) {
+  const t = S.tasks.find(x => x.id === id); if (!t) return;
+  const td = today(), on = t.focusDate !== td;
+  if (on && S.tasks.filter(x => x.focusDate === td && x.status !== 'done' && x.id !== id).length >= 3) return toast('Your Top 3 is full — remove one first', 'err');
+  const before = clone(t); t.focusDate = on ? td : '';
+  render(); persist(t, before); toast(on ? 'Added to Top 3 today' : 'Removed from Top 3');
+}
+/* Small menu next to a button (Move to …) */
+function openPop(anchor, id) {
+  const pop = $('#pop'), r = anchor.getBoundingClientRect();
+  pop.innerHTML = [[0, 'Today'], [1, 'Tomorrow'], [7, 'Next week'], [null, 'No date']].map(([n, l]) => `<button data-sn="${n}">${l}</button>`).join('');
+  pop.dataset.id = id; pop.dataset.y = window.scrollY; pop.classList.remove('hidden');
+  pop.style.top = Math.min(window.innerHeight - pop.offsetHeight - 8, r.bottom + 4) + 'px';
+  pop.style.left = Math.max(8, Math.min(window.innerWidth - pop.offsetWidth - 8, r.right - pop.offsetWidth)) + 'px';
+}
+$('#pop').addEventListener('click', e => {
+  const b = e.target.closest('[data-sn]'); if (!b) return;
+  $('#pop').classList.add('hidden');
+  snooze($('#pop').dataset.id, b.dataset.sn === 'null' ? null : +b.dataset.sn);
+});
+document.addEventListener('click', e => { if (!e.target.closest('#pop') && !e.target.closest('[data-act="snooze"]')) $('#pop').classList.add('hidden'); });
+window.addEventListener('scroll', () => { const p = $('#pop'); if (Math.abs(window.scrollY - (+p.dataset.y || 0)) > 60) p.classList.add('hidden'); }, { passive: true });
+const closePlan = closable('plan-modal', 'plan-close plan-cancel');
+$('#plan-list').addEventListener('change', e => {
+  if (e.target.checked && $$('#plan-list input:checked').length > 3) { e.target.checked = false; toast('Three is the limit — keep it focused', 'err'); }
+  planCount();
+});
+$('#plan-save').addEventListener('click', () => {
+  const td = today(), sel = new Set($$('#plan-list input:checked').map(i => i.value));
+  S.tasks.filter(t => t.status !== 'done').forEach(t => {
+    const want = sel.has(t.id);
+    if (want === (t.focusDate === td)) return;
+    const before = clone(t); t.focusDate = want ? td : ''; persist(t, before);
+  });
+  closePlan(); render(); toast(sel.size ? 'Your Top 3 is set' : 'Top 3 cleared');
+});
+const closeWrap = closable('wrap-modal', 'wrap-close wrap-cancel');
+$('#wrap-save').addEventListener('click', () => {
+  const td = today(); let moved = 0, done = 0;
+  $$('#wrap-list select').forEach(sel => {
+    const t = S.tasks.find(x => x.id === sel.dataset.wid), v = sel.value; if (!t || v === 'keep') return;
+    const before = clone(t);
+    if (v === 'done') { t.status = 'done'; done++; }
+    else { t.dueDate = v === 'none' ? '' : addDays(td, +v); if (t.startDate && t.dueDate && t.startDate > t.dueDate) t.startDate = t.dueDate; moved++; }
+    if (t.focusDate === td && v !== 'done') t.focusDate = '';
+    persist(t, before);
+  });
+  closeWrap(); render(); toast('Day wrapped up — ' + done + ' done, ' + moved + ' moved');
+});
+/* Something moved to Remove → offer to delete it */
+function removeHint(id) { toast('Moved to Remove — still need it?', '', { label: 'Delete', run: () => deleteWithUndo(id) }, 7000); }
+
 function taskCard(t, mode) {
-  const q = QUADS[t.quadrant] || QUADS.Q2, due = dueInfo(t), done = t.status === 'done';
+  const q = qOf(t), due = dueInfo(t), done = t.status === 'done';
   const subDone = t.subtasks.filter(s => s.done).length, p = progress(t);
   const open = mode === 'list' && S.expanded.has(t.id);
   const cm = catMap();
@@ -1390,23 +1874,33 @@ function taskCard(t, mode) {
   const rep = t.repeat ? `<span class="muted" title="Repeats">${REPEAT} ${REPEAT_LABEL[t.repeat]}</span>` : '';
   const pj = t.projectId && S.view !== 'projects' ? S.projects.find(x => x.id === t.projectId) : null;
   const pchip = pj ? `<span class="pchip" style="--c:${esc(pj.color)}"><i></i>${esc(pj.name)}</span>` : '';
-  return `<div class="card ${mode} ${done ? 'is-done' : ''}" data-id="${esc(t.id)}" draggable="true" style="--q:${q.color}">
+  const list = mode === 'list';
+  const dueHtml = due ? `<span class="due ${due.cls}">${due.text}</span>` : '';
+  const progHtml = t.subtasks.length ? `<div class="prog"><div class="bar"><i style="width:${p}%"></i></div>
+    <button class="link" data-act="expand" title="Show subtasks">${subDone}/${t.subtasks.length} · ${p}%</button></div>` : '';
+  const doing = t.status === 'doing' && !(curView() === 'board' && S.boardBy === 'status');
+  const deleg = t.delegateTo ? `<span class="deleg" title="Delegated">→ ${esc(t.delegateTo)}${t.followUp ? ' · follow up ' + fmtDate(t.followUp) : ''}</span>` : '';
+  const est = t.estimate ? `<span class="muted" title="Time estimate">${CLOCK_ICON} ${fmtMin(t.estimate)}</span>` : '';
+  const focus = t.focusDate === today() && !done;
+  const acts = list && !done ? `<div class="c-act"><button class="ico ${focus ? 'on' : ''}" data-act="focus" title="${focus ? 'In your Top 3 today' : 'Add to Top 3 today'}">${STAR}</button>
+    <button class="ico" data-act="snooze" title="Move to another day">»</button></div>` : list ? '<div class="c-act"></div>' : '';
+  const sortRow = list && !t.quadrant && !done ? `<div class="qsort"><span class="muted">Sort into</span>${Object.keys(QUADS).map(k => `<button data-act="qs" data-q="${k}" style="--q:${QUADS[k].color}">${QUADS[k].name}</button>`).join('')}</div>` : '';
+  return `<div class="card ${mode} ${done ? 'is-done' : ''} ${t.quadrant ? '' : 'inbox'} ${focus ? 'focus' : ''}" data-id="${esc(t.id)}" draggable="true" style="--q:${q.color}">
     <div class="row">
       <button class="check ${done ? 'on' : ''}" data-act="toggle" title="${done ? 'Mark incomplete' : 'Mark complete'}">✓</button>
       <div class="grow">
         <div class="title" dir="auto">${esc(t.title)}</div>
         <div class="meta">
-          ${mode === 'list' ? `<span class="qbadge">${q.name}</span>` : ''}
-          ${pchip}${labels}
-          ${due ? `<span class="due ${due.cls}">${due.text}</span>` : ''}
-          ${t.status === 'doing' ? '<span class="muted">In progress</span>' : ''}
-          ${rep}${remind}
+          ${list ? `<span class="qbadge">${q.name}</span>` : ''}${pchip}${labels}
+          ${list ? '' : dueHtml}
+          ${doing ? '<span class="st-doing">In progress</span>' : ''}
+          ${deleg}${est}${rep}${remind}
           ${t._unsaved ? '<span class="unsaved" title="Kept on this device — it will be saved when the connection is back">Not saved yet</span>' : ''}
           ${t.attachments.length ? `<span class="muted">${CLIP} ${t.attachments.length}</span>` : ''}
         </div>
-        ${t.subtasks.length ? `<div class="prog"><div class="bar"><i style="width:${p}%"></i></div>
-          <button class="link" data-act="expand" title="Show subtasks">${subDone}/${t.subtasks.length} · ${p}%</button></div>` : ''}
+        ${list ? '' : progHtml}${sortRow}
       </div>
+      ${list ? `<div class="c-prog">${progHtml}</div><div class="c-due">${dueHtml}</div>${acts}` : ''}
     </div>
     ${open ? `<ul class="subs">${t.subtasks.map(s => `<li class="${s.done ? 'd' : ''}"><label>
       <input type="checkbox" data-sub="${esc(s.id)}" ${s.done ? 'checked' : ''}><span dir="auto">${esc(s.title)}</span></label></li>`).join('')}</ul>` : ''}
@@ -1415,8 +1909,10 @@ function taskCard(t, mode) {
 
 function renderList() {
   const list = sortTasks(filtered());
-  if (!list.length) return `<div class="empty big">No tasks here.<br><br><button class="btn primary" data-act="new">+ New task</button></div>`;
-  return list.map(t => taskCard(t, 'list')).join('');
+  const st = { open: 'Open tasks', all: 'All tasks', todo: 'To do', doing: 'In progress', done: 'Completed' }[S.f.status];
+  const head = vhead('All tasks', list.length, '', st + ' · sorted by ' + $('#f-sort').selectedOptions[0].text.replace('Sort: ', '').toLowerCase());
+  if (!list.length) return head + `<div class="empty big">No tasks here.<br><br><button class="btn primary" data-act="new">+ New task</button></div>`;
+  return head + list.map(t => taskCard(t, 'list')).join('');
 }
 
 function renderMatrix() {
@@ -1430,7 +1926,7 @@ function renderMatrix() {
       ${items.length ? `<div class="qcards">${items.map(t => taskCard(t, 'compact')).join('')}</div>` : '<div class="empty">Drag a task here</div>'}
     </section>`;
   };
-  return `<div class="matrix-wrap">
+  return vhead('Focus Hub', list.filter(t => t.status !== 'done').length, '', 'Drag a task into another box to change it') + `<div class="matrix-wrap">
     <div></div><div class="axis-top"><span>Urgent</span><span>Not urgent</span></div>
     <div class="axis-side"><span>Important</span><span>Not important</span></div>
     <div class="matrix">${box('Q1')}${box('Q2')}${box('Q3')}${box('Q4')}</div>
@@ -1450,7 +1946,8 @@ function boardColumns(list) {
     return S.cats.map(c => ({ drop: 'c:' + c.key, name: c.name, color: c.color, items: list.filter(t => t.labels.includes(c.key)) }))
       .concat([{ drop: 'c:', name: 'No category', items: list.filter(t => !t.labels.some(k => known.has(k))) }]);
   }
-  if (by === 'quad') return Object.keys(QUADS).map(k => ({ drop: 'q:' + k, name: QUADS[k].name, color: QUADS[k].color, items: list.filter(t => t.quadrant === k) }));
+  if (by === 'quad') return Object.keys(QUADS).map(k => ({ drop: 'q:' + k, name: QUADS[k].name, color: QUADS[k].color, items: list.filter(t => t.quadrant === k) }))
+    .concat(list.some(t => !t.quadrant) ? [{ drop: 'q:', name: 'Inbox', items: list.filter(t => !t.quadrant) }] : []);
   if (by === 'day') {
     const cols = [{ drop: '', name: 'Overdue', items: list.filter(t => t.dueDate && t.dueDate < td && t.status !== 'done') }];
     for (let i = 0; i < 7; i++) {
@@ -1466,9 +1963,9 @@ function boardColumns(list) {
 }
 function renderBoard() {
   const list = sortTasks(filtered({ noStatus: S.boardBy === 'status', noQuad: S.boardBy === 'quad' }));
-  const opts = `<div class="board-opts"><span class="muted">Group by</span><div class="seg" id="board-by">${BOARD_BY.map(([k, n]) =>
-    `<button data-by="${k}" class="${S.boardBy === k ? 'on' : ''}">${n}</button>`).join('')}</div>
-    ${S.boardBy === 'project' && !S.projects.length ? '<button class="btn sm" data-pa="new">+ New project</button>' : ''}</div>`;
+  const opts = vhead('Board', list.length, `${S.boardBy === 'project' && !S.projects.length ? '<button class="btn sm" data-pa="new">+ New project</button>' : ''}
+    <span class="muted vlabel">Group by</span><div class="seg" id="board-by">${BOARD_BY.map(([k, n]) =>
+    `<button data-by="${k}" class="${S.boardBy === k ? 'on' : ''}">${n}</button>`).join('')}</div>`);
   const cols = boardColumns(list).map(c => `<section class="col" ${c.drop ? `data-drop="${esc(c.drop)}"` : ''} ${c.color ? `style="--c:${esc(c.color)}"` : ''}>
       <div class="col-h">${c.color ? '<span class="cdot"></span>' : ''}<h3 dir="auto">${esc(c.name)}</h3><span class="count">${c.items.length}</span>
         ${c.drop && c.drop !== 's:doing' && c.drop !== 's:done' ? `<button class="btn sm" data-act="add-col">+</button>` : ''}</div>
@@ -1493,19 +1990,15 @@ function renderCalendar() {
     const items = (byDate[key] || []).sort((a, b) => (a.status === 'done') - (b.status === 'done') || a.quadrant.localeCompare(b.quadrant));
     cells += `<div class="day ${d.getMonth() !== m ? 'other' : ''} ${key === td ? 'today' : ''}" data-date="${key}" data-drop="d:${key}" title="Click to add a task on this day">
       <div class="dnum">${d.getDate()}</div>
-      ${items.map(t => `<div class="pill ${t.status === 'done' ? 'done' : ''}" data-id="${esc(t.id)}" draggable="true" style="--q:${(QUADS[t.quadrant] || QUADS.Q2).color}" title="${esc(t.title)}" dir="auto">${esc(t.title)}</div>`).join('')}
+      ${items.map(t => `<div class="pill ${t.status === 'done' ? 'done' : ''}" data-id="${esc(t.id)}" draggable="true" style="--q:${qOf(t).color}" title="${esc(t.title)}" dir="auto">${esc(t.title)}</div>`).join('')}
     </div>`;
   }
   const undated = sortTasks(list.filter(t => !t.dueDate));
   const undatedHtml = undated.length ? `<div class="undated"><h4>No date (${undated.length})</h4>
       ${undated.map(t => taskCard(t, 'compact')).join('')}</div>` : '';
-  return `<div class="cal-h">
-      <button class="btn sm" data-act="cal-prev" title="Previous month">‹</button>
-      <h3>${MONTHS[m]} ${y}</h3>
-      <button class="btn sm" data-act="cal-next" title="Next month">›</button>
-      <button class="btn sm" data-act="cal-today">Today</button>
-      <span class="muted" style="font-size:12px">Drag any task to change its date</span>
-    </div>
+  return vhead('Calendar', null, `<div class="cal-nav"><button class="btn sm icon-btn" data-act="cal-prev" title="Previous month">‹</button>
+      <b>${MONTHS[m]} ${y}</b><button class="btn sm icon-btn" data-act="cal-next" title="Next month">›</button>
+      <button class="btn sm" data-act="cal-today">Today</button></div>`, 'Drag any task to change its date') + `
     <div class="cal">${DAYS.map(d => `<div class="dow">${d}</div>`).join('')}${cells}</div>
     ${undatedHtml}`;
 }
@@ -1553,7 +2046,7 @@ const shortD = d => MONTHS[d.getMonth()].slice(0, 3) + ' ' + d.getDate();
 /* ================= Insights (weekly analytics) ================= */
 function renderInsights() {
   if (!S.archLoaded) {
-    loadArchived().then(() => { if (S.view === 'insights') render(); }).catch(e => toast(e.message, 'err'));
+    loadArchived().then(() => { if (curView() === 'insights') render(); }).catch(e => toast(e.message, 'err'));
     return '<div class="empty big">Loading insights…</div>';
   }
   const all = S.tasks.concat(S.archived), now = new Date(), ms = s => (s ? Date.parse(s) : NaN);
@@ -1568,7 +2061,7 @@ function renderInsights() {
   const dueDone = cur.done.filter(t => t.dueDate);
   const onTime = dueDone.length ? Math.round(dueDone.filter(t => ymd(new Date(t.completedAt)) <= t.dueDate).length / dueDone.length * 100) : null;
   const diff = cur.done.length - prev.done.length;
-  const tiles = `<div class="stats">
+  const tiles = vhead('Insights', null, '', 'Your week at a glance — weeks start on Saturday') + `<div class="kpis kpis-4">
     <div class="stat"><b>${cur.done.length}</b><span>Completed this week</span><span class="delta ${diff > 0 ? 'up' : diff < 0 ? 'down' : ''}">${diff > 0 ? '▲ ' + diff : diff < 0 ? '▼ ' + (-diff) : 'Same'} vs last week</span></div>
     <div class="stat"><b>${created}</b><span>Created this week</span></div>
     <div class="stat good"><b>${onTime === null ? '—' : onTime + '%'}</b><span>Finished on time</span></div>
@@ -1595,7 +2088,34 @@ function renderInsights() {
       <div class="grow"><div dir="auto" style="font-weight:600">${esc(t.title)}</div><div class="muted" style="font-size:12px">${t.status === 'done' ? 'Done' : t.dueDate ? 'Now due ' + fmtDate(t.dueDate) : ''}</div></div></li>`).join('')}</ul>`
     : '<div class="empty">No postponed tasks — nice.</div>';
 
+  const td = today(), open = S.tasks.filter(t => t.status !== 'done');
+  const inboxN = open.filter(t => !t.quadrant).length, followN = open.filter(t => t.followUp && t.followUp <= td).length;
+  const lateN = open.filter(t => t.dueDate && t.dueDate < td).length;
+  const sorted = open.filter(t => t.quadrant), share = k => sorted.length ? Math.round(sorted.filter(t => t.quadrant === k).length / sorted.length * 100) : 0;
+  const tips = [];
+  if (created > cur.done.length) tips.push(['bad', `Your list is growing — <b>${created}</b> added and <b>${cur.done.length}</b> finished this week.`]);
+  else if (created || cur.done.length) tips.push(['good', `You finished <b>${cur.done.length}</b> and added <b>${created}</b> this week — the list is shrinking.`]);
+  if (sorted.length >= 4 && share('Q1') >= 40) tips.push(['bad', `<b>${share('Q1')}%</b> of your open work is in Priority — that’s firefighting. Move what can wait into Schedule and give it a date.`]);
+  else if (sorted.length >= 4 && share('Q2') >= 50) tips.push(['good', `<b>${share('Q2')}%</b> of your open work is planned in Schedule — that’s where real progress happens.`]);
+  if (inboxN) tips.push(['warn', `<b>${inboxN}</b> task${inboxN === 1 ? '' : 's'} wait in your Inbox — sort them so nothing slips.`]);
+  if (followN) tips.push(['warn', `<b>${followN}</b> delegated task${followN === 1 ? ' needs' : 's need'} a follow-up.`]);
+  if (postponed[0] && postponed[0].postponeCount >= 2) tips.push(['warn', `“${esc(postponed[0].title)}” was pushed <b>${postponed[0].postponeCount}</b> times — break it into smaller steps or drop it.`]);
+  if (onTime !== null && onTime < 70) tips.push(['bad', `Only <b>${onTime}%</b> finished on time — set fewer, more realistic due dates.`]);
+  if (!tips.length) tips.push(['good', 'All clear — nothing needs your attention. Keep going.']);
+  const tipsHtml = `<ul class="tips">${tips.map(([c, t]) => `<li class="${c}">${t}</li>`).join('')}</ul>`;
+  const review = [['inbox', 'Empty your Inbox', inboxN], ['today', 'Deal with overdue tasks', lateN], ['today', 'Follow up on delegated tasks', followN],
+    ['timeline', 'Look at the next two weeks', null], ['plan', 'Check the Focus Hub balance', null]]
+    .map(([go, l, n], i) => `<li><span class="rn">${i + 1}</span><span class="grow">${l}</span>${n === null ? '' : `<span class="count ${n ? 'warn' : ''}">${n}</span>`}<button class="btn xs" data-go="${go}">Open</button></li>`).join('');
+  const mix = Object.keys(QUADS).map(k => ({ k, n: open.filter(t => t.quadrant === k).length, c: QUADS[k].hex, name: QUADS[k].name })).concat([{ k: '', n: inboxN, c: QINBOX.hex, name: 'Inbox' }]);
+  const total = Math.max(1, open.length);
+  const mixHtml = `<div class="mixbar">${mix.filter(x => x.n).map(x => `<i style="width:${x.n / total * 100}%;background:${x.c}" data-tip="${x.name}: ${x.n}"></i>`).join('') || '<i style="width:100%;background:var(--border)"></i>'}</div>
+    <div class="legend" style="margin-top:10px">${mix.map(x => `<span style="--c:${x.c}"><i></i>${x.name} · ${x.n}</span>`).join('')}</div>
+    <p class="hint">Aim for most of your open work in <b>Schedule</b>: planned, important, not on fire.</p>`;
+
   return tiles + `<div class="panels">
+    <div class="panel wide"><h3>What to act on</h3><div class="sub">Based on this week</div>${tipsHtml}</div>
+    <div class="panel"><h3>Weekly review</h3><div class="sub">Five minutes every Thursday keeps next week calm</div><ol class="review">${review}</ol></div>
+    <div class="panel"><h3>Where your open work sits</h3><div class="sub">By Focus Hub box</div>${mixHtml}</div>
     <div class="panel"><h3>Completed per week</h3><div class="sub">Last 8 weeks (weeks start on Saturday)</div>${doneChart}</div>
     <div class="panel"><div class="panel-h"><div class="grow"><h3>Overdue tasks</h3><div class="sub">At the end of each week</div></div>${trend}</div>${odChart}</div>
     <div class="panel"><div class="panel-h"><div class="grow"><h3>Completed by category</h3><div class="sub">${S.insPeriod === 'week' ? 'This week' : 'Last 4 weeks'}</div></div>
@@ -1607,11 +2127,14 @@ function renderInsights() {
 /* ================= Toolbar events ================= */
 $('#tabs').addEventListener('click', e => {
   const b = e.target.closest('[data-view]'); if (!b) return;
-  if (b.dataset.view === 'projects') S.projectOpen = null;
-  S.view = b.dataset.view;
-  $$('.tab').forEach(x => x.classList.toggle('active', x === b));
-  render();
+  goView(b.dataset.view);
 });
+function goView(v) {
+  if (v === 'projects') S.projectOpen = null;
+  S.view = v;
+  $$('.tab').forEach(x => x.classList.toggle('active', x.dataset.view === v));
+  render(); window.scrollTo(0, Math.min(window.scrollY, $('#tabs').offsetTop - 70));
+}
 $('#f-q').addEventListener('input', e => { S.f.q = e.target.value; render(); });
 $('#f-toggle').addEventListener('click', () => { S.filtersOpen = !S.filtersOpen; render(); });
 $('#f-reset').addEventListener('click', () => {
@@ -1632,6 +2155,8 @@ document.addEventListener('click', e => { if (e.target.closest('[data-act="new"]
 /* ================= View events ================= */
 const view = $('#view');
 view.addEventListener('click', e => {
+  const go = e.target.closest('[data-go]');
+  if (go) return goView(go.dataset.go);
   const per = e.target.closest('#ins-period [data-p]');
   if (per) { S.insPeriod = per.dataset.p; return render(); }
   const by = e.target.closest('#board-by [data-by]');
@@ -1641,14 +2166,29 @@ view.addEventListener('click', e => {
   const pcard = e.target.closest('.proj[data-pid]');
   if (pcard) { S.projectOpen = pcard.dataset.pid; S.projMode = 'tasks'; window.scrollTo(0, 0); return render(); }
   if (e.target.closest('.subs')) return;                       // checkboxes handled in 'change'
+  const md = e.target.closest('[data-mode]');
+  if (md) { if (S.view === 'plan') S.planMode = md.dataset.mode; else S.timeMode = md.dataset.mode; ls.set(S.view === 'plan' ? 'planMode' : 'timeMode', md.dataset.mode); return render(); }
   const act = e.target.closest('[data-act]');
   const card = e.target.closest('[data-id]');
   if (act) {
     const a = act.dataset.act;
+    if (a === 'qa-add') return quickAdd();
+    if (a === 'plan-day') return openPlan();
+    if (a === 'wrap-up') return openWrap();
+    if (a === 'focus') return toggleFocus(card.dataset.id);
+    if (a === 'snooze') return openPop(act, card.dataset.id);
+    if (a === 'qs') { const t = S.tasks.find(x => x.id === card.dataset.id), before = clone(t); t.quadrant = act.dataset.q; render(); persist(t, before);
+      toast('Sorted into ' + QUADS[t.quadrant].name); if (t.quadrant === 'Q4') removeHint(t.id); return; }
+    if (a === 'overdue-today') {
+      const td = today(), late = filtered({ noStatus: true }).filter(t => t.status !== 'done' && t.dueDate && t.dueDate < td);
+      late.forEach(t => { const before = clone(t); t.dueDate = td; persist(t, before); });
+      render(); return toast(late.length + ' task' + (late.length === 1 ? '' : 's') + ' moved to today');
+    }
     if (a === 'toggle') return toggleDone(card.dataset.id);
     if (a === 'expand') { const id = card.dataset.id; S.expanded.has(id) ? S.expanded.delete(id) : S.expanded.add(id); return render(); }
     if (a === 'new') return openModal(null);
     if (a === 'add-q') return openModal(null, { quadrant: act.dataset.q });
+    if (a === 'add-today') return openModal(null, { dueDate: today() });
     if (a === 'add-col') {
       const [k, v] = (act.closest('[data-drop]').dataset.drop || '').split(':'), pre = {};
       if (k === 'p') pre.projectId = v; if (k === 'c' && v) pre.labels = [v]; if (k === 'q') pre.quadrant = v; if (k === 'd') pre.dueDate = v;
@@ -1664,6 +2204,9 @@ view.addEventListener('click', e => {
   const day = e.target.closest('.day');
   if (day) openModal(null, { dueDate: day.dataset.date });
 });
+view.addEventListener('input', e => { if (e.target.id === 'qa-in') quickPreview(); });
+view.addEventListener('keydown', e => { if (e.target.id === 'qa-in' && e.key === 'Enter') { e.preventDefault(); quickAdd(); } });
+view.addEventListener('focusin', e => { if (e.target.id === 'qa-in') quickPreview(); });
 view.addEventListener('change', e => {
   const cb = e.target.closest('[data-sub]'); if (!cb) return;
   const t = S.tasks.find(x => x.id === cb.closest('[data-id]').dataset.id); if (!t) return;
@@ -1694,7 +2237,7 @@ view.addEventListener('drop', e => {
   const t = S.tasks.find(x => x.id === e.dataTransfer.getData('text/plain')); if (!t) return;
   const [kind, val] = z.dataset.drop.split(':');
   const before = clone(t);
-  if (kind === 'q') { if (t.quadrant === val) return; t.quadrant = val; }
+  if (kind === 'q') { if (t.quadrant === val) return; t.quadrant = val; if (val === 'Q4') removeHint(t.id); }
   if (kind === 'd') { if (!val || t.dueDate === val) return; t.dueDate = val; if (t.startDate && t.startDate > val) t.startDate = val; }
   if (kind === 's') { if (t.status === val) return; t.status = val; }
   if (kind === 'p') { if ((t.projectId || '') === val) return; t.projectId = val; }
@@ -1838,7 +2381,8 @@ $('#cats-save').addEventListener('click', async () => {
 /* ================= Task modal ================= */
 function openModal(id, preset) {
   const t = id ? S.tasks.find(x => x.id === id) : null;
-  const blank = { id: '', title: '', notes: '', labels: [], quadrant: '', dueDate: '', status: 'todo', reminderAt: '', repeat: '', projectId: '', startDate: '', subtasks: [], attachments: [] };
+  const blank = { id: '', title: '', notes: '', labels: [], quadrant: '', dueDate: '', status: 'todo', reminderAt: '', repeat: '', projectId: '', startDate: '', subtasks: [], attachments: [],
+    focusDate: '', delegateTo: '', followUp: '', estimate: 0 };
   S.draft = Object.assign(blank, t ? clone(t) : preset);
   if (S.draft.projectId && !S.projects.some(p => p.id === S.draft.projectId)) S.draft.projectId = '';
   S.draft.labels = S.draft.labels.filter(k => S.cats.some(c => c.key === k));   // drop deleted categories
@@ -1854,6 +2398,9 @@ function openModal(id, preset) {
   $('#m-rem').value = S.draft.reminderAt ? toLocalInput(S.draft.reminderAt) : '';
   $('#m-repeat').value = S.draft.repeat || '';
   $('#m-start').value = S.draft.startDate || '';
+  $('#m-dto').value = S.draft.delegateTo || ''; $('#m-fu').value = S.draft.followUp || '';
+  $('#m-est').value = String([0, 15, 30, 60, 90, 120, 240, 480].includes(+S.draft.estimate) ? +S.draft.estimate : 0);
+  $('#m-focus').checked = S.draft.focusDate === today();
   mProj();
   $('#m-sub-new').value = $('#m-link-url').value = $('#m-link-name').value = '';
   $('#m-upl-status').textContent = '';
@@ -1881,9 +2428,6 @@ function validateDraft() {
   const d = S.draft, miss = [];
   const chk = (sel, bad, name) => { $(sel).classList.toggle('invalid', bad); if (bad) miss.push(name); };
   chk('#m-title', !d.title.trim(), 'title');
-  chk('#m-labels', !d.labels.length, 'category');
-  chk('#m-eis', !d.quadrant, 'Focus Hub box');
-  chk('#m-status', !d.status, 'status');
   const badStart = !!(d.startDate && d.dueDate && d.startDate > d.dueDate);
   $('#m-start').classList.toggle('invalid', badStart);
   return miss;
@@ -1893,6 +2437,8 @@ function mLabels() {
     `<button type="button" class="chip ${S.draft.labels.includes(c.key) ? 'on' : ''}" data-label="${esc(c.key)}" style="--c:${esc(c.color)}"><span class="dot"></span>${esc(c.name)}</button>`).join('');
 }
 function mEis() {
+  $('#m-deleg').classList.toggle('hidden', !(S.draft.quadrant === 'Q3' || S.draft.delegateTo));
+  $('#m-inbox-hint').classList.toggle('hidden', !!S.draft.quadrant);
   $('#m-eis').innerHTML = Object.keys(QUADS).map(k =>
     `<button type="button" class="${S.draft.quadrant === k ? 'on' : ''}" data-q="${k}" style="--q:${QUADS[k].color}"><b>${QUADS[k].name}</b><small>${QUADS[k].sub}</small></button>`).join('');
 }
@@ -1925,8 +2471,7 @@ $('#m-ocal').addEventListener('click', () => addToOutlook(Object.assign({}, S.dr
 /* Empty start / due date → the day the task was entered (same rule as the server) */
 function fillDates(t) {
   const entry = t.createdAt ? ymd(new Date(t.createdAt)) : today();
-  if (!t.startDate) t.startDate = t.dueDate && t.dueDate < entry ? t.dueDate : entry;
-  if (!t.dueDate) t.dueDate = t.startDate > entry ? t.startDate : entry;
+  if (!t.startDate) t.startDate = t.dueDate && t.dueDate < entry ? t.dueDate : entry;   // the due date is never invented
 }
 
 /* ================= Outlook ================= */
@@ -1940,7 +2485,7 @@ function addToOutlook(t) {
     Office.context.mailbox.displayNewAppointmentForm({ subject: t.title || 'Task', start: new Date(y, m - 1, d, 9, 0), end: new Date(y, m - 1, d, 9, 30), body });
     return;
   }
-  const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//My Tasks//EN', 'BEGIN:VEVENT', 'UID:' + (t.id || uid()) + '@mytasks',
+  const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//North Star//EN', 'BEGIN:VEVENT', 'UID:' + (t.id || uid()) + '@northstar',
     'DTSTAMP:' + new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, ''), 'DTSTART;VALUE=DATE:' + day.replace(/-/g, ''),
     'DTEND;VALUE=DATE:' + addDays(day, 1).replace(/-/g, ''), 'SUMMARY:' + icsEsc(t.title || 'Task'), 'DESCRIPTION:' + icsEsc(body),
     'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
@@ -1997,7 +2542,15 @@ $('#m-labels').addEventListener('click', e => {
   i >= 0 ? L.splice(i, 1) : L.push(b.dataset.label); mLabels();
   if (L.length) $('#m-labels').classList.remove('invalid');
 });
-$('#m-eis').addEventListener('click', e => { const b = e.target.closest('[data-q]'); if (b) { S.draft.quadrant = b.dataset.q; mEis(); $('#m-eis').classList.remove('invalid'); } });
+$('#m-eis').addEventListener('click', e => { const b = e.target.closest('[data-q]'); if (b) { S.draft.quadrant = S.draft.quadrant === b.dataset.q ? '' : b.dataset.q; mEis(); } });
+$('#m-dto').addEventListener('input', e => { S.draft.delegateTo = e.target.value; });
+$('#m-fu').addEventListener('change', e => { S.draft.followUp = e.target.value; });
+$('#m-fu-clear').addEventListener('click', () => { S.draft.followUp = ''; $('#m-fu').value = ''; });
+$('#m-est').addEventListener('change', e => { S.draft.estimate = +e.target.value; });
+$('#m-focus').addEventListener('change', e => {
+  if (e.target.checked && S.tasks.filter(x => x.focusDate === today() && x.status !== 'done' && x.id !== S.draft.id).length >= 3) { e.target.checked = false; return toast('Your Top 3 is full — remove one first', 'err'); }
+  S.draft.focusDate = e.target.checked ? today() : '';
+});
 $('#m-title').addEventListener('input', e => { S.draft.title = e.target.value; if (e.target.value.trim()) e.target.classList.remove('invalid'); mOcal(); });
 $('#m-notes').addEventListener('input', e => { S.draft.notes = e.target.value; });
 $('#m-date').addEventListener('change', e => { S.draft.dueDate = e.target.value; });
@@ -2106,8 +2659,9 @@ async function saveModal() {
   fillDates(d);
   const t = clone(d);
   placeTask(t);
-  closeModal(true); render(); toast('Saved');                   // closes at once — the save continues in the background
+  closeModal(true); render(); toast(t.quadrant ? 'Saved' : 'Saved to your Inbox');   // closes at once — the save continues in the background
   sendTask(t, before).catch(() => {});
+  if (t.quadrant === 'Q4' && (!before || before.quadrant !== 'Q4')) removeHint(t.id);
 }
 $('#m-save').addEventListener('click', saveModal);
 $('#m-close').addEventListener('click', attemptClose);
@@ -2123,10 +2677,21 @@ document.addEventListener('keydown', e => {
   if (e.key !== 'Escape' && !(e.key === 'Enter' && (e.ctrlKey || e.metaKey))) return;
   const open = id => !$(id).classList.contains('hidden');
   if (open('#dlg')) { if (e.key === 'Escape') $('#dlg-cancel').click(); return; }
-  for (const [id, close] of [['#proj-modal', closeProjModal], ['#cats-modal', closeCats], ['#share-modal', closeShare], ['#acct-modal', closeAcct], ['#arch-modal', closeArch], ['#fb-modal', closeFb], ['#ol-modal', closeOl]])
+  for (const [id, close] of [['#proj-modal', closeProjModal], ['#cats-modal', closeCats], ['#share-modal', closeShare], ['#acct-modal', closeAcct], ['#arch-modal', closeArch], ['#fb-modal', closeFb], ['#ol-modal', closeOl], ['#plan-modal', closePlan], ['#wrap-modal', closeWrap]])
     if (open(id)) { if (e.key === 'Escape') close(); return; }
   if (!open('#task-modal')) return;
   if (e.key === 'Escape') attemptClose(); else saveModal();
+});
+
+/* Keyboard: N new task · Q quick add · / search · 1–6 switch screens */
+document.addEventListener('keydown', e => {
+  if (e.ctrlKey || e.metaKey || e.altKey || !S.token || $('#app').classList.contains('hidden')) return;
+  if (e.target.closest('input, textarea, select, [contenteditable]') || $$('.overlay').some(o => !o.classList.contains('hidden'))) return;
+  const tabs = ['today', 'inbox', 'plan', 'timeline', 'projects', 'insights'];
+  if (e.key === 'n' || e.key === 'N') { e.preventDefault(); openModal(null); }
+  else if (e.key === 'q' || e.key === 'Q') { e.preventDefault(); if (!['today', 'inbox'].includes(S.view)) goView('today'); setTimeout(() => $('#qa-in') && $('#qa-in').focus(), 0); }
+  else if (e.key === '/') { if (!$('#toolbar').classList.contains('hidden')) { e.preventDefault(); $('#f-q').focus(); } }
+  else if (/^[1-6]$/.test(e.key)) goView(tabs[+e.key - 1]);
 });
 
 /* ================= Projects ================= */
@@ -2154,8 +2719,7 @@ function renderProjects() {
   }
   if (S.projectOpen && S.projects.some(p => p.id === S.projectOpen)) return renderProjectDetail(S.projectOpen);
   S.projectOpen = null;
-  const head = `<div class="proj-top"><h2>Projects</h2><span class="count">${S.projects.length}</span><span class="grow"></span>
-    <button class="btn primary sm" data-pa="new">+ New project</button></div>`;
+  const head = vhead('Projects', S.projects.length, '<button class="btn primary sm" data-pa="new">+ New project</button>');
   if (!S.projects.length) return head + `<div class="empty big">No projects yet.<br><br><button class="btn primary" data-pa="new">+ New project</button></div>`;
   return head + S.projects.map(p => {
     const st = projStats(p.id);
@@ -2239,10 +2803,10 @@ function ganttSVG(tasks, color, opts) {
 /* Gantt screen for all tasks (uses the filters above; bar color = Focus Hub box) */
 function renderGanttView() {
   const list = filtered();
-  const g = ganttSVG(list, t => (QUADS[t.quadrant] || QUADS.Q2).hex, {});
-  if (!g) return `<div class="empty big">No tasks to show.<br><br><button class="btn primary" data-act="new">+ New task</button></div>`;
+  const g = ganttSVG(list, t => qOf(t).hex, {});
+  if (!g) return vhead('Gantt', 0) + `<div class="empty big">No tasks to show.<br><br><button class="btn primary" data-act="new">+ New task</button></div>`;
   const legend = `<div class="legend">${Object.keys(QUADS).map(k => `<span style="--c:${QUADS[k].hex}"><i></i>${QUADS[k].name}</span>`).join('')}</div>`;
-  return legend + `<div class="gantt-wrap">${g}</div>
+  return vhead('Gantt', list.length, legend) + `<div class="gantt-wrap">${g}</div>
     <p class="hint">Each bar runs from the task’s start date to its due date (a task without dates sits on the day it was entered). The solid part shows progress. The red line is today. Click a bar to open the task.</p>`;
 }
 async function projectAction(act, id) {
@@ -2299,7 +2863,7 @@ function exportProjectPDF(id) {
   const gantt = ganttSVG(st.ts, p.color, { width: 1000, labelW: 250 });
   const logo = (document.querySelector('.logo') || {}).src || '';
   const taskHtml = tasks.map((t, i) => {
-    const pr = progress(t), q = QUADS[t.quadrant] || QUADS.Q2;
+    const pr = progress(t), q = qOf(t);
     const labs = t.labels.filter(k => cm[k]).map(k => `<span class="tag" style="--c:${esc(cm[k].color)}">${esc(cm[k].name)}</span>`).join('');
     const dates = (t.startDate || t.dueDate) ? `${t.startDate ? fmtDate(t.startDate) + ' → ' : ''}${t.dueDate ? fmtDate(t.dueDate) : ''}` : 'No date';
     return `<div class="task">
@@ -2385,7 +2949,8 @@ async function openAdmin() {
 function renderAdmin() {
   const A = S.admin, o = A.overview;
   const tiles = [['Users', o.users], ['New this week', o.newWeek], ['New this month', o.newMonth], ['Active · 7 days', o.active7],
-    ['Active · 30 days', o.active30], ['Total tasks', o.tasks], ['Completed · 7 days', o.doneWeek]]
+    ['Active · 30 days', o.active30], ['Total tasks', o.tasks], ['Completed · 7 days', o.doneWeek],
+    ['Started using it', o.activated == null ? '—' : o.activated], ['Came back this week', o.returning == null ? '—' : o.returning + '%']]
     .map(([l, v]) => `<div class="stat"><b>${v}</b><span>${l}</span></div>`).join('');
 
   // sign-ups per week, last 12 weeks
@@ -2424,7 +2989,7 @@ function renderAdmin() {
   $('#admin-view').innerHTML = `
     <div class="admin-h"><button class="btn sm" id="adm-back">← Back to tasks</button><h2>Admin</h2><span class="grow"></span>
       <span class="muted" style="font-size:12px">You see numbers only — never other people’s tasks.</span></div>
-    <div class="stats">${tiles}</div>
+    <div class="kpis kpis-9">${tiles}</div>
     <div class="panels">
       <div class="panel"><h3>Sign-ups per week</h3><div class="sub">Last 12 weeks</div>${signups}</div>
       <div class="panel"><h3>App settings</h3><div class="sub">Changes apply right away</div>
@@ -2503,6 +3068,7 @@ function applyInfo(info) {
   S.hasUsers = info.hasUsers; S.allowSignup = info.allowSignup; S.maxMb = info.maxFileMb || 10;
   S.maxCats = info.maxCategories || 10; S.appName = info.appName; S.archiveDays = info.archiveDays || 30;
   S.shareUrl = info.shareUrl || location.origin + location.pathname;
+  setupProviders();
   $$('.app-name').forEach(el => el.textContent = info.appName); document.title = info.appName;
   ls.set('mt_info', JSON.stringify(info));
 }

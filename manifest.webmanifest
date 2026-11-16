@@ -1,12 +1,12 @@
 {
-  "name": "My Tasks",
-  "short_name": "My Tasks",
-  "description": "A simple, focused space to organize your tasks, manage your priorities, and keep everything that matters in one place.",
+  "name": "North Star",
+  "short_name": "North Star",
+  "description": "The task and project manager for HR experts — capture, focus and deliver every HR project on time.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#18181b",
+  "background_color": "#312e81",
+  "theme_color": "#312e81",
   "orientation": "portrait-primary",
   "icons": [
     {

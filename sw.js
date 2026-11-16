@@ -1,9 +1,9 @@
-/* My Tasks — service worker
+/* North Star — service worker
  * Makes the app installable and opens it instantly (even on a weak connection).
  * Your data always comes live from Google Apps Script — it is never cached here.
  * When you upload a new index.html, change VERSION below so phones pick up the update.
  */
-const VERSION = 'v12';
+const VERSION = 'v15';
 const CACHE = 'mytasks-' + VERSION;
 const SHELL = ['./', 'index.html', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png', 'icons/favicon-32.png'];
 
@@ -24,6 +24,7 @@ self.addEventListener('fetch', e => {
 
   // Pages: try the network first (so updates show up), fall back to the saved copy when offline
   if (req.mode === 'navigate') {
+    if (!/\/(index\.html)?$/.test(url.pathname)) return;                  // other pages (e.g. the sign-in return page) — leave them alone
     e.respondWith(fetch(req).then(res => {
       const copy = res.clone(); caches.open(CACHE).then(c => c.put('index.html', copy));
       return res;
