@@ -616,6 +616,9 @@ html:not(.ol-mode) #ol-pane{display:none}
 .olp-done h3{margin:4px 0}.olp-done .row-b{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
 .olp-att{font-size:12px;color:var(--muted);margin:-4px 0 10px 26px}
 .c3a-b{background:#7A101E;color:#fff;border-radius:4px;padding:0 6px;font-size:11px;font-weight:700}
+.cal-box{display:flex;gap:8px;align-items:center;flex-wrap:wrap;border:1px solid var(--border);border-radius:12px;padding:12px;background:var(--surface2);margin-bottom:8px}
+.cal-box.on{border-color:color-mix(in srgb,var(--ok) 50%,var(--border));background:color-mix(in srgb,var(--ok) 8%,var(--surface))}
+.ol-alt{margin:12px 0 4px}.ol-alt summary{cursor:pointer;font-weight:600;font-size:13px;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -987,8 +990,17 @@ html:not(.ol-mode) #ol-pane{display:none}
     <div class="field" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><label style="margin:0">Open emails &amp; new meetings in</label>
       <select id="ol-app" style="width:auto"><option value="app">The Outlook app (Windows / Mac)</option><option value="web">Outlook on the web</option></select>
       <span class="hint" style="margin:0">Used by <b>Add to Outlook Calendar</b> and saved emails on a task.</span></div>
-    <h3 class="ol-h">1 · Your tasks in Outlook Calendar</h3>
-    <p class="muted" style="margin:0 0 10px">Subscribe once. Every task appears on its due date as an all-day event, and Outlook keeps it up to date by itself (it checks every few hours).</p>
+    <h3 class="ol-h">1 · Your tasks in your own Outlook calendar</h3>
+    <p class="muted" style="margin:0 0 10px">Every task with a due date appears in <b>your main Outlook calendar</b> as an all-day item (shown as Free, no reminder) and stays up to date when you change it here. Done tasks get a ✓.</p>
+    <div class="cal-box" id="cal-box">
+      <div class="grow"><b id="cal-state">Not connected</b><div class="muted" id="cal-sub" style="font-size:12.5px"></div></div>
+      <button class="btn primary" type="button" id="cal-connect">Connect Outlook calendar</button>
+      <button class="btn hidden" type="button" id="cal-now">Sync now</button>
+      <button class="btn hidden" type="button" id="cal-off">Disconnect</button>
+    </div>
+    <p class="hint hidden" id="cal-setup">Needs a one-time setup first: the Microsoft client ID in <b>Code.gs</b> (MICROSOFT_CLIENT_ID). See README → OUTLOOK CALENDAR SYNC.</p>
+    <details class="ol-alt"><summary>Or subscribe with a link (shows as a separate calendar)</summary>
+    <p class="muted" style="margin:8px 0 10px">Subscribe once. Every task appears on its due date as an all-day event, and Outlook keeps it up to date by itself (it checks every few hours).</p>
     <div class="share-link"><input id="ol-url" readonly placeholder="Loading your link…"><button class="btn primary" type="button" id="ol-copy">Copy</button></div>
     <div class="share-btns">
       <a class="btn" id="ol-live" target="_blank" rel="noopener">Outlook.com</a>
@@ -997,6 +1009,7 @@ html:not(.ol-mode) #ol-pane{display:none}
     </div>
     <p class="hint">If a button doesn’t open the right place: in Outlook Calendar choose <b>Add calendar → Subscribe from web</b> and paste the link.<br>
       Keep this link private — anyone who has it can see your task titles. <button type="button" class="link" id="ol-reset">Make a new link</button></p>
+    </details>
     <h3 class="ol-h">2 · <span class="app-name">North Star Momentum</span> inside Outlook</h3>
     <ol class="steps">
       <li><a class="btn sm" href="outlook-addin.xml" download="MyTasks-Outlook-addin.xml">Download the add-in file</a></li>
@@ -1439,7 +1452,7 @@ $('#auth-form').addEventListener('submit', async e => {
 function logoutLocal() {
   clearCache(); S.pending = 0; S.syncing = false; updateSync();
   OLP.started = false; document.documentElement.classList.remove('ol-mode');
-  S.token = null; S.tasks = []; S.archived = []; S.meetings = []; S.mt = null; S.archLoaded = false; S.draft = null; S.admin = null; store.set(null);
+  S.booted = false; S.token = null; S.tasks = []; S.archived = []; S.meetings = []; S.mt = null; S.archLoaded = false; S.draft = null; S.admin = null; store.set(null);
   S.calUrl = null; S.quoteSeen = []; S.quoteTouched = false;
   try { if (window.google && google.accounts) google.accounts.id.disableAutoSelect(); } catch (e) {}
   $$('.overlay').forEach(o => o.classList.add('hidden'));
@@ -1694,6 +1707,7 @@ function saveCache() {
       const c = { tag: S.token.slice(-16), info: S.info, me: S.me, tasks: S.tasks, categories: S.cats, projects: S.projects, meetings: S.meetings, archivedCount: S.archivedCount, archived: S.archLoaded ? S.archived : null, quote: S.dailyQuote || null, at: Date.now() };
       localStorage.removeItem(CACHE_KEY); sessionStorage.removeItem(CACHE_KEY);
       (store.remembered() ? localStorage : sessionStorage).setItem(CACHE_KEY, JSON.stringify(c));
+      calSoon();
     } catch (e) { /* storage full or blocked — fine, the app just starts the normal way */ }
   }, 400);
 }
@@ -1723,13 +1737,13 @@ async function enterApp(cached, boot) {
   window.scrollTo(0, 0);
   showMain();
   renderGreeting();
-  if (boot) { applyBoot(boot); flushOutbox(); return; }
+  if (boot) { applyBoot(boot); S.booted = true; calSoon(); flushOutbox(); return; }
   if (cached) applyBoot(cached);
   const fresh = api('bootstrap', S.token);
   try {
     if (cached) { S.syncing = true; updateSync(); }
     const b = await (cached ? fresh : withBusy(fresh));
-    applyBoot(b);
+    applyBoot(b); S.booted = true; calSoon();
     if (!b.quote && !S.quote) loadQuote();          // older backend
     flushOutbox();
   } catch (e) { if (S.token) toast(e.message, 'err'); }
@@ -1738,7 +1752,7 @@ async function enterApp(cached, boot) {
 window.addEventListener('beforeunload', e => { if (S.pending) { e.preventDefault(); e.returnValue = ''; } });
 /* Refresh = the same single request the app opens with (tasks, archive, projects, categories) */
 async function loadTasks() {
-  try { applyBoot(await withBusy(api('bootstrap', S.token))); }
+  try { applyBoot(await withBusy(api('bootstrap', S.token))); S.booted = true; calSoon(true); }
   catch (e) { toast(e.message, 'err'); }
 }
 $('#btn-refresh').addEventListener('click', () => { if (!$('#admin-view').classList.contains('hidden')) return openAdmin(); loadTasks(); });
@@ -2679,6 +2693,154 @@ function fillDates(t) {
   if (!t.startDate) t.startDate = t.dueDate && t.dueDate < entry ? t.dueDate : entry;   // the due date is never invented
 }
 
+/* ================= Outlook calendar sync: tasks → your own (main) Outlook calendar via Microsoft 365 =================
+   Each task with a due date = one all-day event (Free, no reminder) in your default calendar, tagged with the
+   category "North Star Momentum" and the task's id. Sync compares what should be there with what is there:
+   adds missing events, updates changed ones, removes events of deleted / undated / archived tasks.
+   Runs on this device while the app is open (after each change, and every 10 minutes). */
+const CAL_CAT = 'North Star Momentum';
+const CAL_ID = 'String {4d3f1c2a-8b6e-4f7a-9c1d-2e5b7a9f0c3e} Name NSMTaskId';
+const CAL_HASH = 'String {4d3f1c2a-8b6e-4f7a-9c1d-2e5b7a9f0c3e} Name NSMHash';
+const CAL_SCOPES = ['Calendars.ReadWrite'];
+const CAL = { app: null, ready: null, timer: null, running: false, again: false, sig: '', at: 0, warned: false };
+const calOn = () => ls.get('calSync') === '1';
+function calInit() {
+  const m = S.info && S.info.microsoftClientId;
+  if (!m) return Promise.reject(new Error('Outlook calendar sync isn’t set up yet'));
+  return CAL.ready = CAL.ready || loadScript(MSAL_URLS[0]).catch(() => loadScript(MSAL_URLS[1])).then(async () => {
+    CAL.app = new msal.PublicClientApplication({ auth: { clientId: m, authority: 'https://login.microsoftonline.com/common', redirectUri: new URL('auth.html', location.href).href },
+      cache: { cacheLocation: 'localStorage' } });
+    if (CAL.app.initialize) await CAL.app.initialize();
+  }).catch(e => { CAL.ready = null; throw e; });
+}
+async function calToken(interactive) {
+  await calInit();
+  const accts = CAL.app.getAllAccounts(), acc = accts.find(a => a.homeAccountId === ls.get('calAcct')) || accts[0];
+  if (acc) {
+    try { return (await CAL.app.acquireTokenSilent({ scopes: CAL_SCOPES, account: acc })).accessToken; }
+    catch (e) { if (!interactive) throw Object.assign(new Error('Sign in to Outlook again'), { relogin: true }); }
+  }
+  if (!interactive) throw Object.assign(new Error('Sign in to Outlook again'), { relogin: true });
+  const r = acc ? await CAL.app.acquireTokenPopup({ scopes: CAL_SCOPES, account: acc }) : await CAL.app.loginPopup({ scopes: CAL_SCOPES, prompt: 'select_account' });
+  ls.set('calAcct', r.account.homeAccountId); ls.set('calName', r.account.username || '');
+  return r.accessToken;
+}
+async function graph(tok, method, path, body, tries = 0) {
+  const r = await fetch(/^https:/.test(path) ? path : 'https://graph.microsoft.com/v1.0' + path, { method,
+    headers: { Authorization: 'Bearer ' + tok, 'Content-Type': 'application/json' }, body: body ? JSON.stringify(body) : undefined });
+  if ((r.status === 429 || r.status === 503) && tries < 3) {
+    await new Promise(res => setTimeout(res, 1000 * (+r.headers.get('Retry-After') || 2 * (tries + 1))));
+    return graph(tok, method, path, body, tries + 1);
+  }
+  if (r.status === 204 || (method === 'DELETE' && r.status === 404)) return null;
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw Object.assign(new Error((j.error && j.error.message) || 'Outlook calendar error ' + r.status), { status: r.status });
+  return j;
+}
+const strHash = str => { let h = 5381; for (let i = 0; i < str.length; i++) h = ((h << 5) + h + str.charCodeAt(i)) | 0; return (h >>> 0).toString(36); };
+/* What should be in the calendar: taskId → event */
+function calWanted() {
+  const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone) || 'UTC', want = new Map();
+  S.tasks.filter(t => t.dueDate && !isArchived(t)).forEach(t => {
+    const done = t.status === 'done', pj = t.projectId && S.projects.find(p => p.id === t.projectId);
+    const body = [done ? 'Done' : t.status === 'doing' ? 'In progress' : 'To do', (QUADS[t.quadrant] || {}).name, pj ? 'Project: ' + pj.name : '',
+      t.delegateTo ? 'Assigned to: ' + t.delegateTo : '', t.subtasks.length ? t.subtasks.filter(x => x.done).length + ' of ' + t.subtasks.length + ' steps done' : '',
+      t.notes, 'Open ' + S.appName + ': ' + (S.shareUrl || location.origin + location.pathname)].filter(Boolean).join('\n');
+    const ev = { subject: (done ? '✓ ' : '') + t.title, isAllDay: true, showAs: 'free', isReminderOn: false, categories: [CAL_CAT],
+      start: { dateTime: t.dueDate + 'T00:00:00', timeZone: tz }, end: { dateTime: addDays(t.dueDate, 1) + 'T00:00:00', timeZone: tz },
+      body: { contentType: 'text', content: body } };
+    const h = strHash(JSON.stringify(ev));
+    ev.singleValueExtendedProperties = [{ id: CAL_ID, value: t.id }, { id: CAL_HASH, value: h }];
+    want.set(t.id, { ev, h });
+  });
+  return want;
+}
+function calSoon(force) {
+  if (!calOn() || S.office || !S.token || !S.booted) return;
+  clearTimeout(CAL.timer);
+  CAL.timer = setTimeout(() => calSync(false, force), 4000);
+}
+setInterval(() => calSoon(true), 10 * 60000);
+async function calSync(interactive, force) {
+  if (!calOn() || !S.booted || !S.token) return;
+  if (CAL.running) { CAL.again = true; return; }
+  const want = calWanted(), sig = strHash(Array.from(want.entries()).map(([k, v]) => k + v.h).sort().join('|'));
+  if (!force && !interactive && sig === CAL.sig && Date.now() - CAL.at < 10 * 60000) return;
+  CAL.running = true; calUi('Syncing…');
+  let added = 0, changed = 0, removed = 0;
+  try {
+    const tok = await calToken(interactive);
+    // what is in the calendar now (our events only)
+    const have = new Map(), extra = [];
+    let url = '/me/events?$top=200&$select=id,subject&$filter=' + encodeURIComponent("categories/any(c:c eq '" + CAL_CAT + "')") +
+      '&$expand=' + encodeURIComponent("singleValueExtendedProperties($filter=id eq '" + CAL_ID + "' or id eq '" + CAL_HASH + "')");
+    while (url) {
+      const page = await graph(tok, 'GET', url);
+      (page.value || []).forEach(e => {
+        const props = {}; (e.singleValueExtendedProperties || []).forEach(p => { props[p.id.toLowerCase()] = p.value; });
+        const tid = props[CAL_ID.toLowerCase()];
+        if (!tid) return;                                    // an event you tagged yourself — leave it alone
+        if (have.has(tid)) extra.push(e.id); else have.set(tid, { id: e.id, h: props[CAL_HASH.toLowerCase()] });
+      });
+      url = page['@odata.nextLink'] || '';
+    }
+    const jobs = [];
+    want.forEach((w, tid) => {
+      const cur = have.get(tid);
+      if (!cur) jobs.push(() => graph(tok, 'POST', '/me/events', w.ev).then(() => added++));
+      else if (cur.h !== w.h) jobs.push(() => graph(tok, 'PATCH', '/me/events/' + cur.id, w.ev).then(() => changed++));
+    });
+    have.forEach((cur, tid) => { if (!want.has(tid)) jobs.push(() => graph(tok, 'DELETE', '/me/events/' + cur.id).then(() => removed++)); });
+    extra.forEach(id => jobs.push(() => graph(tok, 'DELETE', '/me/events/' + id)));
+    for (let i = 0; i < jobs.length; i += 4) await Promise.all(jobs.slice(i, i + 4).map(f => f()));
+    CAL.sig = sig; CAL.at = Date.now(); ls.set('calLast', String(CAL.at)); CAL.warned = false;
+    calUi();
+    if (interactive) toast('Outlook calendar is up to date' + (added + changed + removed ? ' — ' + [added && added + ' added', changed && changed + ' updated', removed && removed + ' removed'].filter(Boolean).join(', ') : ''));
+  } catch (err) {
+    calUi(err.relogin ? 'Sign in again to keep syncing' : 'Last sync failed — ' + err.message);
+    if (interactive) toast(err.message, 'err');
+    else if (!CAL.warned) { CAL.warned = true; toast('Outlook calendar: ' + (err.relogin ? 'please sign in again' : 'sync failed'), 'err', { label: 'Fix', run: () => $('#btn-outlook').click() }, 8000); }
+  } finally {
+    CAL.running = false;
+    if (CAL.again) { CAL.again = false; calSoon(); }
+  }
+}
+function calUi(note) {
+  if (!$('#cal-box')) return;
+  const has = !!(S.info && S.info.microsoftClientId), on = calOn(), last = +ls.get('calLast') || 0;
+  $('#cal-setup').classList.toggle('hidden', has);
+  $('#cal-connect').disabled = !has;
+  $('#cal-box').classList.toggle('on', on);
+  $('#cal-state').textContent = on ? 'Connected' + (ls.get('calName') ? ' · ' + ls.get('calName') : '') : 'Not connected';
+  $('#cal-sub').textContent = note || (on ? (last ? 'Last synced ' + rel(new Date(last).toISOString()) : 'Not synced yet') : 'Tasks go into the calendar you already use — no extra calendar.');
+  $('#cal-connect').classList.toggle('hidden', on); $('#cal-now').classList.toggle('hidden', !on); $('#cal-off').classList.toggle('hidden', !on);
+}
+$('#cal-connect').addEventListener('click', async () => {
+  if (!CAL.app) { calInit().catch(() => {}); return toast('Getting Outlook ready — tap again in a second'); }
+  try {
+    await calToken(true);                                 // pop-up: pick your Microsoft account and allow calendar access
+    ls.set('calSync', '1'); calUi(); await calSync(true, true);
+  } catch (e) {
+    const code = String((e && (e.errorCode || e.message)) || e);
+    if (!/cancel/i.test(code)) toast(/popup/i.test(code) ? 'Allow pop-ups for this site, then try again' : /consent|admin/i.test(code) ? 'Your company needs to approve this app first (ask IT to grant consent)' : 'Couldn’t connect: ' + code, 'err', null, 8000);
+  }
+});
+$('#cal-now').addEventListener('click', () => calSync(true, true));
+$('#cal-off').addEventListener('click', async () => {
+  const wipe = await dialog('Disconnect Outlook calendar', '<p>Stop adding tasks to your Outlook calendar on this device.</p><p>Also remove the task events it already added?</p>', 'Disconnect & remove events', 'Keep the events');
+  if (wipe) {
+    try {
+      const tok = await calToken(false);
+      let url = '/me/events?$top=200&$select=id&$filter=' + encodeURIComponent("categories/any(c:c eq '" + CAL_CAT + "')") + '&$expand=' + encodeURIComponent("singleValueExtendedProperties($filter=id eq '" + CAL_ID + "')");
+      const ids = [];
+      while (url) { const page = await withBusy(graph(tok, 'GET', url)); (page.value || []).forEach(e => { if ((e.singleValueExtendedProperties || []).length) ids.push(e.id); }); url = page['@odata.nextLink'] || ''; }
+      for (let i = 0; i < ids.length; i += 4) await withBusy(Promise.all(ids.slice(i, i + 4).map(id => graph(tok, 'DELETE', '/me/events/' + id))));
+      toast(ids.length + ' event' + (ids.length === 1 ? '' : 's') + ' removed from Outlook');
+    } catch (e) { toast('Couldn’t remove the events: ' + e.message, 'err'); }
+  }
+  ls.set('calSync', null); ls.set('calLast', null); CAL.sig = ''; calUi();
+});
+
 /* ================= Outlook ================= */
 const icsEsc = v => String(v).replace(/\\/g, '\\\\').replace(/;/g, '\;').replace(/,/g, '\\,').replace(/\r?\n/g, '\\n');
 const olWeb = () => ls.get('olApp') === 'web';
@@ -2743,6 +2905,7 @@ function addToOutlook(t) {
 /* Outlook window: calendar subscription link + how to add the app to Outlook */
 $('#btn-outlook').addEventListener('click', async () => {
   closeMenu(); $('#ol-modal').classList.remove('hidden');
+  calUi(); if (S.info && S.info.microsoftClientId) calInit().catch(() => {});   // ready before the click, so the pop-up isn't blocked
   if (S.calUrl) return;
   try { setCalUrl((await api('getCalendarFeed', S.token)).calToken); } catch (e) { toast(e.message, 'err'); }
 });
