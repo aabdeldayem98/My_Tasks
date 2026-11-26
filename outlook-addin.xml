@@ -11,13 +11,13 @@
            xmlns:mailappor="http://schemas.microsoft.com/office/mailappversionoverrides/1.0"
            xsi:type="MailApp">
   <Id>7c084a9c-e629-4876-90e5-67412dedd7ef</Id>
-  <Version>1.0.3.0</Version>
+  <Version>1.0.4.0</Version>
   <ProviderName>Ahmed Abdel-Dayem</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="Polaris"/>
   <Description DefaultValue="Your tasks, Focus Hub, projects and Gantt chart next to your email. Turn any email into a task in one click."/>
-  <IconUrl DefaultValue="https://aabdeldayem98.github.io/My_Tasks/icon-64.png"/>
-  <HighResolutionIconUrl DefaultValue="https://aabdeldayem98.github.io/My_Tasks/icon-128.png"/>
+  <IconUrl DefaultValue="https://aabdeldayem98.github.io/My_Tasks/polaris-64.png"/>
+  <HighResolutionIconUrl DefaultValue="https://aabdeldayem98.github.io/My_Tasks/polaris-128.png"/>
   <SupportUrl DefaultValue="https://www.linkedin.com/in/aabdel-dayem"/>
   <AppDomains>
     <AppDomain>https://aabdeldayem98.github.io</AppDomain>
@@ -80,9 +80,9 @@
     </Hosts>
     <Resources>
       <bt:Images>
-        <bt:Image id="Icon.16" DefaultValue="https://aabdeldayem98.github.io/My_Tasks/icon-16.png"/>
-        <bt:Image id="Icon.32" DefaultValue="https://aabdeldayem98.github.io/My_Tasks/icon-32.png"/>
-        <bt:Image id="Icon.80" DefaultValue="https://aabdeldayem98.github.io/My_Tasks/icon-80.png"/>
+        <bt:Image id="Icon.16" DefaultValue="https://aabdeldayem98.github.io/My_Tasks/polaris-16.png"/>
+        <bt:Image id="Icon.32" DefaultValue="https://aabdeldayem98.github.io/My_Tasks/polaris-32.png"/>
+        <bt:Image id="Icon.80" DefaultValue="https://aabdeldayem98.github.io/My_Tasks/polaris-80.png"/>
       </bt:Images>
       <bt:Urls>
         <bt:Url id="Taskpane.Url" DefaultValue="https://aabdeldayem98.github.io/My_Tasks/?host=outlook"/>
@@ -134,9 +134,9 @@
       </Hosts>
       <Resources>
         <bt:Images>
-          <bt:Image id="Icon.16" DefaultValue="https://aabdeldayem98.github.io/My_Tasks/icon-16.png"/>
-          <bt:Image id="Icon.32" DefaultValue="https://aabdeldayem98.github.io/My_Tasks/icon-32.png"/>
-          <bt:Image id="Icon.80" DefaultValue="https://aabdeldayem98.github.io/My_Tasks/icon-80.png"/>
+          <bt:Image id="Icon.16" DefaultValue="https://aabdeldayem98.github.io/My_Tasks/polaris-16.png"/>
+          <bt:Image id="Icon.32" DefaultValue="https://aabdeldayem98.github.io/My_Tasks/polaris-32.png"/>
+          <bt:Image id="Icon.80" DefaultValue="https://aabdeldayem98.github.io/My_Tasks/polaris-80.png"/>
         </bt:Images>
         <bt:Urls>
           <bt:Url id="Taskpane.Url" DefaultValue="https://aabdeldayem98.github.io/My_Tasks/?host=outlook"/>
