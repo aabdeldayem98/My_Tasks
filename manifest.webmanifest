@@ -1,12 +1,12 @@
 {
-  "name": "North Star Momentum",
-  "short_name": "NS Momentum",
+  "name": "Polaris",
+  "short_name": "Polaris",
   "description": "The task and project manager for HR experts — capture, focus and deliver every HR project on time.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#312e81",
-  "theme_color": "#312e81",
+  "background_color": "#1e1b4b",
+  "theme_color": "#1e1b4b",
   "orientation": "portrait-primary",
   "icons": [
     {
